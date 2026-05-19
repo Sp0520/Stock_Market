@@ -1,0 +1,87 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+.content_market {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 170px;
+  overflow: auto;
+}
+.filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btnGetStockDetails {
+  cursor: pointer;
+  width: 182px !important;
+  background-color: #0179c3;
+  padding: 7px 15px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-left: 30px;
+}
+.btnGetStockDetails:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.content_market > table {
+  text-align: left;
+  margin-bottom: 1rem;
+  color: #212529;
+  border-collapse: collapse;
+}
+/* .tr:hover {
+  transform: scale(1.1);
+} */
+.td > a {
+  text-decoration: none;
+  color: #212529;
+}
+.td > a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.content_market > table > tbody > tr:nth-of-type(2n + 1) {
+  background-color: rgb(233, 236, 239);
+}
+.content_market > table > thead > tr > th,
+.content_market > table > tbody > tr > td {
+  padding: 1.5rem;
+  vertical-align: top;
+  border-top: 1px dashed #dee2e6;
+}
+.content_market > table > thead > tr > th:nth-child(1),
+.content_market > table > tbody > tr > td:nth-child(1) {
+  /* text-align: center; */
+  width: 280px;
+}
+.content_market > table > thead > tr > th:nth-child(2),
+.content_market > table > tbody > tr > td:nth-child(2) {
+  /* text-align: center; */
+  width: 320px;
+}
+.content_market > table > thead > tr > th:nth-child(3),
+.content_market > table > tbody > tr > td:nth-child(3),
+.content_market > table > thead > tr > th:nth-child(4),
+.content_market > table > tbody > tr > td:nth-child(4),
+.content_market > table > thead > tr > th:nth-child(5),
+.content_market > table > tbody > tr > td:nth-child(5),
+.content_market > table > thead > tr > th:nth-child(6),
+.content_market > table > tbody > tr > td:nth-child(6),
+.content_market > table > thead > tr > th:nth-child(7),
+.content_market > table > tbody > tr > td:nth-child(7) {
+  text-align: center;
+  width: 120px;
+  /* border: 1px solid red; */
+}
