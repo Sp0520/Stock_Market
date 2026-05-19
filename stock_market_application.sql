@@ -2,6 +2,12 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+
+-- =========================================
+-- TABLE: users
+-- =========================================
+
 CREATE TABLE IF NOT EXISTS users (
 
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -22,9 +28,9 @@ CREATE TABLE IF NOT EXISTS users (
 
   PANCARD_number VARCHAR(255) NOT NULL,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NULL DEFAULT NULL
   ON UPDATE CURRENT_TIMESTAMP,
 
   available_balance DECIMAL(10,2) NOT NULL DEFAULT 0.00
@@ -32,6 +38,10 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+-- =========================================
+-- SAMPLE USER DATA
+-- =========================================
 
 INSERT INTO users (
 firstname,
@@ -58,6 +68,10 @@ VALUES (
 
 
 
+-- =========================================
+-- TABLE: stock_details
+-- =========================================
+
 CREATE TABLE IF NOT EXISTS stock_details (
 
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,9 +86,9 @@ CREATE TABLE IF NOT EXISTS stock_details (
 
   status INT NOT NULL,
 
-  purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  purchase_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NULL DEFAULT NULL
   ON UPDATE CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id)
@@ -84,6 +98,10 @@ CREATE TABLE IF NOT EXISTS stock_details (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+-- =========================================
+-- SAMPLE STOCK DATA
+-- =========================================
 
 INSERT INTO stock_details (
 stock_name,
@@ -100,6 +118,10 @@ VALUES
 
 
 
+-- =========================================
+-- TABLE: users_transaction
+-- =========================================
+
 CREATE TABLE IF NOT EXISTS users_transaction (
 
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -114,7 +136,7 @@ CREATE TABLE IF NOT EXISTS users_transaction (
 
   user_id INT NOT NULL,
 
-  payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  payment_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 
   FOREIGN KEY (user_id)
   REFERENCES users(id)
@@ -123,6 +145,10 @@ CREATE TABLE IF NOT EXISTS users_transaction (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+
+-- =========================================
+-- SAMPLE TRANSACTION DATA
+-- =========================================
 
 INSERT INTO users_transaction (
 credit,
@@ -137,5 +163,7 @@ VALUES
 (10,0,'pay_IsG3FaML45RX8M','credit',1),
 (3000,0,'pay_IsGjbOBBZKYGKA','credit',1),
 (5000,0,'pay_IsHPTJ10SQ6bQn','credit',1);
+
+
 
 COMMIT;
