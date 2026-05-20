@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <div class="container">
 
 <div class="background_img">
-<img src="./assets/images.jpg" alt="">
+
 </div>
 
 <div class="header">
