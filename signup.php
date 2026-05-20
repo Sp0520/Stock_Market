@@ -117,7 +117,8 @@ $result = mysqli_query($conn,$sql);
 
 if($result){
 
-header("Location:index.php");
+echo "<script>window.location='market.php';</script>";
+exit();
 
 }else{
 

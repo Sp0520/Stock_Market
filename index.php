@@ -24,109 +24,130 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <div class="container">
 
-<div class="background_img">
+    <div class="background_img"></div>
 
-</div>
+    <div class="header">
+        <div>
+            <img class="logo" src="./assets/logo.png" alt="">
+        </div>
+        <p class="title">Stock Market</p>
+    </div>
 
-<div class="header">
-<div>
-<img class="logo" src="./assets/logo.png" alt="">
-</div>
-<p class="title">Stock Market</p>
-</div>
+    <div class="body">
 
-<div class="body">
+        <form action="" method="post">
 
-<form action="" method="post">
+            <div class="signinContent">
 
-<div class="signinContent">
+                <h3>Sign in</h3>
 
-<h3>Sign in</h3>
+                <div>
+                    <input type="email" 
+                           name="txtEmail" 
+                           class="txtEmail" 
+                           placeholder="Email" 
+                           required>
+                </div>
 
-<div>
-<input type="text" name="txtEmail" class="txtEmail" placeholder="Email">
-</div>
+                <div>
+                    <input type="password" 
+                           name="txtPass" 
+                           class="txtPass" 
+                           placeholder="Password" 
+                           required>
+                </div>
 
-<div>
-<input type="password" name="txtPass" class="txtPass" placeholder="Password">
-</div>
+                <div class="btn">
 
-<div class="btn"><br>
+                    <div class="buttonRow">
+                        <input type="submit" 
+                               value="Sign in" 
+                               name="btnSignin" 
+                               class="btnSignin">
 
-<div class="buttonRow">
-<input type="submit" value="Sign in" name="btnSignin" class="btnSignin">
-<input type="submit" value="Sign up" name="btnSignup" class="btnSignup"><br><br>
-</div>
-<a href="forgot_pass.php" class="forgot">Forgot Password?</a>
+                        <input type="submit" 
+                               value="Sign up" 
+                               name="btnSignup" 
+                               class="btnSignup">
+                    </div>
 
-</div>
+                    <br>
 
-</div>
+                    <a href="forgot_pass.php" class="forgot">
+                        Forgot Password?
+                    </a>
 
-</form>
+                </div>
 
-<?php
+            </div>
 
-if (isset($_POST['btnSignin'])) {
+        </form>
 
-$email = trim($_POST['txtEmail']);
-$password = $_POST['txtPass'];
+        <?php
 
-if ($email == "" || $password == "") {
+        if (isset($_POST['btnSignin'])) {
 
-echo "<script>alert('Please enter email and password');</script>";
+            $email = trim($_POST['txtEmail']);
+            $password = $_POST['txtPass'];
 
-} else {
+            if (empty($email) || empty($password)) {
 
-$sql = "SELECT * FROM users WHERE email='$email'";
-$result = mysqli_query($conn,$sql);
+                echo "<script>alert('Please enter email and password');</script>";
 
-if(mysqli_num_rows($result) > 0){
+            } else {
 
-$row = mysqli_fetch_assoc($result);
+                $sql = "SELECT * FROM users WHERE email='$email'";
+                $result = mysqli_query($conn, $sql);
 
-if(password_verify($password,$row['password'])){
+                if ($result && mysqli_num_rows($result) > 0) {
 
-$_SESSION['user_id'] = $row['id'];
-header('location:market.php');
+                    $row = mysqli_fetch_assoc($result);
 
-} else {
+                    if (password_verify($password, $row['password'])) {
 
-echo "<script>alert('Invalid email or password');</script>";
+                        $_SESSION['user_id'] = $row['id'];
 
-}
+                        echo "<script>
+                                alert('Login Successful');
+                                window.location='market.php';
+                              </script>";
+                        exit();
 
-} else {
+                    } else {
 
-echo "<script>alert('Email not found');</script>";
+                        echo "<script>alert('Invalid password');</script>";
 
-}
+                    }
 
-}
+                } else {
 
-}
+                    echo "<script>alert('Email not found');</script>";
 
-if (isset($_POST['btnSignup'])) {
+                }
+            }
+        }
 
-header("Location: signup.php");
+        if (isset($_POST['btnSignup'])) {
 
-}
+            echo "<script>window.location='signup.php';</script>";
+            exit();
+        }
 
-?>
+        ?>
 
-</div>
+    </div>
 
-<div class="footer">
+    <div class="footer">
 
-<div>
-<p> © 2026 All Rights Reserved. </p>
-</div>
+        <div>
+            <p>© 2026 All Rights Reserved.</p>
+        </div>
 
-<div>
-<p>Privacy | About us</p>
-</div>
+        <div>
+            <p>Privacy | About us</p>
+        </div>
 
-</div>
+    </div>
 
 </div>
 
