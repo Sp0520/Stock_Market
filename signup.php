@@ -77,62 +77,57 @@ require('conn.php');
 </form>
 
 <?php
+require('conn.php');
 
-if (isset($_POST['btnSignup'])) {
+if(isset($_POST['btnSignup'])){
 
-$firstname = $_POST['firstname'];
-$lastname = $_POST['lastname'];
-$address = $_POST['address'];
-$email = $_POST['email'];
-$password = $_POST['enter_password'];
-$confirm_password = $_POST['confirm_password'];
-$mobile_number = $_POST['mobile_number'];
-$pan_number = $_POST['pan_number'];
+    $firstname = trim($_POST['firstname']);
+    $lastname = trim($_POST['lastname']);
+    $address = trim($_POST['address']);
+    $email = trim($_POST['email']);
+    $password = $_POST['enter_password'];
+    $confirm_password = $_POST['confirm_password'];
+    $mobile_number = trim($_POST['mobile_number']);
+    $pan_number = trim($_POST['pan_number']);
 
-if($password != $confirm_password){
+    if($password != $confirm_password){
 
-echo "<script>alert('Passwords do not match');</script>";
+        echo "<script>alert('Passwords do not match');</script>";
 
-}else{
+    }else{
 
-$sql_select = "SELECT * FROM users WHERE email='$email'";
-$result = mysqli_query($conn,$sql_select);
+        $check = mysqli_query($conn,
+        "SELECT id FROM users WHERE email='$email'");
 
-if(mysqli_num_rows($result) > 0){
+        if(mysqli_num_rows($check) > 0){
 
-echo "<script>alert('User already exists');</script>";
+            echo "<script>alert('Email already registered');</script>";
 
-}else{
+        }else{
 
-$password = md5($password);
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO users 
-(firstname,lastname,address,email,password,mobile_number,PANCARD_number)
+            $sql = "INSERT INTO users
+            (firstname, lastname, address, email, password, mobile_number, PANCARD_number)
+            VALUES
+            ('$firstname', '$lastname', '$address', '$email', '$hashed_password', '$mobile_number', '$pan_number')";
 
-VALUES
+            if(mysqli_query($conn, $sql)){
 
-('$firstname','$lastname','$address','$email','$password','$mobile_number','$pan_number')";
+                echo "<script>
+                alert('Registration Successful');
+                window.location='index.php';
+                </script>";
 
-$result = mysqli_query($conn,$sql);
+            }else{
 
-if($result){
+                echo mysqli_error($conn);
 
-header("Location:index.php");
-
-}else{
-
-echo "<script>alert('Something went wrong');</script>";
-
+            }
+        }
+    }
 }
-
-}
-
-}
-
-}
-
 ?>
-
 </div>
 
 <div class="footer">

@@ -83,57 +83,52 @@ if (session_status() === PHP_SESSION_NONE) {
 
         </form>
 
-        <?php
+       <?php
 
-        if (isset($_POST['btnSignin'])) {
+if (isset($_POST['btnSignin'])) {
 
-            $email = trim($_POST['txtEmail']);
-            $password = $_POST['txtPass'];
+    $email = trim($_POST['txtEmail']);
+    $password = $_POST['txtPass'];
 
-            if (empty($email) || empty($password)) {
+    $sql = "SELECT * FROM users WHERE email='$email'";
+    $result = mysqli_query($conn, $sql);
 
-                echo "<script>alert('Please enter email and password');</script>";
+    if(mysqli_num_rows($result) > 0){
 
-            } else {
+        $row = mysqli_fetch_assoc($result);
 
-                $sql = "SELECT * FROM users WHERE email='$email'";
-                $result = mysqli_query($conn, $sql);
+        if(password_verify($password, $row['password'])){
 
-                if ($result && mysqli_num_rows($result) > 0) {
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['firstname'] = $row['firstname'];
 
-                    $row = mysqli_fetch_assoc($result);
+            echo "<script>
+            alert('Login Successful');
+            window.location='market.php';
+            </script>";
 
-                    if (password_verify($password, $row['password'])) {
-
-                        $_SESSION['user_id'] = $row['id'];
-
-                        echo "<script>
-                                alert('Login Successful');
-                                window.location='market.php';
-                              </script>";
-                        exit();
-
-                    } else {
-
-                        echo "<script>alert('Invalid password');</script>";
-
-                    }
-
-                } else {
-
-                    echo "<script>alert('Email not found');</script>";
-
-                }
-            }
-        }
-
-        if (isset($_POST['btnSignup'])) {
-
-            echo "<script>window.location='signup.php';</script>";
             exit();
+
+        }else{
+
+            echo "<script>alert('Invalid Password');</script>";
+
         }
 
-        ?>
+    }else{
+
+        echo "<script>alert('Email not found');</script>";
+
+    }
+}
+
+if(isset($_POST['btnSignup'])){
+
+    echo "<script>window.location='signup.php';</script>";
+    exit();
+}
+
+?>
 
     </div>
 
