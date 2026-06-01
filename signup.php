@@ -20,9 +20,7 @@ require('conn.php');
 
 <div class="container">
 
-<div class="background_img">
-<img src="./assets/background.jpg" alt="">
-</div>
+<div class="background_img"></div>
 
 <div class="header">
 <div>
@@ -41,10 +39,8 @@ require('conn.php');
       </div>
       <textarea name="address" class="textarea_signup" placeholder="Address" required></textarea>
       <input type="email" class="email_signup" name="email" placeholder="Email" required>
-      <div class="name_row">
-        <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
-        <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
-      </div>
+      <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
+      <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
       <input type="number" class="email_signup" name="mobile_number" placeholder="Mobile No" required>
       <input type="text" class="email_signup" name="pan_number" placeholder="Pancard No" required>
       <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up">
