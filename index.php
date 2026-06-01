@@ -65,10 +65,10 @@ if (session_status() === PHP_SESSION_NONE) {
                                name="btnSignin" 
                                class="btnSignin">
 
-                        <input type="submit" 
+                        <input type="button" 
                                value="Sign up" 
-                               name="btnSignup" 
-                               class="btnSignup">
+                               class="btnSignup" 
+                               onclick="window.location.href='signup.php'">
                     </div>
 
                     <br>
@@ -134,10 +134,6 @@ if (isset($_POST['btnSignin'])) {
     }
 }
 
-if(isset($_POST['btnSignup'])){
-    echo "<script>window.location.href='signup.php';</script>";
-    exit();
-}
 ?>
 
     </div>
