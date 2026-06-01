@@ -10,9 +10,9 @@ if(!isset($_SESSION['user_id'])){
 $user_id = $_SESSION['user_id'];
 
 // Example data queries (you can improve later)
-$balanceQuery = mysqli_query($conn,"SELECT wallet_balance FROM users WHERE id='$user_id'");
+$balanceQuery = mysqli_query($conn,"SELECT available_balance FROM users WHERE id='$user_id'");
 $balanceData = mysqli_fetch_assoc($balanceQuery);
-$balance = $balanceData['wallet_balance'] ?? 0;
+$balance = $balanceData['available_balance'] ?? 0;
 ?>
 
 <!DOCTYPE html>

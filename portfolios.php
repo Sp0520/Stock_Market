@@ -130,19 +130,30 @@ while ($row = mysqli_fetch_assoc($result)) {
                     if (!empty($stockData)) {
                         $currentPrice = array();
                         foreach ($stockData as $key => $value) {
-                            $json = file_get_contents('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=' . $value["stock_name"] . '.BSE&outputsize=full&apikey=1DBYP9NP4ZDVPWI6');
-                            $data = json_decode($json, true);
+                            $ticker_sym = urlencode($value["stock_name"]);
+                            $json = @file_get_contents("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={$ticker_sym}.BSE&outputsize=compact&apikey=1DBYP9NP4ZDVPWI6");
+                            $data = $json ? json_decode($json, true) : null;
 
-                            array_push($currentPrice, array($value["id"] => sprintf('%0.2f', round($data["Time Series (Daily)"][$data["Meta Data"]["3. Last Refreshed"]]["4. close"], 2))));
+                            $price = $value["purchase_price"]; // default fallback
+                            if ($data && isset($data["Time Series (Daily)"], $data["Meta Data"])) {
+                                $lastRef = $data["Meta Data"]["3. Last Refreshed"];
+                                if (!isset($data["Time Series (Daily)"][$lastRef])) {
+                                    $lastRef = array_key_first($data["Time Series (Daily)"]);
+                                }
+                                if (isset($data["Time Series (Daily)"][$lastRef]["4. close"])) {
+                                    $price = sprintf('%0.2f', round((float)$data["Time Series (Daily)"][$lastRef]["4. close"], 2));
+                                }
+                            }
+
+                            array_push($currentPrice, array($value["id"] => $price));
 
                             echo "<tr>";
-                            echo "<td>" . $value["stock_name"] . "</td>";
-                            echo "<td>" . $value["purchase_price"] . "</td>";
-                            echo "<td>" . sprintf('%0.2f', round($data["Time Series (Daily)"][$data["Meta Data"]["3. Last Refreshed"]]["4. close"], 2))   . "</td>";
-                            echo "<td>" . sprintf('%0.2f', round($data["Time Series (Daily)"][$data["Meta Data"]["3. Last Refreshed"]]["4. close"], 2)) - $value["purchase_price"] . "</td>";
-                            echo "<td>" . $value["purchase_date"] . "</td>";
+                            echo "<td>" . htmlspecialchars($value["stock_name"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($value["purchase_price"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($price) . "</td>";
+                            echo "<td>" . sprintf('%0.2f', (float)$price - (float)$value["purchase_price"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($value["purchase_date"]) . "</td>";
                             echo '<td><a href="portfolios.php?id=' . $value["id"] . '" class="btnSell_">SELL</a></td>';
-                            // echo '<td class="btn"><form method="POST"><input type="submit" value="SELL" name="btnSell" id="btnSell" class="btnSell_"></form></td>';
                             echo "</tr>";
                         }
                     } else {
@@ -271,7 +282,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 $sql_withdraw = "UPDATE `users` SET `available_balance`=`available_balance` - " . $_POST["amount"] . " WHERE `id`= " . $_SESSION['user_id'];
                 $result_withdraw = mysqli_query($conn, $sql_withdraw);
                 if ($result_withdraw) {
-                    $sql = "INSERT INTO `withdraw_details`(`amount`, `payment_id`, `description`) VALUES (" . $_POST["amount"] . "," . $_POST["accountNo"] . ",'Withdraw')";
+                    $sql = "INSERT INTO `users_transaction` (`debit`, `payment_id`, `description`, `user_id`) VALUES (" . (float)$_POST["amount"] . ", '" . mysqli_real_escape_string($conn, $_POST["accountNo"]) . "', 'withdraw', " . $_SESSION['user_id'] . ")";
                     $result = mysqli_query($conn, $sql);
                     if ($result) {
                         echo "<script>alert('Your money will be transferred to your account in 3-5 working days.')</script>";

@@ -83,15 +83,27 @@ if (session_status() === PHP_SESSION_NONE) {
 
         </form>
 
-       <?php
+   <?php
 
 if (isset($_POST['btnSignin'])) {
 
     $email = trim($_POST['txtEmail']);
     $password = $_POST['txtPass'];
 
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare(
+        $conn,
+        "SELECT * FROM users WHERE email=?"
+    );
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "s",
+        $email
+    );
+
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
 
     if(mysqli_num_rows($result) > 0){
 
@@ -101,12 +113,12 @@ if (isset($_POST['btnSignin'])) {
 
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['firstname'] = $row['firstname'];
+            $_SESSION['email'] = $row['email'];
 
             echo "<script>
             alert('Login Successful');
             window.location='market.php';
             </script>";
-
             exit();
 
         }else{
@@ -123,11 +135,9 @@ if (isset($_POST['btnSignin'])) {
 }
 
 if(isset($_POST['btnSignup'])){
-
-    echo "<script>window.location='signup.php';</script>";
+    echo "<script>window.location.href='signup.php';</script>";
     exit();
 }
-
 ?>
 
     </div>

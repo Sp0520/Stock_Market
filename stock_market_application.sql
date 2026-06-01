@@ -20,9 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
 
   email VARCHAR(255) NOT NULL,
 
-  enter_password VARCHAR(255) NOT NULL,
-
-  confirm_password VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
 
   mobile_number VARCHAR(15) NOT NULL,
 
@@ -48,8 +46,7 @@ firstname,
 lastname,
 address,
 email,
-enter_password,
-confirm_password,
+password,
 mobile_number,
 PANCARD_number,
 available_balance
@@ -59,8 +56,7 @@ VALUES (
 'Raval',
 'Rajpardi Jhagadia Bharuch',
 'rushi1234@gmail.com',
-'1234',
-'1234',
+'$2y$10$tZ2y10B/79N26VpB0h2/G.qY3K.k7bQ/jWb5Jk.FwE8NqH3K8882O',
 '1234567890',
 'CSKJVC1548A',
 60123.30

@@ -77,7 +77,6 @@ require('conn.php');
 </form>
 
 <?php
-require('conn.php');
 
 if(isset($_POST['btnSignup'])){
 
@@ -90,38 +89,63 @@ if(isset($_POST['btnSignup'])){
     $mobile_number = trim($_POST['mobile_number']);
     $pan_number = trim($_POST['pan_number']);
 
-    if($password != $confirm_password){
+    if($password !== $confirm_password){
 
         echo "<script>alert('Passwords do not match');</script>";
 
-    }else{
+    } else {
 
-        $check = mysqli_query($conn,
-        "SELECT id FROM users WHERE email='$email'");
+        $stmt = mysqli_prepare(
+            $conn,
+            "SELECT id FROM users WHERE email=?"
+        );
 
-        if(mysqli_num_rows($check) > 0){
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+
+        if(mysqli_num_rows($result) > 0){
 
             echo "<script>alert('Email already registered');</script>";
 
-        }else{
+        } else {
 
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $hashed_password = password_hash(
+                $password,
+                PASSWORD_DEFAULT
+            );
 
-            $sql = "INSERT INTO users
-            (firstname, lastname, address, email, password, mobile_number, PANCARD_number)
-            VALUES
-            ('$firstname', '$lastname', '$address', '$email', '$hashed_password', '$mobile_number', '$pan_number')";
+            $stmt = mysqli_prepare(
+                $conn,
+                "INSERT INTO users
+                (firstname, lastname, address, email, password, mobile_number, PANCARD_number)
+                VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
 
-            if(mysqli_query($conn, $sql)){
+            mysqli_stmt_bind_param(
+                $stmt,
+                "sssssss",
+                $firstname,
+                $lastname,
+                $address,
+                $email,
+                $hashed_password,
+                $mobile_number,
+                $pan_number
+            );
+
+            if(mysqli_stmt_execute($stmt)){
 
                 echo "<script>
                 alert('Registration Successful');
                 window.location='index.php';
                 </script>";
+                exit();
 
-            }else{
+            } else {
 
-                echo mysqli_error($conn);
+                echo "<script>alert('".mysqli_error($conn)."');</script>";
 
             }
         }

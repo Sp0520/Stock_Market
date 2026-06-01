@@ -41,9 +41,9 @@ while ($rowTransaction = mysqli_fetch_assoc($resultTransaction)) {
             <?php
             // $balance = $balance + $value['credit'] - $value['debit'];
 
+            $balance = 0;
             foreach ($dataTransaction as $value) {
-                $balance = 0;
-                $balance = $balance + $value['credit'] - $value['debit'];
+                $balance = $balance + (float)$value['credit'] - (float)$value['debit'];
 
                 echo  "<tr>";
                 echo "<td><p>" . $value['payment_date'] . "</p></td>";

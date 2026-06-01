@@ -19,39 +19,37 @@ $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={$ti
 
 $json = @file_get_contents($url);
 
-if ($json === false) {
-    echo "<h3>Unable to connect to stock server.</h3>";
-    return;
+$data = $json ? json_decode($json, true) : null;
+$hasData = ($json !== false && isset($data['Meta Data'], $data['Time Series (Daily)']));
+
+if ($hasData) {
+    $meta = $data['Meta Data'];
+    $timeSeries = $data['Time Series (Daily)'];
+
+    $lastRefreshed = $meta["3. Last Refreshed"];
+
+    if (!isset($timeSeries[$lastRefreshed])) {
+        $lastRefreshed = array_key_first($timeSeries);
+    }
+
+    $currentPrice = $timeSeries[$lastRefreshed]["4. close"];
+
+    $dailyData = [];
+    $dailyDate = [];
+
+    foreach ($timeSeries as $date => $values) {
+        $dailyData[] = $values["4. close"];
+        $dailyDate[] = $date;
+    }
+
+    $dailyDataClose = array_reverse($dailyData);
+    $dailyDateClose = array_reverse($dailyDate);
+} else {
+    $lastRefreshed = date("Y-m-d");
+    $currentPrice = 0.00;
+    $dailyDataClose = [];
+    $dailyDateClose = [];
 }
-
-$data = json_decode($json, true);
-
-if (!isset($data['Meta Data']) || !isset($data['Time Series (Daily)'])) {
-    echo "<h3>Stock data unavailable (API limit reached or invalid symbol).</h3>";
-    return;
-}
-
-$meta = $data['Meta Data'];
-$timeSeries = $data['Time Series (Daily)'];
-
-$lastRefreshed = $meta["3. Last Refreshed"];
-
-if (!isset($timeSeries[$lastRefreshed])) {
-    $lastRefreshed = array_key_first($timeSeries);
-}
-
-$currentPrice = $timeSeries[$lastRefreshed]["4. close"];
-
-$dailyData = [];
-$dailyDate = [];
-
-foreach ($timeSeries as $date => $values) {
-    $dailyData[] = $values["4. close"];
-    $dailyDate[] = $date;
-}
-
-$dailyDataClose = array_reverse($dailyData);
-$dailyDateClose = array_reverse($dailyDate);
 
 $days = $_GET["days"] ?? 15;
 ?>
@@ -62,6 +60,14 @@ $days = $_GET["days"] ?? 15;
 
 
 <div class="content_selectedStock">
+
+<?php if (!$hasData): ?>
+    <div style="background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.2); padding: 30px; border-radius: 8px; text-align: center; width: 100%; margin: 20px auto; max-width: 600px; color: #721c24; font-family: sans-serif;">
+        <h3 style="margin-bottom: 10px;">Stock Data Unavailable</h3>
+        <p>We are unable to load data for ticker <strong><?= htmlspecialchars($ticker) ?></strong> at this time. This may be due to an invalid symbol, network issues, or AlphaVantage API rate limits (5 requests/minute).</p>
+        <a href="market.php" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #02283e; color: #fff; text-decoration: none; border-radius: 4px;">Return to Market</a>
+    </div>
+<?php else: ?>
 
 <div class="data_sell">
 
@@ -104,11 +110,11 @@ VALUES('$ticker','$currentPrice','".$_SESSION['user_id']."',1)";
 $result = mysqli_query($conn,$sqlInsert);
 
 if ($result) {
-
-echo "<script>alert('Transaction Successful')</script>";
-
-header("Location: portfolios.php");
-
+echo "<script>
+    alert('Transaction Successful');
+    window.location.href = 'portfolios.php';
+</script>";
+exit();
 } else {
 
 echo "<script>alert('Insert Failed')</script>";
@@ -156,7 +162,7 @@ echo "<script>alert('Balance Update Failed')</script>";
 </div>
 
 </div>
-
+<?php endif; ?>
 </div>
 
 

@@ -39,20 +39,23 @@ if ($success === true) {
     //          <p>Payment ID: {$_POST['razorpay_payment_id']}</p>";
     // echo "<script>alert('Payment Sucessfull...')</script>";
 
-    $sql = "INSERT INTO `users_transaction` (`amount`,`payment_id`, `user_id`) VALUES (" . $_COOKIE["amount"] . ",'" . $_POST["razorpay_payment_id"] . "', " . $_SESSION["user_id"] . ")";
+    $sql = "INSERT INTO `users_transaction` (`credit`, `payment_id`, `description`, `user_id`) VALUES (" . (float)$_COOKIE["amount"] . ", '" . mysqli_real_escape_string($conn, $_POST["razorpay_payment_id"]) . "', 'deposit', " . (int)$_SESSION["user_id"] . ")";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        $sql_update = "UPDATE `users` SET `available_balance` = `available_balance` + " . $_COOKIE["amount"] . " WHERE `id` = " . $_SESSION["user_id"];
+        $sql_update = "UPDATE `users` SET `available_balance` = `available_balance` + " . (float)$_COOKIE["amount"] . " WHERE `id` = " . (int)$_SESSION["user_id"];
         $result_update = mysqli_query($conn, $sql_update);
         if ($result_update) {
-            echo "<script>alert('Payment Sucessfull...')</script>";
-            header("Location:http://localhost/stock_market_application/portfolios.php");
+            echo "<script>
+                alert('Payment Successful...');
+                window.location.href = '../portfolios.php';
+            </script>";
+            exit();
         } else {
-            echo "<script>alert('Error while updating available balance...')</script>";
+            echo "<script>alert('Error while updating available balance...');</script>";
         }
     } else {
-        echo "<script>alert('Payment Failed...')</script>" . mysqli_error($conn);
+        echo "<script>alert('Payment Failed...');</script>" . htmlspecialchars(mysqli_error($conn));
     }
 } else {
     $html = "<p>Your payment failed</p>

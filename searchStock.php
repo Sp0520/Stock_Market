@@ -2,13 +2,7 @@
 require("./mainTop.php");
 
 /* ================= GET EXCHANGE LIST ================= */
-
-$json = file_get_contents("http://api.marketstack.com/v1/exchanges?access_key=51fcbd147239c10f7d16498134336532");
-
-$data = json_decode($json, true);
-
-sort($data["data"]);
-
+// Unused dynamic exchange list loading removed to optimize page load speeds and prevent crashes.
 ?>
 
 <div class="content">
@@ -90,45 +84,41 @@ $exchange = "XBOM"; // default BSE
 
 if(isset($_POST["btnSearchStock"]))
 {
-$exchange = $_POST["exchanges"];
+    $exchange = $_POST["exchanges"];
 }
 
 $url = "http://api.marketstack.com/v1/exchanges/".$exchange."/tickers?access_key=51fcbd147239c10f7d16498134336532";
 
-$response = file_get_contents($url);
+$response = @file_get_contents($url);
 
-$stock = json_decode($response,true);
+$stock = $response ? json_decode($response, true) : null;
 
-$count = $stock["pagination"]["count"] ?? 0;
+if ($response === false || !$stock || !isset($stock["data"]["tickers"])) {
+    echo "<tr><td colspan='4' style='text-align: center; color: #721c24;'>Search API is currently rate-limited or unavailable. Please try again later.</td></tr>";
+} else {
+    $count = $stock["pagination"]["count"] ?? 0;
 
+    for($i=0; $i<$count; $i++)
+    {
+        $tickerData = $stock["data"]["tickers"][$i] ?? null;
+        if (!$tickerData) continue;
 
-for($i=0; $i<$count; $i++)
-{
+        $symbol = $tickerData["symbol"] ?? '';
+        $name = $tickerData["name"] ?? '';
+        $country = $stock["data"]["country"] ?? 'India';
 
-$symbol = $stock["data"]["tickers"][$i]["symbol"];
-
-$name = $stock["data"]["tickers"][$i]["name"];
-
-$country = $stock["data"]["country"];
-
-echo "<tr>";
-
-echo "<td>
-<a href='selectedStock.php?ticker=".$symbol."&days=15'>
-".$symbol."
-</a>
-</td>";
-
-echo "<td>".$name."</td>";
-
-echo "<td>".$exchange."</td>";
-
-echo "<td>".$country."</td>";
-
-echo "</tr>";
-
+        echo "<tr>";
+        echo "<td>
+        <a href='selectedStock.php?ticker=".urlencode($symbol)."&days=15'>
+        ".htmlspecialchars($symbol)."
+        </a>
+        </td>";
+        echo "<td>".htmlspecialchars($name)."</td>";
+        echo "<td>".htmlspecialchars($exchange)."</td>";
+        echo "<td>".htmlspecialchars($country)."</td>";
+        echo "</tr>";
+    }
 }
-
 ?>
 
 </tbody>
