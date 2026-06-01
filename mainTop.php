@@ -1,3 +1,18 @@
+<?php
+require("./conn.php");
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: index.php");
+    exit();
+}
+$database = array();
+
+$sql = "SELECT * FROM `users` WHERE `id`= " . $_SESSION['user_id'];
+$result = mysqli_query($conn, $sql);
+while ($row = mysqli_fetch_assoc($result)) {
+    $database[] = $row;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,21 +37,6 @@
 <body>
 
     <div class="container">
-        <?php
-        require("./conn.php");
-        session_start();
-        if (!isset($_SESSION["user_id"])) {
-            header("Location: index.php");
-            exit();
-        }
-        $database = array();
-
-        $sql = "SELECT * FROM `users` WHERE `id`= " . $_SESSION['user_id'];
-        $result = mysqli_query($conn, $sql);
-        while ($row = mysqli_fetch_assoc($result)) {
-            $database[] = $row;
-        }
-        ?>
         <nav class="navbar">
             <div class="title_logo">
                 <img class="logo" src="./assets/logo.png" alt="">
