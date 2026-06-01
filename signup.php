@@ -11,7 +11,7 @@ require('conn.php');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon" />
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="Style.css">
 
 <title>Stock Market Application</title>
 </head>
@@ -32,49 +32,24 @@ require('conn.php');
 </div>
 
 <div class="signup_body">
-
-<form action="" method="post">
-
-<div class="signup_content">
-
-<h3>Sign up</h3>
-
-<div>
-<input type="text" class="name" name="firstname" placeholder="First Name" required>
-<input type="text" class="name" name="lastname" placeholder="Last Name" required>
-</div>
-
-<div>
-<textarea name="address" class="textarea_signup" placeholder="Address" required></textarea>
-</div>
-
-<div>
-<input type="email" class="email_signup" name="email" placeholder="Email" required>
-</div>
-
-<div>
-<input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
-</div>
-
-<div>
-<input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
-</div>
-
-<div>
-<input type="number" class="mobileNo_signup" name="mobile_number" placeholder="Mobile No" required>
-</div>
-
-<div>
-<input type="text" class="panNo_signup" name="pan_number" placeholder="Pancard No" required>
-</div>
-
-<div>
-<input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up">
-</div>
-
-</div>
-
-</form>
+  <div class="signup_card">
+    <form action="" method="post">
+      <h3>Sign up</h3>
+      <div class="name_row">
+        <input type="text" class="name" name="firstname" placeholder="First Name" required>
+        <input type="text" class="name" name="lastname" placeholder="Last Name" required>
+      </div>
+      <textarea name="address" class="textarea_signup" placeholder="Address" required></textarea>
+      <input type="email" class="email_signup" name="email" placeholder="Email" required>
+      <div class="name_row">
+        <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
+        <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
+      </div>
+      <input type="number" class="email_signup" name="mobile_number" placeholder="Mobile No" required>
+      <input type="text" class="email_signup" name="pan_number" placeholder="Pancard No" required>
+      <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up">
+    </form>
+  </div>
 
 <?php
 
