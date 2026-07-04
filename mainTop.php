@@ -7,11 +7,14 @@ if (!isset($_SESSION["user_id"])) {
 }
 $database = array();
 
-$sql = "SELECT * FROM `users` WHERE `id`= " . $_SESSION['user_id'];
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM `users` WHERE `id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 while ($row = mysqli_fetch_assoc($result)) {
     $database[] = $row;
 }
+mysqli_stmt_close($stmt);
 ?>
 <!DOCTYPE html>
 <html lang="en">

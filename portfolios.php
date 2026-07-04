@@ -10,19 +10,25 @@ require("./conn.php");
 
 $database = array();
 // session_start();
-$sql = "SELECT * FROM `users` WHERE `id`= " . $_SESSION['user_id'];
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM `users` WHERE `id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 while ($row = mysqli_fetch_assoc($result)) {
     $database[] = $row;
 }
+mysqli_stmt_close($stmt);
 
 $stockData = array();
-$sql = "SELECT * FROM `stock_details` WHERE `status`=1 AND `user_id`= " . $_SESSION['user_id'];
-
-$result = mysqli_query($conn, $sql);
+$status = 1;
+$stmt = mysqli_prepare($conn, "SELECT * FROM `stock_details` WHERE `status` = ? AND `user_id` = ?");
+mysqli_stmt_bind_param($stmt, "ii", $status, $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 while ($row = mysqli_fetch_assoc($result)) {
     $stockData[] = $row;
 }
+mysqli_stmt_close($stmt);
 // print_r($database);
 ?>
 
@@ -98,12 +104,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <?php
                 if (isset($_GET["sell"])) {
                     $stockDataSell = array();
-                    $sql = "SELECT * FROM `stock_details` WHERE `status`=0 AND `user_id`= " . $_SESSION['user_id'];
-
-                    $result = mysqli_query($conn, $sql);
+                    $stmt = mysqli_prepare($conn, "SELECT * FROM `stock_details` WHERE `status` = 0 AND `user_id` = ?");
+                    mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+                    mysqli_stmt_execute($stmt);
+                    $result = mysqli_stmt_get_result($stmt);
                     while ($row = mysqli_fetch_assoc($result)) {
                         $stockDataSell[] = $row;
                     }
+                    mysqli_stmt_close($stmt);
                     if (!empty($stockDataSell)) {
                         foreach ($stockDataSell as $key => $value) {
                             echo "<tr>";
@@ -181,14 +189,17 @@ while ($row = mysqli_fetch_assoc($result)) {
                         }
                     }
                 }
-                $sql_update = "UPDATE `users` SET `available_balance`=`available_balance` + " . $stockSoldPrice . " WHERE `id`= " . $_SESSION['user_id'];
-                $result_update = mysqli_query($conn, $sql_update);
+                $stmt = mysqli_prepare($conn, "UPDATE `users` SET `available_balance` = `available_balance` + ? WHERE `id` = ?");
+                mysqli_stmt_bind_param($stmt, "di", $stockSoldPrice, $_SESSION['user_id']);
+                $result_update = mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
                 if ($result_update) {
                     // echo "<script>alert('Stock Sold Successfully')</script>";
 
-                    $sqlUpdateStatus = "UPDATE `stock_details` SET `status`= 0, `sell_price`=" . $stockSoldPrice . " WHERE `id`= " . $_REQUEST["id"];
-
-                    $resultUpdateStatus = mysqli_query($conn, $sqlUpdateStatus);
+                    $stmt = mysqli_prepare($conn, "UPDATE `stock_details` SET `status` = 0, `sell_price` = ? WHERE `id` = ?");
+                    mysqli_stmt_bind_param($stmt, "di", $stockSoldPrice, $_REQUEST["id"]);
+                    $resultUpdateStatus = mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
                     if ($resultUpdateStatus) {
                         echo "<script>alert('Stock Sold Successfully')</script>";
                         echo "<script>window.location.href='portfolios.php'</script>";
@@ -279,11 +290,16 @@ while ($row = mysqli_fetch_assoc($result)) {
             if ($_POST["amount"] > $database[0]["available_balance"]) {
                 echo "<script>alert('Insufficient Balance')</script>";
             } else {
-                $sql_withdraw = "UPDATE `users` SET `available_balance`=`available_balance` - " . $_POST["amount"] . " WHERE `id`= " . $_SESSION['user_id'];
-                $result_withdraw = mysqli_query($conn, $sql_withdraw);
+                $stmt = mysqli_prepare($conn, "UPDATE `users` SET `available_balance` = `available_balance` - ? WHERE `id` = ?");
+                mysqli_stmt_bind_param($stmt, "di", $_POST["amount"], $_SESSION['user_id']);
+                $result_withdraw = mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
                 if ($result_withdraw) {
-                    $sql = "INSERT INTO `users_transaction` (`debit`, `payment_id`, `description`, `user_id`) VALUES (" . (float)$_POST["amount"] . ", '" . mysqli_real_escape_string($conn, $_POST["accountNo"]) . "', 'withdraw', " . $_SESSION['user_id'] . ")";
-                    $result = mysqli_query($conn, $sql);
+                    $stmt = mysqli_prepare($conn, "INSERT INTO `users_transaction` (`debit`, `payment_id`, `description`, `user_id`) VALUES (?, ?, ?, ?)");
+                    $description = 'withdraw';
+                    mysqli_stmt_bind_param($stmt, "dssi", $_POST["amount"], $_POST["accountNo"], $description, $_SESSION['user_id']);
+                    $result = mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
                     if ($result) {
                         echo "<script>alert('Your money will be transferred to your account in 3-5 working days.')</script>";
                         echo "<script>window.location.href='portfolios.php'</script>";

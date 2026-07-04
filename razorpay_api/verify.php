@@ -39,12 +39,17 @@ if ($success === true) {
     //          <p>Payment ID: {$_POST['razorpay_payment_id']}</p>";
     // echo "<script>alert('Payment Sucessfull...')</script>";
 
-    $sql = "INSERT INTO `users_transaction` (`credit`, `payment_id`, `description`, `user_id`) VALUES (" . (float)$_COOKIE["amount"] . ", '" . mysqli_real_escape_string($conn, $_POST["razorpay_payment_id"]) . "', 'deposit', " . (int)$_SESSION["user_id"] . ")";
-    $result = mysqli_query($conn, $sql);
+    $stmt = mysqli_prepare($conn, "INSERT INTO `users_transaction` (`credit`, `payment_id`, `description`, `user_id`) VALUES (?, ?, ?, ?)");
+    $description = 'deposit';
+    mysqli_stmt_bind_param($stmt, "dssi", $_COOKIE["amount"], $_POST["razorpay_payment_id"], $description, $_SESSION["user_id"]);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     if ($result) {
-        $sql_update = "UPDATE `users` SET `available_balance` = `available_balance` + " . (float)$_COOKIE["amount"] . " WHERE `id` = " . (int)$_SESSION["user_id"];
-        $result_update = mysqli_query($conn, $sql_update);
+        $stmt = mysqli_prepare($conn, "UPDATE `users` SET `available_balance` = `available_balance` + ? WHERE `id` = ?");
+        mysqli_stmt_bind_param($stmt, "di", $_COOKIE["amount"], $_SESSION["user_id"]);
+        $result_update = mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         if ($result_update) {
             echo "<script>
                 alert('Payment Successful...');

@@ -3,18 +3,24 @@ require("./mainTop.php");
 require("./conn.php");
 
 $database = array();
-$sql = "SELECT * FROM `users` WHERE `id`= " . $_SESSION['user_id'];
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM `users` WHERE `id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 while ($row = mysqli_fetch_assoc($result)) {
     $database[] = $row;
 }
+mysqli_stmt_close($stmt);
 // echo $_SESSION['user_id'];
 $dataTransaction = array();
-$sqlTransaction = "SELECT * FROM `users_transaction` WHERE `user_id`= " . $_SESSION['user_id'];
-$resultTransaction = mysqli_query($conn, $sqlTransaction);
+$stmt = mysqli_prepare($conn, "SELECT * FROM `users_transaction` WHERE `user_id` = ?");
+mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$resultTransaction = mysqli_stmt_get_result($stmt);
 while ($rowTransaction = mysqli_fetch_assoc($resultTransaction)) {
     $dataTransaction[] = $rowTransaction;
 }
+mysqli_stmt_close($stmt);
 
 ?>
 <div class="content_transactionHistory">

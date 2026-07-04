@@ -1,0 +1,44 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHP
+vendor/
+composer.lock
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+tmp/
+temp/
+
+# Build artifacts
+dist/
+build/
+
+# Node modules (if using any frontend tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker
+.docker/
+
+# Application specific
+/var/www/html/uploads/
+/var/www/html/files/

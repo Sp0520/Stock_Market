@@ -4,12 +4,15 @@ require("./conn.php");
 
 $database = [];
 
-$sql = "SELECT * FROM users WHERE id=" . $_SESSION['user_id'];
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $database[] = $row;
 }
+mysqli_stmt_close($stmt);
 
 $ticker = strtoupper(explode(".", $_GET["ticker"] ?? "TCS")[0]);
 
@@ -97,17 +100,18 @@ echo "<script>alert('Insufficient Balance')</script>";
 
 } else {
 
-$sqlupdate = "UPDATE users SET available_balance = available_balance - {$currentPrice} WHERE id=" . $_SESSION['user_id'];
-
-$result = mysqli_query($conn,$sqlupdate);
+$stmt = mysqli_prepare($conn, "UPDATE users SET available_balance = available_balance - ? WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "di", $currentPrice, $_SESSION['user_id']);
+$result = mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 
 if ($result) {
 
-$sqlInsert = "INSERT INTO stock_details (stock_name,purchase_price,user_id,status)
-
-VALUES('$ticker','$currentPrice','".$_SESSION['user_id']."',1)";
-
-$result = mysqli_query($conn,$sqlInsert);
+$stmt = mysqli_prepare($conn, "INSERT INTO stock_details (stock_name, purchase_price, user_id, status) VALUES (?, ?, ?, ?)");
+$status = 1;
+mysqli_stmt_bind_param($stmt, "sdii", $ticker, $currentPrice, $_SESSION['user_id'], $status);
+$result = mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 
 if ($result) {
 echo "<script>

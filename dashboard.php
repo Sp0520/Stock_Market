@@ -9,10 +9,14 @@ if(!isset($_SESSION['user_id'])){
 
 $user_id = $_SESSION['user_id'];
 
-// Example data queries (you can improve later)
-$balanceQuery = mysqli_query($conn,"SELECT available_balance FROM users WHERE id='$user_id'");
+// Use prepared statement to prevent SQL injection
+$stmt = mysqli_prepare($conn, "SELECT available_balance FROM users WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+$balanceQuery = mysqli_stmt_get_result($stmt);
 $balanceData = mysqli_fetch_assoc($balanceQuery);
 $balance = $balanceData['available_balance'] ?? 0;
+mysqli_stmt_close($stmt);
 ?>
 
 <!DOCTYPE html>
