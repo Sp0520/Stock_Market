@@ -36,7 +36,10 @@ mysqli_stmt_close($stmt);
     <div class="addAmount">
         <div class="balance_history">
             <?php
-            echo "<h4>Available Balance : ₹ " . $database[0]["available_balance"] . "</h4>";
+            $balance = (!empty($database) && isset($database[0]["available_balance"])) 
+                ? htmlspecialchars($database[0]["available_balance"], ENT_QUOTES, 'UTF-8')
+                : 0;
+            echo "<h4>Available Balance : ₹ " . $balance . "</h4>";
             ?>
             <div class="btnHistoryDiv">
                 <div>

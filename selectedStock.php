@@ -94,7 +94,11 @@ $days = $_GET["days"] ?? 15;
 
 if (isset($_POST["btnBuy"])) {
 
-if ($database[0]["available_balance"] < $currentPrice) {
+$userBalance = (!empty($database) && isset($database[0]["available_balance"])) 
+    ? floatval($database[0]["available_balance"]) 
+    : 0;
+
+if ($userBalance < floatval($currentPrice)) {
 
 echo "<script>alert('Insufficient Balance')</script>";
 

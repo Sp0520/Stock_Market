@@ -24,7 +24,12 @@ mysqli_stmt_close($stmt);
 
 ?>
 <div class="content_transactionHistory">
-    <h3>Available Balance = ₹ <?= $database[0]["available_balance"] ?></h3>
+    <?php
+    $balance = (!empty($database) && isset($database[0]["available_balance"])) 
+        ? htmlspecialchars($database[0]["available_balance"], ENT_QUOTES, 'UTF-8')
+        : 0;
+    ?>
+    <h3>Available Balance = ₹ <?= $balance ?></h3>
     <table>
         <thead>
             <tr>

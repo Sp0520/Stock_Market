@@ -4,7 +4,7 @@ FROM php:8.2-apache
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 # Enable Apache modules
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 
 # Copy application files
 COPY . /var/www/html/
@@ -13,8 +13,8 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 755 /var/www/html
 
-# Create logs directory if needed
-RUN mkdir -p /var/www/html/logs && chown www-data:www-data /var/www/html/logs
+# Create logs directory with proper permissions
+RUN mkdir -p /var/www/html/logs && chown www-data:www-data /var/www/html/logs && chmod 755 /var/www/html/logs
 
 # Set working directory
 WORKDIR /var/www/html

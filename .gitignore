@@ -42,3 +42,10 @@ yarn-error.log
 # Application specific
 /var/www/html/uploads/
 /var/www/html/files/
+
+# Development/Test files
+demo.php
+test.php
+demo.js
+.DS_Store
+*.bak

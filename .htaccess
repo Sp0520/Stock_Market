@@ -1,0 +1,46 @@
+# Stock Market Application - Security Configuration
+
+# Disable directory listing
+Options -Indexes
+
+# Enable Apache rewrite engine
+RewriteEngine On
+
+# Redirect HTTP to HTTPS (uncomment when using SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent access to sensitive files
+<FilesMatch "^(\.env|\.git|composer\.json|composer\.lock|\.htaccess|README\.md|RENDER_DEPLOYMENT\.md)$">
+    Deny from all
+</FilesMatch>
+
+# Prevent access to directories
+<DirectoryMatch "^(\.git|vendor|logs|tmp)">
+    Deny from all
+</DirectoryMatch>
+
+# Set proper headers
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Prevent MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Enable XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Deny access to error and access logs
+<FilesMatch "\.(log)$">
+    Deny from all
+</FilesMatch>
+
+# Block access to .git
+<DirectoryMatch "\.git">
+    Deny from all
+</DirectoryMatch>

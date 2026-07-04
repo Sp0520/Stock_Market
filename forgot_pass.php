@@ -15,8 +15,7 @@ if (isset($_POST['submit'])) {
 
     } else {
 
-        $sql = "SELECT id FROM users WHERE email=?";
-        $stmt = mysqli_prepare($conn, $sql);
+        $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");
 
         if ($stmt) {
 

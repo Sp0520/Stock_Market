@@ -39,15 +39,24 @@ if ($success === true) {
     //          <p>Payment ID: {$_POST['razorpay_payment_id']}</p>";
     // echo "<script>alert('Payment Sucessfull...')</script>";
 
+    $amount = isset($_COOKIE["amount"]) ? floatval($_COOKIE["amount"]) : 0;
+    $paymentId = isset($_POST["razorpay_payment_id"]) ? trim($_POST["razorpay_payment_id"]) : '';
+    $userId = isset($_SESSION["user_id"]) ? intval($_SESSION["user_id"]) : 0;
+
+    if ($amount <= 0 || empty($paymentId) || $userId <= 0) {
+        echo "<script>alert('Invalid payment data...');</script>";
+        exit();
+    }
+
     $stmt = mysqli_prepare($conn, "INSERT INTO `users_transaction` (`credit`, `payment_id`, `description`, `user_id`) VALUES (?, ?, ?, ?)");
     $description = 'deposit';
-    mysqli_stmt_bind_param($stmt, "dssi", $_COOKIE["amount"], $_POST["razorpay_payment_id"], $description, $_SESSION["user_id"]);
+    mysqli_stmt_bind_param($stmt, "dssi", $amount, $paymentId, $description, $userId);
     $result = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
     if ($result) {
         $stmt = mysqli_prepare($conn, "UPDATE `users` SET `available_balance` = `available_balance` + ? WHERE `id` = ?");
-        mysqli_stmt_bind_param($stmt, "di", $_COOKIE["amount"], $_SESSION["user_id"]);
+        mysqli_stmt_bind_param($stmt, "di", $amount, $userId);
         $result_update = mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         if ($result_update) {
@@ -60,7 +69,7 @@ if ($success === true) {
             echo "<script>alert('Error while updating available balance...');</script>";
         }
     } else {
-        echo "<script>alert('Payment Failed...');</script>" . htmlspecialchars(mysqli_error($conn));
+        echo "<script>alert('Payment Failed...');</script>";
     }
 } else {
     $html = "<p>Your payment failed</p>
