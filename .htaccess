@@ -12,13 +12,11 @@ RewriteEngine On
 
 # Prevent access to sensitive files
 <FilesMatch "^(\.env|\.git|composer\.json|composer\.lock|\.htaccess|README\.md|RENDER_DEPLOYMENT\.md)$">
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Prevent access to directories
-<DirectoryMatch "^(\.git|vendor|logs|tmp)">
-    Deny from all
-</DirectoryMatch>
+RewriteRule ^(\.git|vendor|logs|tmp)(/|$) - [F,L]
 
 # Set proper headers
 <IfModule mod_headers.c>
@@ -37,10 +35,5 @@ RewriteEngine On
 
 # Deny access to error and access logs
 <FilesMatch "\.(log)$">
-    Deny from all
+    Require all denied
 </FilesMatch>
-
-# Block access to .git
-<DirectoryMatch "\.git">
-    Deny from all
-</DirectoryMatch>
