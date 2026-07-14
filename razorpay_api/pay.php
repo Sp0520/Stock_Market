@@ -18,6 +18,11 @@ if (!preg_match('/^rzp_(test|live)_[A-Za-z0-9]+$/', $keyId)) {
 
 $api = new Api($keyId, $keySecret);
 
+$amountVal = isset($_COOKIE['amount']) ? floatval($_COOKIE['amount']) : 0;
+if ($amountVal <= 0) {
+    die('Invalid amount. Please return to the portfolios page and enter a valid amount.');
+}
+
 try {
     //
     // We create a razorpay order using orders api
@@ -25,7 +30,7 @@ try {
     //
     $orderData = [
         'receipt'         => 3456,
-        'amount'          => $_COOKIE['amount'] * 100, // 2000 rupees in paise
+        'amount'          => $amountVal * 100, // amount in paise
         'currency'        => 'INR',
         'payment_capture' => 1 // auto capture
     ];
@@ -45,10 +50,15 @@ try {
 $displayAmount = $amount = $orderData['amount'];
 
 if ($displayCurrency !== 'INR') {
-    $url = "https://api.fixer.io/latest?symbols=$displayCurrency&base=INR";
-    $exchange = json_decode(file_get_contents($url), true);
+    $url = "https://open.er-api.com/v6/latest/INR";
+    $jsonExchange = @file_get_contents($url);
+    $exchange = $jsonExchange ? json_decode($jsonExchange, true) : null;
 
-    $displayAmount = $exchange['rates'][$displayCurrency] * $amount / 100;
+    if ($exchange && isset($exchange['rates'][$displayCurrency])) {
+        $displayAmount = $exchange['rates'][$displayCurrency] * $amount / 100;
+    } else {
+        $displayAmount = $amount / 100; // fallback to INR if API fails
+    }
 }
 
 // Debug data to verify correct API key used

@@ -143,6 +143,10 @@ require("./mainTop.php");
                 if ($ticker === '') {
                     echo "<tr><td colspan='7'>Please enter a ticker symbol.</td></tr>";
                 } else {
+                    // Automatically append .BSE if no exchange suffix is provided
+                    if (strpos($ticker, '.') === false) {
+                        $ticker .= '.BSE';
+                    }
                     getData($ticker);
                 }
             }
