@@ -103,4 +103,43 @@ try {
 }
 
 mysqli_set_charset($conn, "utf8mb4");
+
+// Auto-initialize database tables if they do not exist
+try {
+    $tableCheck = mysqli_query($conn, "SHOW TABLES LIKE 'users'");
+    if ($tableCheck && mysqli_num_rows($tableCheck) === 0) {
+        $schemaPath = __DIR__ . '/stock_market_application.sql';
+        if (file_exists($schemaPath)) {
+            $sqlContent = file_get_contents($schemaPath);
+            
+            // Remove comments and empty lines
+            $sqlContent = preg_replace('/--.*\n/', '', $sqlContent);
+            $sqlContent = preg_replace('/\/\*.*?\*\//s', '', $sqlContent);
+            
+            // Split by semicolon (safe as there are no semicolons inside text literals in our schema)
+            $queries = explode(';', $sqlContent);
+            
+            mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 0");
+            
+            $success = true;
+            foreach ($queries as $query) {
+                $query = trim($query);
+                if (!empty($query)) {
+                    if (!mysqli_query($conn, $query)) {
+                        error_log("Database initialization error on query: " . substr($query, 0, 100) . "... Error: " . mysqli_error($conn));
+                        $success = false;
+                    }
+                }
+            }
+            
+            mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 1");
+            
+            if ($success) {
+                error_log("Database tables initialized successfully from stock_market_application.sql");
+            }
+        }
+    }
+} catch (Throwable $e) {
+    error_log("Database auto-initialization error: " . $e->getMessage());
+}
 ?>
