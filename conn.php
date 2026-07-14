@@ -85,18 +85,21 @@ if (!empty($missing_vars)) {
 }
 
 // Establish database connection
-$conn = mysqli_connect(
-    $db_host,
-    $db_user,
-    $db_pass,
-    $db_name,
-    (int)$db_port
-);
-
-if (!$conn) {
-    error_log("Database Connection Error: " . mysqli_connect_error());
+try {
+    $conn = mysqli_connect(
+        $db_host,
+        $db_user,
+        $db_pass,
+        $db_name,
+        (int)$db_port
+    );
+    if (!$conn) {
+        throw new Exception(mysqli_connect_error());
+    }
+} catch (Throwable $e) {
+    error_log("Database Connection Error: " . $e->getMessage());
     error_log("Attempted connection to: " . $db_host . " with user: " . $db_user);
-    die("Database Connection Failed: " . mysqli_connect_error());
+    die("Database Connection Failed. Please check the server logs for details.");
 }
 
 mysqli_set_charset($conn, "utf8mb4");
