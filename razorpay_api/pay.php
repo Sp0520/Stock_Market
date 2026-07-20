@@ -1,19 +1,15 @@
 <?php
-
-require('config.php');
-require('razorpay-php/Razorpay.php');
-session_start();
+require_once(dirname(__DIR__) . '/config/razorpay.php');
 
 // Create the Razorpay Order
-
 use Razorpay\Api\Api;
 
 if (empty($keyId) || empty($keySecret)) {
-    die('Razorpay keyId or keySecret is empty in config.php');
+    die('Razorpay keyId or keySecret is missing in configuration.');
 }
 
 if (!preg_match('/^rzp_(test|live)_[A-Za-z0-9]+$/', $keyId)) {
-    die('Razorpay keyId is not valid format. It should be rzp_test_... or rzp_live_...');
+    die('Razorpay keyId is not valid format.');
 }
 
 $api = new Api($keyId, $keySecret);
@@ -24,12 +20,8 @@ if ($amountVal <= 0) {
 }
 
 try {
-    //
-    // We create a razorpay order using orders api
-    // Docs: https://docs.razorpay.com/docs/orders
-    //
     $orderData = [
-        'receipt'         => 3456,
+        'receipt'         => 'rcpt_' . time(),
         'amount'          => $amountVal * 100, // amount in paise
         'currency'        => 'INR',
         'payment_capture' => 1 // auto capture
@@ -39,69 +31,97 @@ try {
     $razorpayOrderId = $razorpayOrder['id'];
     $_SESSION['razorpay_order_id'] = $razorpayOrderId;
 } catch (Exception $e) {
-    // show the root cause, especially 401 Authentication failed
     http_response_code(500);
+    echo '<div style="background:#111827; color:#fff; font-family:sans-serif; padding:40px; text-align:center; min-height:100vh;">';
     echo '<h1>Razorpay API Error</h1>';
     echo '<p>' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . '</p>';
-    echo '<pre>' . htmlspecialchars($e->getTraceAsString(), ENT_QUOTES, 'UTF-8') . '</pre>';
+    echo '</div>';
     exit;
 }
 
 $displayAmount = $amount = $orderData['amount'];
 
-if ($displayCurrency !== 'INR') {
-    $url = "https://open.er-api.com/v6/latest/INR";
-    $jsonExchange = @file_get_contents($url);
-    $exchange = $jsonExchange ? json_decode($jsonExchange, true) : null;
-
-    if ($exchange && isset($exchange['rates'][$displayCurrency])) {
-        $displayAmount = $exchange['rates'][$displayCurrency] * $amount / 100;
-    } else {
-        $displayAmount = $amount / 100; // fallback to INR if API fails
-    }
-}
-
-// Debug data to verify correct API key used
-error_log('Razorpay API KeyId: ' . $keyId);
-error_log('Razorpay API KeySecret length: ' . strlen($keySecret));
 $data = [
     "key"               => $keyId,
     "amount"            => $amount,
-    "name"              => "STOCK MARKET APPLICATION",
-    "description"       => "Payment for STOCK MARKET APPLICATION",
-    "image"             => "https://s29.postimg.org/r6dj1g85z/daft_punk.jpg",
+    "name"              => "BullVest Trading Platform",
+    "description"       => "Deposit credits to your BullVest account",
+    "image"             => "https://cdn-icons-png.flaticon.com/512/3594/3594449.png",
     "prefill"           => [
-        "name"              => "Rushi",
-        "email"             => "abc@xyz.com",
+        "name"              => htmlspecialchars($_SESSION['firstname'] ?? 'Trader'),
+        "email"             => htmlspecialchars($_SESSION['email'] ?? 'trader@bullvest.com'),
         "contact"           => "9999999999",
     ],
     "notes"             => [
-        "address"           => "Hello World",
-        "merchant_order_id" => "12312321",
+        "address"           => "BullVest Platform",
+        "merchant_order_id" => "order_" . time(),
     ],
     "theme"             => [
-        "color"             => "#F37254"
+        "color"             => "#2962FF"
     ],
     "order_id"          => $razorpayOrderId,
 ];
 
-if ($displayCurrency !== 'INR') {
-    $data['display_currency']  = $displayCurrency;
-    $data['display_amount']    = $displayAmount;
-}
-
 $json = json_encode($data);
 ?>
 
-<form action="verify.php" method="POST">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processing Payment...</title>
+    <style>
+        body {
+            background-color: #0B1220;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loader {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border-left-color: #2962FF;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <h2>Redirecting to payment gateway...</h2>
+        <p style="color: #9CA3AF;">Please do not refresh the page or click back.</p>
+    </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="<?php echo $data['key'] ?>" data-amount="<?php echo $data['amount'] ?>" data-currency="INR" data-name="<?php echo $data['name'] ?>" data-image="<?php echo $data['image'] ?>" data-description="<?php echo $data['description'] ?>" data-prefill.name="<?php echo $data['prefill']['name'] ?>" data-prefill.email="<?php echo $data['prefill']['email'] ?>" data-prefill.contact="<?php echo $data['prefill']['contact'] ?>" data-notes.shopping_order_id="3456" data-order_id="<?php echo $data['order_id'] ?>" <?php if ($displayCurrency !== 'INR') { ?> data-display_amount="<?php echo $data['display_amount'] ?>" <?php } ?> <?php if ($displayCurrency !== 'INR') { ?> data-display_currency="<?php echo $data['display_currency'] ?>" <?php } ?>>
+    <form action="verify.php" method="POST" style="display: none;">
+        <script src="https://checkout.razorpay.com/v1/checkout.js" 
+            data-key="<?php echo $data['key'] ?>" 
+            data-amount="<?php echo $data['amount'] ?>" 
+            data-currency="INR" 
+            data-name="<?php echo $data['name'] ?>" 
+            data-image="<?php echo $data['image'] ?>" 
+            data-description="<?php echo $data['description'] ?>" 
+            data-prefill.name="<?php echo $data['prefill']['name'] ?>" 
+            data-prefill.email="<?php echo $data['prefill']['email'] ?>" 
+            data-prefill.contact="<?php echo $data['prefill']['contact'] ?>" 
+            data-notes.shopping_order_id="3456" 
+            data-order_id="<?php echo $data['order_id'] ?>">
+        </script>
+        <input type="hidden" name="shopping_order_id" value="3456">
+    </form>
+
+    <script>
+        document.querySelector(".razorpay-payment-button").click();
     </script>
-
-    <input type="hidden" name="shopping_order_id" value="3456">
-
-</form>
-
-<script>
-    document.querySelector(".razorpay-payment-button").click();
-</script>
+</body>
+</html>

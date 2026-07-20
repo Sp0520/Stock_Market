@@ -1,83 +1,101 @@
 <?php
-require('conn.php');
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once(__DIR__ . '/config/conn.php');
 
-// Only allow access if forgot-password session is set
-if (empty($_SESSION['forgot_user_id_verified'])) {
-    header('Location: forgot_pass.php');
+// Block access if reset flow wasn't verified
+if (!isset($_SESSION['reset_user_id'])) {
+    header("Location: forgot_pass.php");
     exit();
 }
 
-$userId = (int) $_SESSION['forgot_user_id_verified'];
+$errorMsg = '';
+$successMsg = '';
 
-if (isset($_POST['submit'])) {
-    $password = $_POST['password'] ?? '';
-
-    if ($password === '') {
-        $msg = "Password cannot be empty.";
+if (isset($_POST['btnUpdatePass'])) {
+    if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
+        $errorMsg = 'CSRF validation failed. Please try again.';
     } else {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        if ($stmt = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE id = ?")) {
-            mysqli_stmt_bind_param($stmt, "si", $hashedPassword, $userId);
-            mysqli_stmt_execute($stmt);
-
-            if (mysqli_stmt_affected_rows($stmt) > 0) {
-                $msg = "Password Updated Successfully!";
-                unset($_SESSION['forgot_user_id_verified']);
-            } else {
-                $msg = "Failed to update password.";
-            }
-
-            mysqli_stmt_close($stmt);
+        $password = $_POST['new_pass'];
+        $confirm = $_POST['confirm_pass'];
+        
+        if ($password !== $confirm) {
+            $errorMsg = 'Passwords do not match.';
+        } elseif (strlen($password) < 6) {
+            $errorMsg = 'Password must be at least 6 characters.';
         } else {
-            $msg = "Failed to update password.";
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            $userId = $_SESSION['reset_user_id'];
+            
+            $stmt = mysqli_prepare($conn, "UPDATE users SET password = ? WHERE id = ?");
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "si", $hashed, $userId);
+                if (mysqli_stmt_execute($stmt)) {
+                    // Success! Clean reset token
+                    unset($_SESSION['reset_user_id']);
+                    
+                    // Create notification
+                    $stmtNotif = mysqli_prepare($conn, "INSERT INTO notifications (user_id, title, message) VALUES (?, 'Password Reset Successful', 'Your account password was changed successfully.')");
+                    if ($stmtNotif) {
+                        mysqli_stmt_bind_param($stmtNotif, "i", $userId);
+                        mysqli_stmt_execute($stmtNotif);
+                        mysqli_stmt_close($stmtNotif);
+                    }
+                    
+                    $successMsg = 'Password updated successfully! Redirecting to login...';
+                    echo "<script>
+                        setTimeout(() => { window.location.href = 'index.php'; }, 2000);
+                    </script>";
+                } else {
+                    $errorMsg = 'Internal update error.';
+                }
+                mysqli_stmt_close($stmt);
+            }
         }
     }
 }
+
+include_once(__DIR__ . '/includes/header.php');
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Reset Password</title>
-<link rel="stylesheet" href="reset.css">
-
-<?php if(isset($msg) && $msg === "Password Updated Successfully!"){ ?>
-<script>
-setTimeout(function(){
-window.location.href="index.php";  // change to your login page name
-},3000);
-</script>
-<?php } ?>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="card">
-
-<h2>Reset Password</h2>
-
-<?php if(isset($msg)){ ?>
-<p class="success"><?php echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8'); ?></p>
-<?php } ?>
-
-<form method="post">
-
-<input type="password" name="password" placeholder="Enter New Password" required>
-
-<button type="submit" name="submit">Reset Password</button>
-
-</form>
-
+<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: url('./assets/background.jpg') no-repeat center center/cover;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="glass-panel p-4 text-center">
+                <div class="mb-4">
+                    <img src="./assets/logo.png" alt="BullVest Logo" style="height: 64px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594449.png'">
+                    <h3 class="mt-3 fw-bold">Reset Password</h3>
+                    <p class="text-secondary small">Choose a secure, strong password</p>
+                </div>
+                
+                <?php if (!empty($errorMsg)): ?>
+                    <div class="alert alert-danger py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= htmlspecialchars($errorMsg) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($successMsg)): ?>
+                    <div class="alert alert-success py-2 small" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> <?= htmlspecialchars($successMsg) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (empty($successMsg)): ?>
+                    <form action="" method="post" autocomplete="off">
+                        <?= getCsrfInput() ?>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="new_pass" name="new_pass" placeholder="New Password" required style="border-radius: var(--border-radius);">
+                            <label for="new_pass" class="text-secondary">New Password</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="confirm_pass" name="confirm_pass" placeholder="Re-enter Password" required style="border-radius: var(--border-radius);">
+                            <label for="confirm_pass" class="text-secondary">Confirm New Password</label>
+                        </div>
+                        
+                        <button type="submit" name="btnUpdatePass" class="btn btn-primary-custom w-100 mb-3" style="border-radius: var(--border-radius);">Update Password</button>
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </div>
 
-</div>
-
-</body>
-</html>
+<?php include_once(__DIR__ . '/includes/footer.php'); ?>

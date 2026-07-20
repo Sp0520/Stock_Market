@@ -1,141 +1,179 @@
 <?php
-require('conn.php');
-?>
+require_once(__DIR__ . '/config/conn.php');
 
-<!DOCTYPE html>
-<html lang="en">
+if (isset($_SESSION['user_id'])) {
+    header("Location: market.php");
+    exit();
+}
 
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+$errorMsg = '';
+$successMsg = '';
 
-<link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon" />
-<link rel="stylesheet" href="Style.css">
-
-<title>Stock Market Application</title>
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="background_img"></div>
-
-<div class="header">
-<div>
-<img class="logo" src="./assets/logo.png" alt="">
-</div>
-<p class="title">Stock Market Application</p>
-</div>
-
-<div class="signup_body">
-  <div class="signup_card">
-    <form action="" method="post">
-      <h3>Sign up</h3>
-      <div class="name_row">
-        <input type="text" class="name" name="firstname" placeholder="First Name" required>
-        <input type="text" class="name" name="lastname" placeholder="Last Name" required>
-      </div>
-      <textarea name="address" class="textarea_signup" placeholder="Address" required></textarea>
-      <input type="email" class="email_signup" name="email" placeholder="Email" required>
-      <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
-      <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
-      <input type="number" class="email_signup" name="mobile_number" placeholder="Mobile No" required>
-      <input type="text" class="email_signup" name="pan_number" placeholder="Pancard No" required>
-      <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up">
-    </form>
-  </div>
-
-<?php
-
-if(isset($_POST['btnSignup'])){
-
-    $firstname = trim($_POST['firstname']);
-    $lastname = trim($_POST['lastname']);
-    $address = trim($_POST['address']);
-    $email = trim($_POST['email']);
-    $password = $_POST['enter_password'];
-    $confirm_password = $_POST['confirm_password'];
-    $mobile_number = trim($_POST['mobile_number']);
-    $pan_number = trim($_POST['pan_number']);
-
-    if($password !== $confirm_password){
-
-        echo "<script>alert('Passwords do not match');</script>";
-
+if (isset($_POST['btnSignup'])) {
+    // Validate CSRF
+    if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
+        $errorMsg = 'CSRF validation failed. Please refresh and try again.';
     } else {
+        $firstname = trim($_POST['firstname']);
+        $lastname = trim($_POST['lastname']);
+        $address = trim($_POST['address']);
+        $email = trim($_POST['email']);
+        $password = $_POST['enter_password'];
+        $confirm_password = $_POST['confirm_password'];
+        $mobile_number = trim($_POST['mobile_number']);
+        $pan_number = trim($_POST['pan_number']);
 
-        $stmt = mysqli_prepare(
-            $conn,
-            "SELECT id FROM users WHERE email=?"
-        );
-
-        mysqli_stmt_bind_param($stmt, "s", $email);
-        mysqli_stmt_execute($stmt);
-
-        $result = mysqli_stmt_get_result($stmt);
-
-        if(mysqli_num_rows($result) > 0){
-
-            echo "<script>alert('Email already registered');</script>";
-
+        if ($password !== $confirm_password) {
+            $errorMsg = 'Passwords do not match.';
+        } elseif (strlen($password) < 6) {
+            $errorMsg = 'Password must be at least 6 characters long.';
         } else {
+            // Check if email already exists
+            $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email=?");
+            mysqli_stmt_bind_param($stmt, "s", $email);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
 
-            $hashed_password = password_hash(
-                $password,
-                PASSWORD_DEFAULT
-            );
-
-            $stmt = mysqli_prepare(
-                $conn,
-                "INSERT INTO users
-                (firstname, lastname, address, email, password, mobile_number, PANCARD_number)
-                VALUES (?, ?, ?, ?, ?, ?, ?)"
-            );
-
-            mysqli_stmt_bind_param(
-                $stmt,
-                "sssssss",
-                $firstname,
-                $lastname,
-                $address,
-                $email,
-                $hashed_password,
-                $mobile_number,
-                $pan_number
-            );
-
-            if(mysqli_stmt_execute($stmt)){
-
-                echo "<script>
-                alert('Registration Successful');
-                window.location='index.php';
-                </script>";
-                exit();
-
+            if (mysqli_num_rows($result) > 0) {
+                $errorMsg = 'Email already registered.';
+                mysqli_stmt_close($stmt);
             } else {
-
-                echo "<script>alert('".mysqli_error($conn)."');</script>";
-
+                mysqli_stmt_close($stmt);
+                
+                // Hash Password
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $defaultBalance = 100000.00; // Give new signups 1 Lakh virtual credits!
+                
+                $stmt = mysqli_prepare($conn, "INSERT INTO users (firstname, lastname, address, email, password, mobile_number, PANCARD_number, available_balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, "sssssssd", $firstname, $lastname, $address, $email, $hashed_password, $mobile_number, $pan_number, $defaultBalance);
+                    
+                    if (mysqli_stmt_execute($stmt)) {
+                        $newUserId = mysqli_insert_id($conn);
+                        mysqli_stmt_close($stmt);
+                        
+                        // Automatically create default watchlist for new user
+                        $stmtWatch = mysqli_prepare($conn, "INSERT INTO watchlists (user_id, name, is_pinned) VALUES (?, 'My Watchlist', 1)");
+                        if ($stmtWatch) {
+                            mysqli_stmt_bind_param($stmtWatch, "i", $newUserId);
+                            mysqli_stmt_execute($stmtWatch);
+                            mysqli_stmt_close($stmtWatch);
+                        }
+                        
+                        // Create onboarding notification
+                        $stmtNotif = mysqli_prepare($conn, "INSERT INTO notifications (user_id, title, message) VALUES (?, 'Registration Successful', 'Welcome to BullVest! We have credited 1 Lakh virtual credits to your portfolio. Start trading now!')");
+                        if ($stmtNotif) {
+                            mysqli_stmt_bind_param($stmtNotif, "i", $newUserId);
+                            mysqli_stmt_execute($stmtNotif);
+                            mysqli_stmt_close($stmtNotif);
+                        }
+                        
+                        $successMsg = 'Registration successful! Redirecting to login...';
+                        echo "<script>
+                            setTimeout(() => { window.location.href = 'index.php'; }, 2000);
+                        </script>";
+                    } else {
+                        $errorMsg = 'Registration failed: ' . mysqli_error($conn);
+                    }
+                } else {
+                    $errorMsg = 'Internal server error.';
+                }
             }
         }
     }
 }
+
+include_once(__DIR__ . '/includes/header.php');
 ?>
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: url('./assets/background.jpg') no-repeat center center/cover; padding: 40px 0;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-7 col-lg-5">
+            <div class="glass-panel p-4">
+                <div class="text-center mb-4">
+                    <img src="./assets/logo.png" alt="BullVest Logo" style="height: 56px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594449.png'">
+                    <h3 class="mt-2 fw-bold">Join BullVest</h3>
+                    <p class="text-secondary small">Start your trading journey with virtual credit</p>
+                </div>
+                
+                <?php if (!empty($errorMsg)): ?>
+                    <div class="alert alert-danger py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= htmlspecialchars($errorMsg) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($successMsg)): ?>
+                    <div class="alert alert-success py-2 small" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> <?= htmlspecialchars($successMsg) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <form action="" method="post" autocomplete="off">
+                    <?= getCsrfInput() ?>
+                    <div class="row g-2">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-transparent text-white border-secondary" id="firstname" name="firstname" placeholder="First Name" required style="border-radius: var(--border-radius);">
+                                <label for="firstname" class="text-secondary">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-transparent text-white border-secondary" id="lastname" name="lastname" placeholder="Last Name" required style="border-radius: var(--border-radius);">
+                                <label for="lastname" class="text-secondary">Last Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control bg-transparent text-white border-secondary h-auto" id="address" name="address" placeholder="Address" required style="border-radius: var(--border-radius); min-height: 80px;"></textarea>
+                        <label for="address" class="text-secondary">Full Address</label>
+                    </div>
+                    
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control bg-transparent text-white border-secondary" id="email" name="email" placeholder="Email" required style="border-radius: var(--border-radius);">
+                        <label for="email" class="text-secondary">Email Address</label>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="password" class="form-control bg-transparent text-white border-secondary" id="enter_password" name="enter_password" placeholder="Password" required style="border-radius: var(--border-radius);">
+                                <label for="enter_password" class="text-secondary">Password</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="password" class="form-control bg-transparent text-white border-secondary" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required style="border-radius: var(--border-radius);">
+                                <label for="confirm_password" class="text-secondary">Re-enter Password</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-2">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-transparent text-white border-secondary" id="mobile_number" name="mobile_number" placeholder="Mobile" required pattern="^[0-9]{10}$" title="Please enter a valid 10-digit mobile number" style="border-radius: var(--border-radius);">
+                                <label for="mobile_number" class="text-secondary">Mobile No</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control bg-transparent text-white border-secondary" id="pan_number" name="pan_number" placeholder="Pancard No" required pattern="^[A-Z]{5}[0-9]{4}[A-Z]{1}$" title="Please enter a valid PAN card format (e.g. ABCDE1234F)" style="border-radius: var(--border-radius);">
+                                <label for="pan_number" class="text-secondary">PAN Card No</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" name="btnSignup" class="btn btn-primary-custom w-100 mt-2 mb-3" style="border-radius: var(--border-radius);">Register Account</button>
+                </form>
+                
+                <p class="text-secondary small text-center mb-0 mt-2">
+                    Already have an account? <a href="index.php" class="text-primary text-decoration-none fw-bold">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="footer">
-<div>
-<p> © 2026 All Rights Reserved. </p>
-</div>
-
-<div>
-<p>Privacy | About us</p>
-</div>
-</div>
-
-</div>
-
-</body>
-</html>
+<?php include_once(__DIR__ . '/includes/footer.php'); ?>

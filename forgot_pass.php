@@ -1,74 +1,89 @@
 <?php
-require('conn.php');
+require_once(__DIR__ . '/config/conn.php');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+$errorMsg = '';
+$successMsg = '';
+$resetLink = '';
 
-if (isset($_POST['submit'])) {
-
-    $email = trim($_POST['email']);
-
-    if ($email == "") {
-
-        echo "<script>alert('Please enter your email');</script>";
-
+if (isset($_POST['btnReset'])) {
+    if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
+        $errorMsg = 'CSRF validation failed. Please refresh and try again.';
     } else {
-
-        $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");
-
+        $email = trim($_POST['email']);
+        
+        $stmt = mysqli_prepare($conn, "SELECT id, firstname FROM users WHERE email = ?");
         if ($stmt) {
-
             mysqli_stmt_bind_param($stmt, "s", $email);
             mysqli_stmt_execute($stmt);
-            mysqli_stmt_bind_result($stmt, $userId);
-
-            if (mysqli_stmt_fetch($stmt)) {
-
-                // Keep the same session key used by reset.php.
-                $_SESSION['forgot_user_id_verified'] = $userId;
-
-                echo "<script>
-                        alert('Email found. Reset your password.');
-                        window.location='reset.php';
-                      </script>";
-                exit();
-
+            $result = mysqli_stmt_get_result($stmt);
+            
+            if (mysqli_num_rows($result) > 0) {
+                $row = mysqli_fetch_assoc($result);
+                // Simulate password recovery token
+                $_SESSION['reset_user_id'] = $row['id'];
+                
+                $successMsg = 'Recovery request verified! Reset link generated successfully.';
+                $resetLink = 'reset.php';
             } else {
-
-                echo "<script>alert('Email not found');</script>";
-
+                $errorMsg = 'Email address not found in our records.';
             }
-
             mysqli_stmt_close($stmt);
-
         } else {
-
-            echo "<script>alert('Database error');</script>";
-
+            $errorMsg = 'Database connection error.';
         }
     }
 }
+
+include_once(__DIR__ . '/includes/header.php');
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Forgot Password</title>
-<link rel="stylesheet" href="forgot.css">
-</head>
+<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: url('./assets/background.jpg') no-repeat center center/cover;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="glass-panel p-4 text-center">
+                <div class="mb-4">
+                    <img src="./assets/logo.png" alt="BullVest Logo" style="height: 64px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594449.png'">
+                    <h3 class="mt-3 fw-bold">Recover Password</h3>
+                    <p class="text-secondary small">Enter your email to verify your identity</p>
+                </div>
+                
+                <?php if (!empty($errorMsg)): ?>
+                    <div class="alert alert-danger py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= htmlspecialchars($errorMsg) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($successMsg)): ?>
+                    <div class="alert alert-success py-2 small" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> <?= htmlspecialchars($successMsg) ?>
+                    </div>
+                    <?php if (!empty($resetLink)): ?>
+                        <div class="mb-4 mt-2">
+                            <a href="<?= $resetLink ?>" class="btn btn-warning w-100 text-dark fw-bold">
+                                <i class="bi bi-shield-lock-fill me-2"></i> Go to Reset Password
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+                
+                <?php if (empty($resetLink)): ?>
+                    <form action="" method="post" autocomplete="off">
+                        <?= getCsrfInput() ?>
+                        <div class="form-floating mb-4">
+                            <input type="email" class="form-control bg-transparent text-white border-secondary" id="email" name="email" placeholder="name@example.com" required style="border-radius: var(--border-radius);">
+                            <label for="email" class="text-secondary">Registered Email Address</label>
+                        </div>
+                        
+                        <button type="submit" name="btnReset" class="btn btn-primary-custom w-100 mb-3" style="border-radius: var(--border-radius);">Verify Identity</button>
+                    </form>
+                <?php endif; ?>
+                
+                <p class="text-secondary small mb-0 mt-3">
+                    Remember password? <a href="index.php" class="text-primary text-decoration-none fw-bold">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<body>
-
-<form method="post">
-
-<h2>Forgot Password</h2>
-
-<input type="email" name="email" placeholder="Enter Email" required>
-
-<button type="submit" name="submit">Reset Password</button>
-
-</form>
-
-</body>
-</html>
+<?php include_once(__DIR__ . '/includes/footer.php'); ?>
