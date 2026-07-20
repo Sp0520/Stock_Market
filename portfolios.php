@@ -142,7 +142,8 @@ mysqli_stmt_close($stmt);
                         $currentPrice = array();
                         foreach ($stockData as $key => $value) {
                             $ticker_sym = urlencode($value["stock_name"]);
-                            $json = @file_get_contents("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={$ticker_sym}.BSE&outputsize=compact&apikey=1DBYP9NP4ZDVPWI6");
+                            $apiKey = getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "1DBYP9NP4ZDVPWI6";
+                            $json = @file_get_contents("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={$ticker_sym}.BSE&outputsize=compact&apikey={$apiKey}");
                             $data = $json ? json_decode($json, true) : null;
 
                             $price = $value["purchase_price"]; // default fallback
@@ -364,7 +365,7 @@ mysqli_stmt_close($stmt);
     function myFunctionIfsc(val) {
         // alert("The input value has changed. The new value is: " + val);
         $.ajax({
-            url: 'https://ifsc.razorpay.com/' + val,
+            url: 'https://ifsc.razorpay.com/' + val.toUpperCase(),
             type: 'GET',
             success: function(data) {
                 // console.log(data);

@@ -87,7 +87,8 @@ if(isset($_POST["btnSearchStock"]))
     $exchange = $_POST["exchanges"];
 }
 
-$url = "http://api.marketstack.com/v1/exchanges/".$exchange."/tickers?access_key=51fcbd147239c10f7d16498134336532";
+$marketstackKey = getenv("MARKETSTACK_API_KEY") ?: "51fcbd147239c10f7d16498134336532";
+$url = "https://api.marketstack.com/v1/exchanges/".$exchange."/tickers?access_key=".$marketstackKey;
 
 $response = @file_get_contents($url);
 

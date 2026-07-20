@@ -94,7 +94,7 @@ require("./mainTop.php");
 
             function getData($ticker)
 {
-    $apiKey = "1DBYP9NP4ZDVPWI6";
+    $apiKey = getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "1DBYP9NP4ZDVPWI6";
 
     $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . urlencode($ticker) . "&apikey=$apiKey";
 
