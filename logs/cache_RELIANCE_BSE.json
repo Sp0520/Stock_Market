@@ -1,0 +1,25 @@
+{
+    "Meta Data": {
+        "1. Information": "Daily Prices (open, high, low, close, volume) daily",
+        "2. Symbol": "RELIANCE.BSE",
+        "3. Last Refreshed": "2026-07-20",
+        "4. Output Size": "Compact",
+        "5. Time Zone": "US/Eastern"
+    },
+    "Time Series (Daily)": {
+        "2026-07-20": {
+            "1. open": "2410.00",
+            "2. high": "2440.00",
+            "3. low": "2395.00",
+            "4. close": "2428.15",
+            "5. volume": "450000"
+        },
+        "2026-07-17": {
+            "1. open": "2390.00",
+            "2. high": "2420.00",
+            "3. low": "2380.00",
+            "4. close": "2398.50",
+            "5. volume": "420000"
+        }
+    }
+}

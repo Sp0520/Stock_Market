@@ -219,7 +219,7 @@ function fetchStockData($ticker) {
     }
     
     $cacheFile = $cacheDir . '/cache_' . preg_replace('/[^A-Za-z0-9_-]/', '_', $ticker) . '.json';
-    $cacheTime = 3600; // 1 hour cache duration
+    $cacheTime = 14400; // 4 hours cache duration
     
     // Check if cache is fresh
     if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTime) {
@@ -231,6 +231,14 @@ function fetchStockData($ticker) {
     }
     
     // Cache is expired or missing, call API
+    // To prevent hitting AlphaVantage's 1-request-per-second burst limit, sleep for 1.5 seconds if we recently made an API call
+    static $lastApiCallTime = 0;
+    $timeSinceLastCall = microtime(true) - $lastApiCallTime;
+    if ($timeSinceLastCall < 1.5 && $lastApiCallTime > 0) {
+        usleep((1.5 - $timeSinceLastCall) * 1000000);
+    }
+    $lastApiCallTime = microtime(true);
+
     $apiKey = getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "1DBYP9NP4ZDVPWI6";
     $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . urlencode($ticker) . "&apikey={$apiKey}";
     
