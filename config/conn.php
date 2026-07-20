@@ -106,18 +106,14 @@ try {
 
 // Automatic Schema Migration & Updates
 try {
-    // Check if watchlists table exists
-    $tableCheck = mysqli_query($conn, "SHOW TABLES LIKE 'watchlists'");
-    if ($tableCheck && mysqli_num_rows($tableCheck) === 0) {
+    // 1. If core users table is missing, run the entire schema initialization
+    $usersCheck = mysqli_query($conn, "SHOW TABLES LIKE 'users'");
+    if ($usersCheck && mysqli_num_rows($usersCheck) === 0) {
         $schemaPath = dirname(__DIR__) . '/stock_market_application.sql';
         if (file_exists($schemaPath)) {
             $sqlContent = file_get_contents($schemaPath);
-            
-            // Remove comments and empty lines
             $sqlContent = preg_replace('/--.*\n/', '', $sqlContent);
             $sqlContent = preg_replace('/\/\*.*?\*\//s', '', $sqlContent);
-            
-            // Split by semicolon (ignoring strings)
             $queries = explode(';', $sqlContent);
             
             mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 0");
@@ -128,10 +124,55 @@ try {
                 }
             }
             mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 1");
-            error_log("Database schema initialized and updated successfully.");
+            error_log("Database schema initialized successfully.");
         }
     } else {
-        // Upgrade existing tables if user role/profile fields are missing
+        // 2. Core tables exist, check and create newer tables if missing
+        
+        // Check watchlists
+        $wlCheck = mysqli_query($conn, "SHOW TABLES LIKE 'watchlists'");
+        if ($wlCheck && mysqli_num_rows($wlCheck) === 0) {
+            mysqli_query($conn, "CREATE TABLE IF NOT EXISTS watchlists (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              user_id INT NOT NULL,
+              name VARCHAR(100) NOT NULL DEFAULT 'My Watchlist',
+              is_pinned TINYINT(1) DEFAULT 0,
+              created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+              FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+              UNIQUE KEY uq_user_watchlist (user_id, name)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+            error_log("Migration: Created watchlists table.");
+        }
+        
+        // Check watchlist_stocks
+        $wlsCheck = mysqli_query($conn, "SHOW TABLES LIKE 'watchlist_stocks'");
+        if ($wlsCheck && mysqli_num_rows($wlsCheck) === 0) {
+            mysqli_query($conn, "CREATE TABLE IF NOT EXISTS watchlist_stocks (
+              watchlist_id INT NOT NULL,
+              stock_name VARCHAR(50) NOT NULL,
+              added_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (watchlist_id, stock_name),
+              FOREIGN KEY (watchlist_id) REFERENCES watchlists(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+            error_log("Migration: Created watchlist_stocks table.");
+        }
+        
+        // Check notifications
+        $notifCheck = mysqli_query($conn, "SHOW TABLES LIKE 'notifications'");
+        if ($notifCheck && mysqli_num_rows($notifCheck) === 0) {
+            mysqli_query($conn, "CREATE TABLE IF NOT EXISTS notifications (
+              id INT AUTO_INCREMENT PRIMARY KEY,
+              user_id INT NOT NULL,
+              title VARCHAR(255) NOT NULL,
+              message TEXT NOT NULL,
+              is_read TINYINT(1) DEFAULT 0,
+              created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+              FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+            error_log("Migration: Created notifications table.");
+        }
+        
+        // Upgrade existing users table for roles/avatars
         $columnsCheck = mysqli_query($conn, "SHOW COLUMNS FROM `users` LIKE 'role'");
         if ($columnsCheck && mysqli_num_rows($columnsCheck) === 0) {
             mysqli_query($conn, "ALTER TABLE `users` ADD COLUMN `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user'");
