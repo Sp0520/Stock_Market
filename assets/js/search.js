@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (data && data.length > 0) {
                     data.forEach(item => {
                         const link = document.createElement("a");
-                        link.href = "./selectedStock.php?ticker=" + encodeURIComponent(item.symbol) + "&days=15";
+                        link.href = "./stock.php?symbol=" + encodeURIComponent(item.symbol);
                         link.className = "suggestion-item";
                         
                         const left = document.createElement("div");

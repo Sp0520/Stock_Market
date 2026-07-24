@@ -410,7 +410,7 @@ $isUp = $overallReturn >= 0;
                                 $isPlUp = $pl >= 0;
                                 ?>
                                 <tr>
-                                    <td><a href="selectedStock.php?ticker=<?= $value['stock_name'] ?>" class="text-white fw-bold text-decoration-none hover-blue"><?= htmlspecialchars($value['stock_name']) ?></a></td>
+                                    <td><a href="stock.php?symbol=<?= $value['stock_name'] ?>" class="text-white fw-bold text-decoration-none hover-blue"><?= htmlspecialchars($value['stock_name']) ?></a></td>
                                     <td>₹<?= number_format($value['purchase_price'], 2) ?></td>
                                     <td>₹<?= number_format($price, 2) ?></td>
                                     <td class="<?= $isPlUp ? 'text-up' : 'text-down' ?>">

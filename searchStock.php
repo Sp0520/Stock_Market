@@ -30,7 +30,7 @@ $popularStocks = [
             <div class="row g-3">
                 <?php foreach ($popularStocks as $stock): ?>
                     <div class="col-md-6">
-                        <a href="selectedStock.php?ticker=<?= $stock['symbol'] ?>" class="text-decoration-none text-white">
+                        <a href="stock.php?symbol=<?= $stock['symbol'] ?>" class="text-decoration-none text-white">
                             <div class="glass-panel p-3 d-flex align-items-center justify-content-between hover-glow">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">

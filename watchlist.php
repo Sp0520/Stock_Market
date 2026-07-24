@@ -87,8 +87,8 @@ if (isset($_POST['remove_stock'])) {
                                 $tickerClean = explode('.', $ticker)[0];
                                 
                                 if (isset($data['error'])) {
-                                    echo '<tr>';
-                                    echo '<td><a href="selectedStock.php?ticker=' . $tickerClean . '" class="fw-bold text-decoration-none text-white">' . $tickerClean . '</a></td>';
+                                    echo '<tr data-ticker="' . $tickerClean . '">';
+                                    echo '<td><a href="stock.php?symbol=' . $tickerClean . '" class="fw-bold text-decoration-none text-white">' . $tickerClean . '</a></td>';
                                     echo '<td colspan="6" class="text-muted small">Data unavailable: ' . htmlspecialchars($data['error']) . '</td>';
                                     echo '<td class="text-end">';
                                     echo '<form action="" method="post" onsubmit="return confirm(\'Remove this stock?\')">';
@@ -117,14 +117,14 @@ if (isset($_POST['remove_stock'])) {
                                     $changePct = ($change / $open) * 100;
                                     $isUp = $change >= 0;
                                     
-                                    echo '<tr>';
-                                    echo '<td><a href="selectedStock.php?ticker=' . $tickerClean . '" class="fw-bold text-decoration-none text-white hover-blue">' . $tickerClean . ' <i class="bi bi-arrow-right-short text-secondary"></i></a></td>';
+                                    echo '<tr data-ticker="' . $tickerClean . '">';
+                                    echo '<td><a href="stock.php?symbol=' . $tickerClean . '" class="fw-bold text-decoration-none text-white hover-blue">' . $tickerClean . ' <i class="bi bi-arrow-right-short text-secondary"></i></a></td>';
                                     echo '<td><span class="text-secondary small">' . $tickerClean . ' Holdings Asset</span></td>';
-                                    echo '<td class="fw-bold ' . ($isUp ? 'text-up' : 'text-down') . '">₹' . number_format($close, 2) . '</td>';
-                                    echo '<td class="text-up">₹' . number_format($high, 2) . '</td>';
-                                    echo '<td class="text-down">₹' . number_format($low, 2) . '</td>';
-                                    echo '<td>' . number_format($volume) . '</td>';
-                                    echo '<td><span class="' . ($isUp ? 'badge-up' : 'badge-down') . '">' . ($isUp ? '+' : '') . number_format($changePct, 2) . '%</span></td>';
+                                    echo '<td class="fw-bold price-td ' . ($isUp ? 'text-up' : 'text-down') . '">₹' . number_format($close, 2) . '</td>';
+                                    echo '<td class="text-up high-td">₹' . number_format($high, 2) . '</td>';
+                                    echo '<td class="text-down low-td">₹' . number_format($low, 2) . '</td>';
+                                    echo '<td class="vol-td">' . number_format($volume) . '</td>';
+                                    echo '<td><span class="badge-trend ' . ($isUp ? 'badge-up' : 'badge-down') . '">' . ($isUp ? '+' : '') . number_format($changePct, 2) . '%</span></td>';
                                     echo '<td class="text-end">';
                                     echo '<form action="" method="post" style="display:inline-block;" onsubmit="return confirm(\'Remove this stock?\')">';
                                     echo getCsrfInput();
@@ -143,5 +143,44 @@ if (isset($_POST['remove_stock'])) {
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        const watchlistedTickers = [];
+        $('tbody tr[data-ticker]').each(function() {
+            watchlistedTickers.push($(this).attr('data-ticker'));
+        });
+        
+        if (watchlistedTickers.length > 0) {
+            setInterval(() => {
+                watchlistedTickers.forEach(t => {
+                    $.ajax({
+                        url: './api/market.php',
+                        type: 'GET',
+                        data: { symbol: t },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.success) {
+                                const row = $('tr[data-ticker="' + t + '"]');
+                                if (row.length) {
+                                    row.find('.price-td').text('₹' + res.price.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                                    row.find('.high-td').text('₹' + res.high.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                                    row.find('.low-td').text('₹' + res.low.toLocaleString('en-IN', {minimumFractionDigits: 2}));
+                                    
+                                    const isUp = res.change >= 0;
+                                    row.find('.price-td').removeClass('text-up text-down').addClass(isUp ? 'text-up' : 'text-down');
+                                    
+                                    const badge = row.find('.badge-trend');
+                                    badge.removeClass('badge-up badge-down').addClass(isUp ? 'badge-up' : 'badge-down');
+                                    badge.text((isUp ? '+' : '') + res.changePct.toFixed(2) + '%');
+                                }
+                            }
+                        }
+                    });
+                });
+            }, 5000);
+        }
+    });
+</script>
 
 <?php include_once(__DIR__ . '/includes/footer.php'); ?>
