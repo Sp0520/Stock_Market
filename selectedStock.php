@@ -25,8 +25,9 @@ if ($hasData) {
     $close = (float)$latest['4. close'];
     $volume = (int)$latest['5. volume'];
     
-    $change = $close - $open;
-    $changePct = ($change / $open) * 100;
+    $prevClose = isset($meta['4. Previous Close']) ? (float)$meta['4. Previous Close'] : $open;
+    $change = $close - $prevClose;
+    $changePct = ($change / $prevClose) * 100;
     $isUp = $change >= 0;
 }
 

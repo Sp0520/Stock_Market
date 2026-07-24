@@ -73,7 +73,7 @@ $db_name = null;
 foreach ($envSources as $key => $variants) {
     foreach ($variants as $variant) {
         $value = getenv($variant);
-        if ($value !== false && $value !== '') {
+        if ($value !== false && ($value !== '' || $key === 'DB_PASS')) {
             ${strtolower($key)} = $value;
             break;
         }
@@ -224,28 +224,25 @@ function getCsrfInput() {
 }
 
 /**
- * Fetches stock data from AlphaVantage with file-based caching.
- * Cache is stored in the logs/ directory and is valid for 1 hour.
- * Falls back to expired cache if API is rate-limited.
+ * Fetches stock data from Yahoo Finance with file-based caching.
+ * Cache is stored in the logs/ directory and is valid for the specified duration (default 10s).
+ * Supports automatic suffix resolution (.NS for NSE, .BO for BSE, then base symbol).
  */
-function fetchStockData($ticker) {
+function fetchStockData($ticker, $cacheTime = 10) {
     $ticker = strtoupper(trim($ticker));
     if (empty($ticker)) {
         return ['error' => 'Empty ticker symbol'];
     }
     
-    // Automatically append .BSE if no suffix is provided
-    if (strpos($ticker, '.') === false) {
-        $ticker .= '.BSE';
-    }
+    // Clean base ticker if there's any suffix
+    $tickerClean = explode('.', $ticker)[0];
     
     $cacheDir = dirname(__DIR__) . '/logs';
     if (!file_exists($cacheDir)) {
         @mkdir($cacheDir, 0755, true);
     }
     
-    $cacheFile = $cacheDir . '/cache_' . preg_replace('/[^A-Za-z0-9_-]/', '_', $ticker) . '.json';
-    $cacheTime = 14400; // 4 hours cache duration
+    $cacheFile = $cacheDir . '/cache_' . preg_replace('/[^A-Za-z0-9_-]/', '_', $tickerClean) . '.json';
     
     // Check if cache is fresh
     if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTime) {
@@ -256,58 +253,95 @@ function fetchStockData($ticker) {
         }
     }
     
-    // Cache is expired or missing, call API
-    // To prevent hitting AlphaVantage's 1-request-per-second burst limit, sleep for 1.5 seconds if we recently made an API call
-    static $lastApiCallTime = 0;
-    $timeSinceLastCall = microtime(true) - $lastApiCallTime;
-    if ($timeSinceLastCall < 1.5 && $lastApiCallTime > 0) {
-        usleep((1.5 - $timeSinceLastCall) * 1000000);
+    // Attempt resolution with suffixes
+    $suffixes = [];
+    if (strpos($ticker, '.') !== false) {
+        // If suffix already provided, check that specifically
+        $suffixes[] = '';
+    } else {
+        // Otherwise try NSE, BSE, then global/as-is
+        $suffixes = ['.NS', '.BO', ''];
     }
-    $lastApiCallTime = microtime(true);
-
-    $apiKey = getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "1DBYP9NP4ZDVPWI6";
-    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . urlencode($ticker) . "&apikey={$apiKey}";
     
-    $json = @file_get_contents($url);
-    if ($json !== false) {
-        $data = json_decode($json, true);
-        if (is_array($data)) {
-            if (isset($data['Meta Data'], $data['Time Series (Daily)'])) {
-                @file_put_contents($cacheFile, $json);
-                return $data;
+    $fetchedResult = null;
+    $resolvedTicker = '';
+    
+    foreach ($suffixes as $suffix) {
+        $queryTicker = $tickerClean . $suffix;
+        $url = "https://query1.finance.yahoo.com/v8/finance/chart/" . urlencode($queryTicker) . "?range=1d&interval=1m";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
+            if (isset($data['chart']['result'][0])) {
+                $fetchedResult = $data['chart']['result'][0];
+                $resolvedTicker = $queryTicker;
+                break;
             }
-            
-            $errorMsg = 'Unknown error';
-            if (isset($data['Note'])) {
-                $errorMsg = $data['Note'];
-            } elseif (isset($data['Information'])) {
-                $errorMsg = $data['Information'];
-            } elseif (isset($data['Error Message'])) {
-                return ['error' => 'Invalid Stock Symbol'];
-            }
-            
-            // If rate-limited, try to return expired cache if it exists
-            if (file_exists($cacheFile)) {
-                $cacheContent = @file_get_contents($cacheFile);
-                $cachedData = $cacheContent ? json_decode($cacheContent, true) : null;
-                if ($cachedData && isset($cachedData['Meta Data'], $cachedData['Time Series (Daily)'])) {
-                    return $cachedData; 
-                }
-            }
-            
-            return ['error' => 'API Rate Limit: ' . $errorMsg];
         }
     }
     
-    // Network failure, try to return expired cache
-    if (file_exists($cacheFile)) {
-        $cacheContent = @file_get_contents($cacheFile);
-        $cachedData = $cacheContent ? json_decode($cacheContent, true) : null;
-        if ($cachedData && isset($cachedData['Meta Data'], $cachedData['Time Series (Daily)'])) {
-            return $cachedData;
+    if (!$fetchedResult || !isset($fetchedResult['meta']['regularMarketPrice'])) {
+        // Try fallback to expired cache
+        if (file_exists($cacheFile)) {
+            $cacheContent = @file_get_contents($cacheFile);
+            $cachedData = $cacheContent ? json_decode($cacheContent, true) : null;
+            if ($cachedData && isset($cachedData['Meta Data'], $cachedData['Time Series (Daily)'])) {
+                return $cachedData;
+            }
+        }
+        return ['error' => 'Cannot retrieve live stock data for symbol ' . $ticker];
+    }
+    
+    // Parse fetched values
+    $meta = $fetchedResult['meta'];
+    $livePrice = (float)$meta['regularMarketPrice'];
+    $prevClose = isset($meta['previousClose']) ? (float)$meta['previousClose'] : $livePrice;
+    $dayHigh = isset($meta['regularMarketDayHigh']) ? (float)$meta['regularMarketDayHigh'] : max($livePrice, $prevClose);
+    $dayLow = isset($meta['regularMarketDayLow']) ? (float)$meta['regularMarketDayLow'] : min($livePrice, $prevClose);
+    $volume = isset($meta['regularMarketVolume']) ? (int)$meta['regularMarketVolume'] : 0;
+    
+    // Find open price from indicators
+    $openPrice = $prevClose;
+    if (isset($fetchedResult['indicators']['quote'][0]['open'])) {
+        $opens = array_filter($fetchedResult['indicators']['quote'][0]['open'], function($x) { return !is_null($x); });
+        if (count($opens) > 0) {
+            $openPrice = (float)reset($opens);
         }
     }
     
-    return ['error' => 'Cannot connect to Stock API'];
+    // Structure like AlphaVantage daily response
+    $lastRefreshedDate = date('Y-m-d');
+    $formattedData = [
+        'Meta Data' => [
+            '1. Information' => 'Daily Prices (open, high, low, close, volume) daily',
+            '2. Symbol' => $resolvedTicker,
+            '3. Last Refreshed' => $lastRefreshedDate
+        ],
+        'Time Series (Daily)' => [
+            $lastRefreshedDate => [
+                '1. open' => (string)$openPrice,
+                '2. high' => (string)$dayHigh,
+                '3. low' => (string)$dayLow,
+                '4. close' => (string)$livePrice,
+                '5. volume' => (string)$volume
+            ]
+        ]
+    ];
+    
+    // Write cache
+    @file_put_contents($cacheFile, json_encode($formattedData));
+    
+    return $formattedData;
 }
 ?>

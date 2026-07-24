@@ -4,14 +4,11 @@ require_once(dirname(__DIR__) . '/config/conn.php');
 
 $symbol = isset($_GET['symbol']) ? strtoupper(trim($_GET['symbol'])) : '';
 
-// Smooth sine wave offset generator based on timestamp to simulate live ticking fluctuations
-$timeSec = time();
-$offset = sin($timeSec * 0.2) * 0.0006; // +/- 0.06% smooth swing
-
 if (!empty($symbol)) {
     // Clean symbol suffix if provided
     $symbolClean = explode('.', $symbol)[0];
-    $data = fetchStockData($symbolClean);
+    // Use short cache lifetime (2 seconds) for active polling
+    $data = fetchStockData($symbolClean, 2);
     
     if (isset($data['error'])) {
         echo json_encode(['success' => false, 'error' => $data['error']]);
@@ -32,10 +29,10 @@ if (!empty($symbol)) {
     $close = (float)$latest['4. close'];
     $volume = (int)$latest['5. volume'];
     
-    // Simulate live ticking price
-    $livePrice = $close * (1 + $offset);
-    $change = $livePrice - $open;
-    $changePct = ($change / $open) * 100;
+    $prevClose = isset($meta['4. Previous Close']) ? (float)$meta['4. Previous Close'] : $open;
+    $livePrice = $close;
+    $change = $livePrice - $prevClose;
+    $changePct = ($change / $prevClose) * 100;
     
     echo json_encode([
         'success' => true,
@@ -53,30 +50,110 @@ if (!empty($symbol)) {
     exit;
 }
 
-// Otherwise, return general market indexes, gainers, losers, and actives
-$niftyVal = 22096.75 * (1 + $offset * 0.5);
-$sensexVal = 72708.10 * (1 + $offset * 0.5);
-$bankNiftyVal = 46919.80 * (1 - $offset * 0.3);
-$finniftyVal = 20738.90 * (1 + $offset * 0.2);
+// Fetch live indices
+$indicesList = [
+    'NIFTY 50' => '^NSEI',
+    'SENSEX' => '^BSESN',
+    'BANK NIFTY' => '^NSEBANK',
+    'FINNIFTY' => 'NIFTY_FIN_SERVICE.NS'
+];
+
+$indices = [];
+foreach ($indicesList as $name => $ticker) {
+    $idxData = fetchStockData($ticker, 10);
+    if (!isset($idxData['error'])) {
+        $meta = $idxData['Meta Data'];
+        $timeSeries = $idxData['Time Series (Daily)'];
+        $lastRef = $meta['3. Last Refreshed'];
+        if (!isset($timeSeries[$lastRef])) {
+            $lastRef = array_key_first($timeSeries);
+        }
+        $latest = $timeSeries[$lastRef];
+        
+        $close = (float)$latest['4. close'];
+        $prevClose = isset($meta['4. Previous Close']) ? (float)$meta['4. Previous Close'] : $close;
+        $change = $close - $prevClose;
+        $pct = ($change / $prevClose) * 100;
+        
+        $indices[$name] = [
+            'val' => round($close, 2),
+            'change' => round($change, 2),
+            'pct' => round($pct, 2)
+        ];
+    } else {
+        // Safe fallbacks if index load fails
+        $fallbacks = [
+            'NIFTY 50' => ['val' => 24400.00, 'change' => 50.00, 'pct' => 0.21],
+            'SENSEX' => ['val' => 80000.00, 'change' => 150.00, 'pct' => 0.19],
+            'BANK NIFTY' => ['val' => 52000.00, 'change' => -100.00, 'pct' => -0.19],
+            'FINNIFTY' => ['val' => 23800.00, 'change' => 20.00, 'pct' => 0.08]
+        ];
+        $indices[$name] = $fallbacks[$name];
+    }
+}
+
+// Fetch live prices for movers
+$moverTickers = ['TCS', 'INFY', 'SBIN', 'RELIANCE', 'TATAMOTORS', 'HDFCBANK'];
+$popularQuotes = [];
+$nameMapping = [
+    'TCS' => 'Tata Consultancy Services',
+    'INFY' => 'Infosys Ltd.',
+    'SBIN' => 'State Bank of India',
+    'RELIANCE' => 'Reliance Industries',
+    'TATAMOTORS' => 'Tata Motors',
+    'HDFCBANK' => 'HDFC Bank Ltd.'
+];
+
+foreach ($moverTickers as $ticker) {
+    $quoteData = fetchStockData($ticker, 10);
+    if (!isset($quoteData['error'])) {
+        $meta = $quoteData['Meta Data'];
+        $timeSeries = $quoteData['Time Series (Daily)'];
+        $lastRef = $meta['3. Last Refreshed'];
+        if (!isset($timeSeries[$lastRef])) {
+            $lastRef = array_key_first($timeSeries);
+        }
+        $latest = $timeSeries[$lastRef];
+        
+        $close = (float)$latest['4. close'];
+        $prevClose = isset($meta['4. Previous Close']) ? (float)$meta['4. Previous Close'] : $close;
+        $change = $close - $prevClose;
+        $pct = ($change / $prevClose) * 100;
+        
+        $popularQuotes[] = [
+            'symbol' => $ticker,
+            'name' => $nameMapping[$ticker] ?? ($ticker . ' Ltd.'),
+            'price' => round($close, 2),
+            'pct' => round($pct, 2)
+        ];
+    }
+}
+
+// If quotes fetch failed, provide a stable mockup array
+if (empty($popularQuotes)) {
+    $popularQuotes = [
+        ['symbol' => 'TCS', 'name' => 'Tata Consultancy Services', 'price' => 3835.45, 'pct' => 1.24],
+        ['symbol' => 'INFY', 'name' => 'Infosys Ltd.', 'price' => 1620.10, 'pct' => 2.05],
+        ['symbol' => 'SBIN', 'name' => 'State Bank of India', 'price' => 745.20, 'pct' => 0.85],
+        ['symbol' => 'RELIANCE', 'name' => 'Reliance Industries', 'price' => 2428.15, 'pct' => -0.95],
+        ['symbol' => 'TATAMOTORS', 'name' => 'Tata Motors', 'price' => 920.40, 'pct' => -1.40],
+        ['symbol' => 'HDFCBANK', 'name' => 'HDFC Bank Ltd.', 'price' => 1412.30, 'pct' => -0.54]
+    ];
+}
+
+// Sort quotes dynamically by change percent descending
+usort($popularQuotes, function($a, $b) {
+    return $b['pct'] <=> $a['pct'];
+});
+
+$gainers = array_slice($popularQuotes, 0, 3);
+$losers = array_slice($popularQuotes, 3, 3);
 
 echo json_encode([
     'success' => true,
-    'indices' => [
-        'NIFTY 50' => ['val' => round($niftyVal, 2), 'change' => round($niftyVal - 21912.50, 2), 'pct' => round((($niftyVal - 21912.50) / 21912.50) * 100, 2)],
-        'SENSEX' => ['val' => round($sensexVal, 2), 'change' => round($sensexVal - 72111.80, 2), 'pct' => round((($sensexVal - 72111.80) / 72111.80) * 100, 2)],
-        'BANK NIFTY' => ['val' => round($bankNiftyVal, 2), 'change' => round($bankNiftyVal - 47032.25, 2), 'pct' => round((($bankNiftyVal - 47032.25) / 47032.25) * 100, 2)],
-        'FINNIFTY' => ['val' => round($finniftyVal, 2), 'change' => round($finniftyVal - 20666.05, 2), 'pct' => round((($finniftyVal - 20666.05) / 20666.05) * 100, 2)]
-    ],
-    'gainers' => [
-        ['symbol' => 'TCS', 'name' => 'Tata Consultancy Services', 'price' => round(3835.45 * (1 + $offset), 2), 'pct' => round(1.24 + $offset * 100, 2)],
-        ['symbol' => 'INFY', 'name' => 'Infosys Ltd.', 'price' => round(1620.10 * (1 + $offset * 1.2), 2), 'pct' => round(2.05 + $offset * 120, 2)],
-        ['symbol' => 'SBIN', 'name' => 'State Bank of India', 'price' => round(745.20 * (1 + $offset * 0.8), 2), 'pct' => round(0.85 + $offset * 80, 2)]
-    ],
-    'losers' => [
-        ['symbol' => 'RELIANCE', 'name' => 'Reliance Industries', 'price' => round(2428.15 * (1 - $offset * 0.9), 2), 'pct' => round(-0.95 - $offset * 90, 2)],
-        ['symbol' => 'TATAMOTORS', 'name' => 'Tata Motors', 'price' => round(920.40 * (1 - $offset * 1.5), 2), 'pct' => round(-1.40 - $offset * 150, 2)],
-        ['symbol' => 'HDFCBANK', 'name' => 'HDFC Bank Ltd.', 'price' => round(1412.30 * (1 - $offset * 0.7), 2), 'pct' => round(-0.54 - $offset * 70, 2)]
-    ]
+    'indices' => $indices,
+    'gainers' => $gainers,
+    'losers' => $losers
 ]);
 exit;
 ?>
