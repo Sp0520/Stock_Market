@@ -1,11 +1,37 @@
 <?php
 // Start secure session if not already active
 if (session_status() === PHP_SESSION_NONE) {
+    // Ensure session directory is writeable (fixes Render session save issues)
+    if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        // Unix environments like Render
+        $sessionDir = '/tmp/php_sessions';
+        if (!file_exists($sessionDir)) {
+            @mkdir($sessionDir, 0777, true);
+        }
+        if (is_writable($sessionDir)) {
+            session_save_path($sessionDir);
+        } else if (is_writable('/tmp')) {
+            session_save_path('/tmp');
+        }
+    } else {
+        // Windows environment
+        $winTemp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php_sessions';
+        if (!file_exists($winTemp)) {
+            @mkdir($winTemp, 0777, true);
+        }
+        if (is_writable($winTemp)) {
+            session_save_path($winTemp);
+        }
+    }
+
     ini_set('session.cookie_httponly', 1);
     ini_set('session.use_only_cookies', 1);
     
-    // Set secure flag if HTTPS is enabled
-    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+    // Set secure flag if HTTPS is enabled (supporting proxies like Render)
+    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
+                || $_SERVER['SERVER_PORT'] == 443 
+                || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+                
     ini_set('session.cookie_secure', $isSecure ? 1 : 0);
     
     session_start();
