@@ -59,7 +59,7 @@ include_once(__DIR__ . '/includes/header.php');
             <div class="glass-panel p-4 text-center">
                 <div class="mb-4">
                     <img src="./assets/logo.png" alt="BullVest Logo" style="height: 64px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594449.png'">
-                    <h2 class="mt-3 fw-bold">BullVest</h2>
+                    <h2 class="mt-3 fw-bold">FinNest</h2>
                     <p class="text-secondary small">Smart FinTech Stock Trading Platform</p>
                 </div>
                 
