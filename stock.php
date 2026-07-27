@@ -50,7 +50,13 @@ if ($user) {
         <div class="glass-panel p-4 mb-4">
             <div class="row align-items-center">
                 <div class="col-sm-6">
-                    <span class="text-secondary small">Live Share Price</span>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="text-secondary small">Live Share Price</span>
+                        <div id="ws-status-badge" class="ws-badge polling">
+                            <span class="pulse-dot"></span>
+                            <span class="badge-text">REST Polling</span>
+                        </div>
+                    </div>
                     <h2 class="fw-bold mb-1" id="live-price" style="font-size: 2.25rem;">₹0.00</h2>
                     <div id="live-change-container" class="fw-semibold small">
                         <span id="live-change">₹0.00 (0.00%)</span>
@@ -282,14 +288,23 @@ if ($user) {
 <!-- Page Real-time Polling Logic -->
 <script>
     let currentLivePrice = 0.00;
+    let ws = null;
+    let pollingInterval = null;
+    let wsConnectAttempts = 0;
     
     $(document).ready(function() {
         // Load initial company details
         fetchCompanyDetails();
         
-        // Load initial price & start 5-second polling loop
-        pollStockPrice();
-        setInterval(pollStockPrice, 5000);
+        // Start WebSocket stream. Fallback is handled automatically if WS server is offline.
+        connectWebSocket();
+        
+        // In case WebSocket doesn't connect in 2 seconds, trigger fallback as initial load safety
+        setTimeout(function() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                startRestFallback();
+            }
+        }, 2000);
         
         // Handle limit order display toggle
         $('#trade-order-type').change(function() {
@@ -349,6 +364,111 @@ if ($user) {
         });
     });
     
+    function updateStatusBadge(status) {
+        const badge = $('#ws-status-badge');
+        const text = badge.find('.badge-text');
+        badge.removeClass('connected polling disconnected');
+        
+        if (status === "connected") {
+            badge.addClass('connected');
+            text.text("Live (WS)");
+        } else if (status === "polling") {
+            badge.addClass('polling');
+            text.text("Live (REST)");
+        } else {
+            badge.addClass('disconnected');
+            text.text("Reconnecting...");
+        }
+    }
+    
+    function startRestFallback() {
+        if (!pollingInterval) {
+            updateStatusBadge("polling");
+            pollStockPrice();
+            pollingInterval = setInterval(pollStockPrice, 5000);
+        }
+    }
+    
+    function connectWebSocket() {
+        const wsUrl = "ws://" + window.location.hostname + ":8080";
+        console.log("Connecting to WebSocket: " + wsUrl);
+        ws = new WebSocket(wsUrl);
+        
+        ws.onopen = function() {
+            console.log("WebSocket connection established!");
+            wsConnectAttempts = 0;
+            updateStatusBadge("connected");
+            
+            // Subscribe to current stock
+            ws.send(JSON.stringify({
+                type: 'subscribe',
+                symbol: '<?= $symbolClean ?>'
+            }));
+            
+            // Clear REST fallback polling if active
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        };
+        
+        ws.onmessage = function(event) {
+            try {
+                const response = JSON.parse(event.data);
+                if (response.type === 'tick' && response.data) {
+                    updatePriceUI(response.data);
+                }
+            } catch(e) {
+                console.error("Error decoding WebSocket frame data:", e);
+            }
+        };
+        
+        ws.onclose = function() {
+            console.log("WebSocket connection lost.");
+            startRestFallback();
+            
+            // Exponential backoff reconnect
+            wsConnectAttempts++;
+            const delay = Math.min(1000 * Math.pow(2, wsConnectAttempts), 30000);
+            updateStatusBadge("disconnected");
+            setTimeout(connectWebSocket, delay);
+        };
+        
+        ws.onerror = function(err) {
+            console.error("WebSocket error occurred:", err);
+            ws.close();
+        };
+    }
+    
+    function updatePriceUI(data) {
+        const oldPrice = currentLivePrice;
+        currentLivePrice = data.price;
+        
+        const priceEl = $('#live-price');
+        priceEl.text('₹' + data.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        
+        // Visual green/red flash update
+        if (oldPrice > 0 && oldPrice !== data.price) {
+            priceEl.removeClass('flash-green flash-red');
+            void priceEl[0].offsetWidth; // trigger layout reflow to restart animation
+            priceEl.addClass(data.price > oldPrice ? 'flash-green' : 'flash-red');
+        }
+        
+        const changeVal = data.change;
+        const changePct = data.changePct;
+        const isUp = changeVal >= 0;
+        
+        const changeHtml = (isUp ? '+' : '') + '₹' + changeVal.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct.toFixed(2) + '%)';
+        $('#live-change').text(changeHtml);
+        $('#live-change-container').removeClass('text-up text-down').addClass(isUp ? 'text-up' : 'text-down');
+        
+        $('#live-timestamp').text(data.timestamp.split(' ')[1]);
+        
+        if ($('#trade-order-type').val() === 'market') {
+            recalcEstimatedCost();
+        }
+    }
+    
     function setTradeMode(mode) {
         const actionInput = document.getElementById('trade-action');
         const submitBtn = document.getElementById('btn-submit-order');
@@ -381,26 +501,7 @@ if ($user) {
             dataType: 'json',
             success: function(res) {
                 if (res.success) {
-                    currentLivePrice = res.price;
-                    
-                    // Update main price elements
-                    $('#live-price').text('₹' + res.price.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
-                    
-                    const changeVal = res.change;
-                    const changePct = res.changePct;
-                    const isUp = changeVal >= 0;
-                    
-                    const changeHtml = (isUp ? '+' : '') + '₹' + changeVal.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct.toFixed(2) + '%)';
-                    $('#live-change').text(changeHtml);
-                    $('#live-change-container').removeClass('text-up text-down').addClass(isUp ? 'text-up' : 'text-down');
-                    
-                    // Update timestamp
-                    $('#live-timestamp').text(res.timestamp.split(' ')[1]);
-                    
-                    // Recalc cost summary if order type is market
-                    if ($('#trade-order-type').val() === 'market') {
-                        recalcEstimatedCost();
-                    }
+                    updatePriceUI(res);
                 }
             }
         });

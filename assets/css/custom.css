@@ -620,3 +620,72 @@ body {
         display: none !important;
     }
 }
+
+/* Real-time Flashing Price Effects */
+@keyframes flash-green-bg {
+    0% { background-color: var(--color-green-light); color: var(--color-green); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flash-red-bg {
+    0% { background-color: var(--color-red-light); color: var(--color-red); }
+    100% { background-color: transparent; }
+}
+
+.flash-green {
+    animation: flash-green-bg 1s ease-out;
+}
+
+.flash-red {
+    animation: flash-red-bg 1s ease-out;
+}
+
+/* WebSocket Status Badges */
+.ws-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-smooth);
+}
+
+.ws-badge.connected {
+    background-color: var(--color-green-light);
+    color: var(--color-green);
+    border: 1px solid rgba(0, 200, 83, 0.3);
+}
+
+.ws-badge.polling {
+    background-color: var(--color-blue-light);
+    color: var(--color-blue);
+    border: 1px solid rgba(41, 98, 255, 0.3);
+}
+
+.ws-badge.disconnected {
+    background-color: var(--color-red-light);
+    color: var(--color-red);
+    border: 1px solid rgba(255, 61, 87, 0.3);
+}
+
+.ws-badge .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    display: inline-block;
+}
+
+.ws-badge.connected .pulse-dot {
+    animation: ws-pulse 1.5s infinite;
+}
+
+@keyframes ws-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.4; }
+    100% { transform: scale(1); opacity: 1; }
+}
