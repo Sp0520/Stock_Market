@@ -68,7 +68,25 @@ if ($stmt) {
     mysqli_stmt_close($stmt);
 }
 
-// Slice to maximum 6 results for clean UI dropdown
+if (count($results) < 6) {
+    $yahooResults = searchYahooSymbols($query, 6);
+    foreach ($yahooResults as $stock) {
+        $found = false;
+        foreach ($results as $item) {
+            if ($item['symbol'] === $stock['symbol']) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            $results[] = $stock;
+        }
+        if (count($results) >= 6) {
+            break;
+        }
+    }
+}
+
 echo json_encode(array_slice($results, 0, 6));
 exit;
 ?>

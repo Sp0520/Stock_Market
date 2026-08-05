@@ -77,7 +77,7 @@ if ($user) {
     <div class="glass-panel p-5 text-center my-4">
         <div class="text-danger mb-3" style="font-size: 3rem;"><i class="bi bi-exclamation-octagon"></i></div>
         <h4 class="fw-bold">Stock Data Unavailable</h4>
-        <p class="text-secondary max-width-600 mx-auto">Reason: <?= htmlspecialchars($errorMessage) ?>. AlphaVantage API standard rate limits may have been reached, or the stock symbol is invalid. Try again in a minute.</p>
+        <p class="text-secondary max-width-600 mx-auto">Reason: <?= htmlspecialchars($errorMessage) ?>. Live data could not be fetched from Yahoo Finance or fallback providers. Check your internet connection, verify the symbol, or try again shortly.</p>
         <a href="market.php" class="btn btn-primary-custom mt-3">Return to Market</a>
     </div>
 <?php else: ?>

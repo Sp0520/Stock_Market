@@ -49,16 +49,19 @@ if (isset($_POST['btnSaveSettings'])) {
             <form action="" method="post">
                 <?= getCsrfInput() ?>
                 
-                <h6 class="fw-bold text-primary mb-3">API Key Overrides (Read-Only via Dashboard Env Vars)</h6>
+                <h6 class="fw-bold text-primary mb-3">Stock Data Providers</h6>
+                <div class="alert alert-secondary py-2 small mb-3">
+                    Primary provider: <strong>Yahoo Finance</strong> (no API key required). Keys below are optional fallbacks.
+                </div>
                 <div class="mb-3">
-                    <label class="text-secondary small fw-semibold mb-2">AlphaVantage Key (Active)</label>
-                    <input type="text" class="form-control bg-transparent text-secondary border-secondary" value="<?= htmlspecialchars(getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "1DBYP9NP4ZDVPWI6") ?>" disabled style="border-radius: var(--border-radius);">
+                    <label class="text-secondary small fw-semibold mb-2">AlphaVantage Key (Fallback)</label>
+                    <input type="text" class="form-control bg-transparent text-secondary border-secondary" value="<?= htmlspecialchars(getenv("ALPHAVANTAGE_API_KEY") ?: getenv("API_KEY") ?: "Not configured") ?>" disabled style="border-radius: var(--border-radius);">
                     <div class="text-secondary small mt-1">Configure this variable in Render Dashboard under name `ALPHAVANTAGE_API_KEY`.</div>
                 </div>
                 
                 <div class="mb-4">
-                    <label class="text-secondary small fw-semibold mb-2">Marketstack Key (Active)</label>
-                    <input type="text" class="form-control bg-transparent text-secondary border-secondary" value="<?= htmlspecialchars(getenv("MARKETSTACK_API_KEY") ?: "75e8ef804fbf5fa58ad3d7e5d8048253") ?>" disabled style="border-radius: var(--border-radius);">
+                    <label class="text-secondary small fw-semibold mb-2">Marketstack Key (Fallback)</label>
+                    <input type="text" class="form-control bg-transparent text-secondary border-secondary" value="<?= htmlspecialchars(getenv("MARKETSTACK_API_KEY") ?: "Not configured") ?>" disabled style="border-radius: var(--border-radius);">
                     <div class="text-secondary small mt-1">Configure this variable in Render Dashboard under name `MARKETSTACK_API_KEY`.</div>
                 </div>
                 
@@ -112,8 +115,8 @@ if (isset($_POST['btnSaveSettings'])) {
                 </div>
                 <div class="p-3 rounded d-flex justify-content-between align-items-center" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);">
                     <div>
-                        <div class="small fw-bold">AlphaVantage Gateway</div>
-                        <div class="text-secondary small mt-1">Standard HTTPS Port 443</div>
+                        <div class="small fw-bold">Stock Data Gateway</div>
+                        <div class="text-secondary small mt-1">Yahoo Finance + optional fallbacks</div>
                     </div>
                     <span class="badge-up">CONNECTED</span>
                 </div>
