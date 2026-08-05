@@ -135,13 +135,14 @@ function buildDashboardPayload(&$lastKnownTicks, &$lastFetchTimes) {
         'FINNIFTY' => 'NIFTY_FIN_SERVICE.NS',
     ];
 
-    $movers = ['TCS', 'INFY', 'SBIN', 'RELIANCE', 'TATAMOTORS', 'HDFCBANK'];
+    $movers = ['TCS', 'INFY', 'SBIN', 'RELIANCE', 'TMPV', 'HDFCBANK'];
     $nameMapping = [
         'TCS' => 'Tata Consultancy Services',
         'INFY' => 'Infosys Ltd.',
         'SBIN' => 'State Bank of India',
         'RELIANCE' => 'Reliance Industries',
-        'TATAMOTORS' => 'Tata Motors',
+        'TMPV' => 'Tata Motors Passenger Vehicles',
+        'TMCV' => 'Tata Motors Commercial Vehicles',
         'HDFCBANK' => 'HDFC Bank Ltd.',
     ];
 

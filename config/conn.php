@@ -1,6 +1,6 @@
 <?php
 // Start secure session if not already active
-if (session_status() === PHP_SESSION_NONE) {
+if (session_status() === PHP_SESSION_NONE && php_sapi_name() !== 'cli') {
     // Ensure session directory is writeable (fixes Render session save issues)
     if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
         // Unix environments like Render
@@ -29,7 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
     
     // Set secure flag if HTTPS is enabled (supporting proxies like Render)
     $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
-                || $_SERVER['SERVER_PORT'] == 443 
+                || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) 
                 || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
                 
     ini_set('session.cookie_secure', $isSecure ? 1 : 0);
@@ -205,7 +205,7 @@ try {
             mysqli_query($conn, "ALTER TABLE `users` ADD COLUMN `profile_picture` VARCHAR(255) DEFAULT NULL");
             // Add default admin user if not present
             mysqli_query($conn, "INSERT INTO users (firstname, lastname, address, email, password, mobile_number, PANCARD_number, role, available_balance)
-                                 VALUES ('Admin', 'User', 'Fintech HQ', 'admin@stockapp.com', '$2y$10$tZ2y10B/79N26VpB0h2/G.qY3K.k7bQ/jWb5Jk.FwE8NqH3K8882O', '9999999999', 'ADMINPAN12A', 'admin', 500000.00)
+                                 VALUES ('Admin', 'User', 'Fintech HQ', 'admin@stockapp.com', '\$2y\$10\$tZ2y10B/79N26VpB0h2/G.qY3K.k7bQ/jWb5Jk.FwE8NqH3K8882O', '9999999999', 'ADMINPAN12A', 'admin', 500000.00)
                                  ON DUPLICATE KEY UPDATE email=email");
             error_log("Upgraded database schema for users roles.");
         }

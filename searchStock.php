@@ -8,7 +8,7 @@ $popularStocks = [
     ['symbol' => 'INFY', 'name' => 'Infosys Technologies', 'logo' => 'https://cdn-icons-png.flaticon.com/512/3594/3594449.png'],
     ['symbol' => 'SBIN', 'name' => 'State Bank of India', 'logo' => 'https://cdn-icons-png.flaticon.com/512/3594/3594449.png'],
     ['symbol' => 'HDFCBANK', 'name' => 'HDFC Bank Limited', 'logo' => 'https://cdn-icons-png.flaticon.com/512/3594/3594449.png'],
-    ['symbol' => 'TATAMOTORS', 'name' => 'Tata Motors', 'logo' => 'https://cdn-icons-png.flaticon.com/512/3594/3594449.png']
+    ['symbol' => 'TMPV', 'name' => 'Tata Motors Passenger Vehicles', 'logo' => 'https://cdn-icons-png.flaticon.com/512/3594/3594449.png']
 ];
 ?>
 

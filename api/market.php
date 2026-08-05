@@ -48,13 +48,14 @@ foreach ($indicesList as $name => $ticker) {
     }
 }
 
-$moverTickers = ['TCS', 'INFY', 'SBIN', 'RELIANCE', 'TATAMOTORS', 'HDFCBANK'];
+$moverTickers = ['TCS', 'INFY', 'SBIN', 'RELIANCE', 'TMPV', 'HDFCBANK'];
 $nameMapping = [
     'TCS' => 'Tata Consultancy Services',
     'INFY' => 'Infosys Ltd.',
     'SBIN' => 'State Bank of India',
     'RELIANCE' => 'Reliance Industries',
-    'TATAMOTORS' => 'Tata Motors',
+    'TMPV' => 'Tata Motors Passenger Vehicles',
+    'TMCV' => 'Tata Motors Commercial Vehicles',
     'HDFCBANK' => 'HDFC Bank Ltd.',
 ];
 

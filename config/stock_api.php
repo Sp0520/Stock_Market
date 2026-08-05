@@ -220,6 +220,13 @@ function fetchFromMarketstack($ticker) {
 
 function fetchStockData($ticker, $cacheTime = null) {
     $ticker = strtoupper(trim($ticker));
+    // Map obsolete/demerged symbols to current ones to support legacy watchlists/portfolios
+    $aliases = [
+        'TATAMOTORS' => 'TMPV'
+    ];
+    if (isset($aliases[$ticker])) {
+        $ticker = $aliases[$ticker];
+    }
     if (empty($ticker)) {
         return ['error' => 'Empty ticker symbol'];
     }
