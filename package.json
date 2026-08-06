@@ -1,7 +1,7 @@
 {
   "name": "indian-stock-market-platform",
-  "version": "1.0.0",
-  "description": "Full-Stack Indian Stock Market Trading Platform for Render Deployment",
+  "version": "2.0.0",
+  "description": "Production-Ready Indian Stock Market Trading Platform (NSE & BSE) powered by Node.js, Express, and React.js",
   "main": "server/server.js",
   "scripts": {
     "install:client": "npm install --prefix client",
@@ -15,8 +15,10 @@
     "indian-stock-market",
     "nse",
     "bse",
-    "render-deployment",
+    "groww-clone",
+    "zerodha-kite-clone",
     "tradingview-charts",
+    "render-deployment",
     "react-express"
   ],
   "author": "Sneh Patel",
