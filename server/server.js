@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const {
   STOCKS_DATABASE,
@@ -25,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const JWT_SECRET = 'indian_stock_market_jwt_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'indian_stock_market_jwt_secret_key_2026';
 
 // Middleware to verify JWT token if present
 const authenticateToken = (req, res, next) => {
@@ -43,9 +44,8 @@ app.use(authenticateToken);
 
 // === AUTH ENDPOINTS ===
 app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-  // Demo login accept
-  const token = jwt.sign({ email, name: "Rahul Sharma", role: email.includes('admin') ? 'ADMIN' : 'USER' }, JWT_SECRET, { expiresIn: '7d' });
+  const { email } = req.body;
+  const token = jwt.sign({ email, name: "Rahul Sharma", role: email && email.includes('admin') ? 'ADMIN' : 'USER' }, JWT_SECRET, { expiresIn: '7d' });
   return res.json({
     success: true,
     token,
@@ -60,7 +60,7 @@ app.post('/api/auth/login', (req, res) => {
 });
 
 app.post('/api/auth/signup', (req, res) => {
-  const { name, email, phone, pan } = req.body;
+  const { name, email, pan } = req.body;
   const token = jwt.sign({ email, name, role: 'USER' }, JWT_SECRET, { expiresIn: '7d' });
   return res.json({
     success: true,
@@ -121,7 +121,6 @@ app.post('/api/orders/estimate', (req, res) => {
 
 // === PORTFOLIO & HOLDINGS ===
 app.get('/api/portfolio', (req, res) => {
-  // Recalculate portfolio current value based on live stock prices
   let currentVal = 0;
   let todaysPnl = 0;
 
@@ -164,10 +163,8 @@ app.post('/api/orders/place', (req, res) => {
     if (USER_PORTFOLIO.profile.availableBalance < chargesCalc.estimatedTotalAmount) {
       return res.status(400).json({ success: false, message: "Insufficient Funds in Account" });
     }
-    // Deduct funds
     USER_PORTFOLIO.profile.availableBalance -= chargesCalc.estimatedTotalAmount;
 
-    // Update holdings
     const existingHolding = USER_PORTFOLIO.holdings.find(h => h.symbol === stock.symbol);
     if (existingHolding) {
       const totalQty = existingHolding.qty + numQty;
@@ -238,7 +235,7 @@ app.post('/api/funds/deposit', (req, res) => {
   }
 
   USER_PORTFOLIO.profile.availableBalance += numAmt;
-  USER_PORTFOLIO.profile.buyingPower += numAmt * 2; // 2x leverage for trading power
+  USER_PORTFOLIO.profile.buyingPower += numAmt * 2;
 
   res.json({
     success: true,
@@ -312,6 +309,16 @@ app.get('/api/admin/stats', (req, res) => {
   });
 });
 
+// === SERVE STATIC REACT FRONTEND FOR RENDER DEPLOYMENT ===
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`Indian Stock Market Backend running on port ${PORT}`);
+  console.log(`Indian Stock Market Trading Server listening on port ${PORT}`);
 });
