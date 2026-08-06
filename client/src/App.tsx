@@ -3,6 +3,9 @@ import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { PortfolioSummary } from './components/dashboard/PortfolioSummary';
 import { MarketIndices } from './components/dashboard/MarketIndices';
+import { Donut3DChart } from './components/dashboard/Donut3DChart';
+import { MarketHeatmap3D } from './components/dashboard/MarketHeatmap3D';
+import { Card3D } from './components/common/Card3D';
 import { TradingViewChart } from './components/trading/TradingViewChart';
 import { BuySellPanel } from './components/trading/BuySellPanel';
 import { HoldingsView } from './components/portfolio/HoldingsView';
@@ -169,7 +172,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0a0e17] text-slate-100 flex flex-col font-sans">
       
       {/* Top Glass Sticky Navbar */}
       <Navbar
@@ -190,18 +193,29 @@ export function App() {
           setCollapsed={setSidebarCollapsed}
         />
 
-        {/* Main Content Area */}
+        {/* Main Command Center Content */}
         <main className="flex-1 p-6 overflow-y-auto space-y-6">
           
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
+              
+              {/* Portfolio Metrics Cards */}
               <PortfolioSummary
                 portfolio={portfolio}
                 onDepositClick={() => setActiveTab('funds')}
               />
 
-              <MarketIndices indices={indices} />
+              {/* 3D Asset Donut & Market Indices Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <MarketIndices indices={indices} />
+                </div>
+                <Card3D className="p-5">
+                  <Donut3DChart />
+                </Card3D>
+              </div>
 
+              {/* Trading View Chart & Floating Order Ticket */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
                   <TradingViewChart
@@ -222,6 +236,10 @@ export function App() {
                   />
                 </div>
               </div>
+
+              {/* 3D Sector Market Heatmap */}
+              <MarketHeatmap3D />
+
             </div>
           )}
 
@@ -264,6 +282,7 @@ export function App() {
           {activeTab === 'markets' && (
             <div className="space-y-6">
               <MarketIndices indices={indices} />
+              <MarketHeatmap3D />
               <WatchlistView onSelectStock={handleSelectStock} />
             </div>
           )}

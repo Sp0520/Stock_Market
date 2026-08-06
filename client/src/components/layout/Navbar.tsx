@@ -49,25 +49,25 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header className="sticky top-0 z-50 glass-panel border-b border-white/10 px-6 py-3">
       <div className="flex items-center justify-between gap-6">
         
-        {/* Logo & Brand */}
+        {/* Logo & 3D Rotating Candlestick Brand */}
         <div 
           onClick={() => setActiveTab('dashboard')} 
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-extrabold text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            📈
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-extrabold text-xl shadow-lg shadow-cyan-500/30 group-hover:rotate-12 transition-transform">
+            ⚡
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="brand-font text-xl font-extrabold text-white tracking-tight">GROWW<span className="gradient-text">TRADE</span></span>
+              <span className="brand-font text-xl font-extrabold text-white tracking-tight">GROWW<span className="gradient-text">TRADE 3D</span></span>
               <span className="badge-exchange text-[10px]">NSE / BSE</span>
             </div>
-            <p className="text-[11px] text-slate-400">Indian Stock Trading Platform</p>
+            <p className="text-[11px] text-slate-400">Fintech Command Center</p>
           </div>
         </div>
 
         {/* Live Indices Ticker Tape */}
-        <div className="hidden xl:flex items-center gap-6 bg-slate-900/60 border border-white/5 rounded-2xl px-5 py-2 overflow-x-auto">
+        <div className="hidden xl:flex items-center gap-6 bg-slate-950/80 border border-white/5 rounded-2xl px-5 py-2 overflow-x-auto">
           {indices.slice(0, 3).map((idx) => (
             <div key={idx.symbol} className="flex items-center gap-3 text-xs">
               <span className="font-semibold text-slate-300">{idx.symbol}</span>
@@ -79,25 +79,25 @@ export const Navbar: React.FC<NavbarProps> = ({
           ))}
           <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            MARKET OPEN
+            LIVE FEED
           </div>
         </div>
 
-        {/* Search Input with Stock Autocomplete */}
+        {/* Search Input with 3D Depressed Glass Effect */}
         <div className="relative flex-1 max-w-md">
           <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-400" />
             <input
               type="text"
               placeholder="Search NSE / BSE Stocks (e.g. RELIANCE, TCS, ZOMATO)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full glass-input pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500"
+              className="w-full glass-input-3d pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500"
             />
           </div>
 
           {showDropdown && (
-            <div className="absolute left-0 right-0 top-full mt-2 glass-panel border border-white/10 rounded-2xl p-2 shadow-2xl z-50 max-h-80 overflow-y-auto">
+            <div className="absolute left-0 right-0 top-full mt-2 glass-panel border border-cyan-500/30 rounded-2xl p-2 shadow-2xl z-50 max-h-80 overflow-y-auto">
               {searchResults.length > 0 ? (
                 searchResults.map((stock) => (
                   <div
@@ -150,14 +150,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             title="Notifications & Market News"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00d4ff] animate-ping"></span>
           </button>
 
           <div 
             onClick={() => setActiveTab('profile')}
             className="flex items-center gap-3 cursor-pointer border border-white/10 hover:border-emerald-400/40 p-1.5 pr-3 rounded-2xl bg-white/5 hover:bg-white/10 transition-all"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-bold text-xs">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-bold text-xs shadow-md">
               RS
             </div>
             <div className="hidden sm:block text-left">
