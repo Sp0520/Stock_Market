@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/includes/header.php');
+require_once(__DIR__ . '/config/stock_api.php');
 
 $symbol = isset($_GET['symbol']) ? strtoupper(trim($_GET['symbol'])) : 'TCS';
 $symbolClean = explode('.', $symbol)[0];
@@ -17,6 +18,27 @@ if ($user) {
         $inWatchlist = true;
     }
     mysqli_stmt_close($stmt);
+}
+
+// Fetch initial stock details for server rendering
+$stockData = fetchStockData($symbolClean);
+$hasStockData = ($stockData && !isset($stockData['error']));
+
+$initialPrice = 0.00;
+$initialChange = 0.00;
+$initialChangePct = 0.00;
+$initialTimestamp = '--:--:--';
+$isPriceUp = true;
+
+if ($hasStockData) {
+    $tick = stockDataToTick($stockData);
+    if ($tick) {
+        $initialPrice = $tick['price'];
+        $initialChange = $tick['change'];
+        $initialChangePct = $tick['changePct'];
+        $initialTimestamp = explode(' ', $tick['timestamp'])[1];
+        $isPriceUp = $initialChange >= 0;
+    }
 }
 ?>
 
@@ -57,14 +79,14 @@ if ($user) {
                             <span class="badge-text">REST Polling</span>
                         </div>
                     </div>
-                    <h2 class="fw-bold mb-1" id="live-price" style="font-size: 2.25rem;">₹0.00</h2>
-                    <div id="live-change-container" class="fw-semibold small">
-                        <span id="live-change">₹0.00 (0.00%)</span>
+                    <h2 class="fw-bold mb-1" id="live-price" style="font-size: 2.25rem;">₹<?= number_format($initialPrice, 2) ?></h2>
+                    <div id="live-change-container" class="fw-semibold small <?= $isPriceUp ? 'text-up' : 'text-down' ?>">
+                        <span id="live-change"><?= ($isPriceUp ? '+' : '') ?>₹<?= number_format($initialChange, 2) ?> (<?= ($isPriceUp ? '+' : '') ?><?= number_format($initialChangePct, 2) ?>%)</span>
                     </div>
                 </div>
                 <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
                     <span class="text-secondary small d-block">Last Refreshed</span>
-                    <span class="fw-bold text-white" id="live-timestamp">--:--:--</span>
+                    <span class="fw-bold text-white" id="live-timestamp"><?= htmlspecialchars($initialTimestamp) ?></span>
                 </div>
             </div>
         </div>
@@ -287,7 +309,7 @@ if ($user) {
 
 <!-- Page Real-time Polling Logic -->
 <script>
-    let currentLivePrice = 0.00;
+    let currentLivePrice = <?= $initialPrice ?>;
     let ws = null;
     let pollingInterval = null;
     let wsConnectAttempts = 0;
@@ -295,6 +317,7 @@ if ($user) {
     $(document).ready(function() {
         // Load initial company details
         fetchCompanyDetails();
+        recalcEstimatedCost();
         
         // Start WebSocket stream. Fallback is handled automatically if WS server is offline.
         connectWebSocket();

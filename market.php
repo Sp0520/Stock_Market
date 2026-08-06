@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . '/includes/header.php');
+require_once(__DIR__ . '/config/stock_api.php');
 
 // Define Indian Market Hours status (9:15 AM to 3:30 PM IST, Monday-Friday)
 date_default_timezone_set('Asia/Kolkata');
@@ -18,6 +19,37 @@ $popularList = [
     ['symbol' => 'INFY', 'name' => 'Infosys Ltd.', 'sector' => 'IT'],
     ['symbol' => 'SBIN', 'name' => 'State Bank of India', 'sector' => 'Banking']
 ];
+
+// Pre-fetch initial popular stocks data
+$popularData = [];
+foreach ($popularList as $p) {
+    $data = fetchStockData($p['symbol']);
+    $tick = stockDataToTick($data);
+    if ($tick) {
+        $popularData[$p['symbol']] = $tick;
+    }
+}
+
+// Pre-fetch initial indices data
+$indicesList = [
+    'NIFTY 50' => '^NSEI',
+    'SENSEX' => '^BSESN',
+    'BANK NIFTY' => '^NSEBANK',
+    'FINNIFTY' => 'NIFTY_FIN_SERVICE.NS',
+];
+$initialIndices = [];
+foreach ($indicesList as $name => $ticker) {
+    $idxData = fetchStockData($ticker);
+    $tick = stockDataToTick($idxData);
+    if ($tick) {
+        $initialIndices[$name] = [
+            'val' => $tick['price'],
+            'change' => $tick['change'],
+            'pct' => $tick['changePct'],
+            'stale' => $tick['stale'],
+        ];
+    }
+}
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -45,10 +77,25 @@ $popularList = [
 
 <!-- Live Indices Section -->
 <div class="index-widget" id="indices-container">
-    <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
-    <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
-    <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
-    <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
+    <?php if (count($initialIndices) > 0): ?>
+        <?php foreach ($initialIndices as $name => $index): 
+            $isUp = $index['change'] >= 0;
+        ?>
+            <div class="index-card">
+                <h6 class="index-name"><?= htmlspecialchars($name) ?></h6>
+                <div class="index-val">₹<?= number_format($index['val'], 2) ?></div>
+                <div class="index-change <?= $isUp ? 'text-up' : 'text-down' ?>">
+                    <i class="bi <?= $isUp ? 'bi-caret-up-fill' : 'bi-caret-down-fill' ?>"></i>
+                    <span><?= $isUp ? '+' : '' ?><?= number_format($index['change'], 2) ?> (<?= $isUp ? '+' : '' ?><?= number_format($index['pct'], 2) ?>%)</span>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
+        <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
+        <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
+        <div class="index-card skeleton" style="height: 90px; flex: 0 0 220px;"></div>
+    <?php endif; ?>
 </div>
 
 <div class="row g-4 mb-4">
@@ -73,7 +120,15 @@ $popularList = [
                         </tr>
                     </thead>
                     <tbody id="featured-stocks-body">
-                        <?php foreach ($popularList as $p): ?>
+                        <?php foreach ($popularList as $p): 
+                            $tick = $popularData[$p['symbol']] ?? null;
+                            $price = $tick ? $tick['price'] : 0.00;
+                            $high = $tick ? $tick['high'] : 0.00;
+                            $low = $tick ? $tick['low'] : 0.00;
+                            $changePct = $tick ? $tick['changePct'] : 0.00;
+                            $change = $tick ? $tick['change'] : 0.00;
+                            $isUp = $change >= 0;
+                        ?>
                             <tr id="featured-row-<?= $p['symbol'] ?>">
                                 <td>
                                     <a href="stock.php?symbol=<?= $p['symbol'] ?>" class="fw-bold text-white text-decoration-none hover-blue">
@@ -81,10 +136,10 @@ $popularList = [
                                     </a>
                                 </td>
                                 <td><span class="text-secondary small"><?= $p['sector'] ?></span></td>
-                                <td class="fw-bold index-val">₹0.00</td>
-                                <td class="text-up">₹0.00</td>
-                                <td class="text-down">₹0.00</td>
-                                <td><span class="badge-up">0.00%</span></td>
+                                <td class="fw-bold index-val">₹<?= number_format($price, 2) ?></td>
+                                <td class="text-up">₹<?= number_format($high, 2) ?></td>
+                                <td class="text-down">₹<?= number_format($low, 2) ?></td>
+                                <td><span class="<?= $isUp ? 'badge-up' : 'badge-down' ?>"><?= ($isUp ? '+' : '') ?><?= number_format($changePct, 2) ?>%</span></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
