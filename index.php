@@ -1,5 +1,5 @@
 <?php
-// Indian Stock Market Platform - Route to Reference UI Command Center
+// Indian Stock Market Platform - Route to HTML5, CSS, JS React SPA
 $distIndex = __DIR__ . '/client/dist/index.html';
 
 if (file_exists($distIndex)) {
