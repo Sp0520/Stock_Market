@@ -6,7 +6,6 @@ services:
     plan: free
     buildCommand: npm run build
     startCommand: npm start
-    healthCheckPath: /api/indices
     envVars:
       - key: NODE_ENV
         value: production
