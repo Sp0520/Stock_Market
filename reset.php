@@ -56,24 +56,26 @@ if (isset($_POST['btnUpdatePass'])) {
 include_once(__DIR__ . '/includes/header.php');
 ?>
 
-<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: url('./assets/background.jpg') no-repeat center center/cover;">
+<div class="container d-flex align-items-center justify-content-center min-vh-100" style="background: var(--bg-gradient); background-attachment: fixed;">
     <div class="row w-100 justify-content-center">
         <div class="col-md-5 col-lg-4">
-            <div class="glass-panel p-4 text-center">
+            <div class="glass-panel p-5 text-center fade-in-up" style="box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 <div class="mb-4">
-                    <img src="./assets/logo.png" alt="BullVest Logo" style="height: 64px;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3594/3594449.png'">
-                    <h3 class="mt-3 fw-bold">Reset Password</h3>
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary-transparent rounded-circle mb-3" style="width: 70px; height: 70px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2);">
+                        <i class="bi bi-shield-lock-fill text-primary" style="font-size: 2.2rem;"></i>
+                    </div>
+                    <h3 class="mt-2 fw-bold text-white">Reset Password</h3>
                     <p class="text-secondary small">Choose a secure, strong password</p>
                 </div>
                 
                 <?php if (!empty($errorMsg)): ?>
-                    <div class="alert alert-danger py-2 small" role="alert">
+                    <div class="alert alert-danger py-2 small" role="alert" style="border-radius: var(--border-radius); background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #FF8A8A;">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= htmlspecialchars($errorMsg) ?>
                     </div>
                 <?php endif; ?>
                 
                 <?php if (!empty($successMsg)): ?>
-                    <div class="alert alert-success py-2 small" role="alert">
+                    <div class="alert alert-success py-2 small" role="alert" style="border-radius: var(--border-radius); background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #A7F3D0;">
                         <i class="bi bi-check-circle-fill me-2"></i> <?= htmlspecialchars($successMsg) ?>
                     </div>
                 <?php endif; ?>
@@ -82,15 +84,15 @@ include_once(__DIR__ . '/includes/header.php');
                     <form action="" method="post" autocomplete="off">
                         <?= getCsrfInput() ?>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="new_pass" name="new_pass" placeholder="New Password" required style="border-radius: var(--border-radius);">
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="new_pass" name="new_pass" placeholder="New Password" required style="border-radius: var(--border-radius); border-color: rgba(255,255,255,0.1) !important;">
                             <label for="new_pass" class="text-secondary">New Password</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="confirm_pass" name="confirm_pass" placeholder="Re-enter Password" required style="border-radius: var(--border-radius);">
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="confirm_pass" name="confirm_pass" placeholder="Re-enter Password" required style="border-radius: var(--border-radius); border-color: rgba(255,255,255,0.1) !important;">
                             <label for="confirm_pass" class="text-secondary">Confirm New Password</label>
                         </div>
                         
-                        <button type="submit" name="btnUpdatePass" class="btn btn-primary-custom w-100 mb-3" style="border-radius: var(--border-radius);">Update Password</button>
+                        <button type="submit" name="btnUpdatePass" class="btn btn-primary-custom w-100 mb-3" style="border-radius: var(--border-radius); padding: 12px; font-weight: 700; font-size: 1rem;">Update Password</button>
                     </form>
                 <?php endif; ?>
             </div>
