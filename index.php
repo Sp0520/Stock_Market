@@ -1,5 +1,5 @@
 <?php
-// Indian Stock Market Platform - Route to 3D React Command Center
+// Indian Stock Market Platform - Route to Reference UI Command Center
 $distIndex = __DIR__ . '/client/dist/index.html';
 
 if (file_exists($distIndex)) {

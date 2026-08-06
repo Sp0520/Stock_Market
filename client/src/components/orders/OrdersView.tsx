@@ -1,112 +1,153 @@
 import React, { useState } from 'react';
-import { ShoppingBag, CheckCircle, Clock, Download } from 'lucide-react';
-import { formatINR } from '../../utils/formatters';
+import { Search, Filter } from 'lucide-react';
 
 interface OrdersViewProps {
   orders: any[];
 }
 
-export const OrdersView: React.FC<OrdersViewProps> = ({ orders }) => {
-  const [activeTab, setActiveTab] = useState<'EXECUTED' | 'OPEN' | 'REJECTED' | 'TRADEBOOK'>('EXECUTED');
+export const OrdersView: React.FC<OrdersViewProps> = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('Last 30 Days');
 
-  const filteredOrders = orders.filter((o) => {
-    if (activeTab === 'TRADEBOOK') return true;
-    return o.status === activeTab;
-  });
+  const transactions = [
+    {
+      date: "2026-05-15 10:30",
+      txId: "T-98765432",
+      description: "Deposit from Bank Account",
+      type: "Deposit",
+      status: "COMPLETED",
+      debit: "",
+      credit: "₹10,000.00"
+    },
+    {
+      date: "2026-05-15 14:15",
+      txId: "T-98765433",
+      description: "Purchase 100 shares RELIANCE @ ₹2,455.70",
+      type: "Buy",
+      status: "EXECUTED",
+      debit: "₹2,45,570.00",
+      credit: ""
+    },
+    {
+      date: "2026-05-16 09:45",
+      txId: "T-98765434",
+      description: "Sale 50 shares TCS @ ₹3,410.90",
+      type: "Sell",
+      status: "EXECUTED",
+      debit: "",
+      credit: "₹1,70,545.00"
+    },
+    {
+      date: "2026-05-17 11:00",
+      txId: "T-98765435",
+      description: "Dividend Payment - INFY",
+      type: "Dividend",
+      status: "PAID",
+      debit: "",
+      credit: "₹1,250.00"
+    },
+    {
+      date: "2026-05-18 16:30",
+      txId: "T-98765436",
+      description: "Purchase 20 shares HDFCBANK @ ₹1,642.15",
+      type: "Buy",
+      status: "EXECUTED",
+      debit: "₹32,843.00",
+      credit: ""
+    },
+    {
+      date: "2026-05-19 08:00",
+      txId: "T-98765437",
+      description: "Bank Transfer",
+      type: "Withdrawal",
+      status: "PENDING",
+      debit: "₹5,000.00",
+      credit: ""
+    }
+  ];
+
+  const filteredTransactions = transactions.filter(t => 
+    t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    t.txId.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
       
-      {/* Tabs */}
+      {/* Header Search & Filter Bar */}
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-white/10">
-          {(['EXECUTED', 'OPEN', 'REJECTED', 'TRADEBOOK'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                activeTab === tab
-                  ? 'gradient-btn text-black shadow-md'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {tab === 'EXECUTED' && '✅ Executed Orders'}
-              {tab === 'OPEN' && '⏳ Open Orders'}
-              {tab === 'REJECTED' && '❌ Cancelled / Rejected'}
-              {tab === 'TRADEBOOK' && '📜 Trade Book & Contract Notes'}
-            </button>
-          ))}
+        
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search transactions..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full glass-input pl-10 py-2.5 text-xs text-white placeholder-slate-500"
+          />
         </div>
 
-        <button className="gradient-btn py-2 px-4 text-xs font-bold">
-          <Download className="w-4 h-4" /> Download Contract Note (PDF)
-        </button>
+        {/* Filter Dropdowns */}
+        <div className="flex items-center gap-3">
+          <select 
+            value={selectedFilter}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+            className="glass-input py-2 text-xs text-white"
+          >
+            <option className="bg-slate-900">Last 30 Days</option>
+            <option className="bg-slate-900">Last 90 Days</option>
+            <option className="bg-slate-900">Year to Date (YTD)</option>
+          </select>
+
+          <select className="glass-input py-2 text-xs text-white">
+            <option className="bg-slate-900">All Transaction Types</option>
+            <option className="bg-slate-900">Buy Orders</option>
+            <option className="bg-slate-900">Sell Orders</option>
+            <option className="bg-slate-900">Dividends</option>
+          </select>
+
+          <button className="glass-input py-2 px-3 text-xs text-slate-300 flex items-center gap-1.5 hover:text-white">
+            <Filter className="w-3.5 h-3.5" /> Filter
+          </button>
+        </div>
+
       </div>
 
-      {/* Orders Table */}
+      {/* Transactions Table */}
       <div className="glass-card overflow-hidden">
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <ShoppingBag className="w-5 h-5 text-cyan-400" />
-            {activeTab} ({filteredOrders.length})
-          </h3>
-          <span className="text-xs text-slate-400">NSE / BSE Trade Log</span>
-        </div>
-
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-white/10 text-[11px] text-slate-400 uppercase tracking-wider bg-slate-900/60 font-semibold">
-                <th className="p-4">Time</th>
-                <th className="p-4">Order ID</th>
-                <th className="p-4">Instrument</th>
+                <th className="p-4">Date ↕</th>
+                <th className="p-4">Transaction ID</th>
+                <th className="p-4">Description</th>
                 <th className="p-4">Type</th>
-                <th className="p-4">Category</th>
-                <th className="p-4 text-right">Qty</th>
-                <th className="p-4 text-right">Price</th>
-                <th className="p-4 text-right">Statutory Charges</th>
-                <th className="p-4 text-center">Status</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Debit</th>
+                <th className="p-4 text-right">Credit</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-xs font-medium">
-              {filteredOrders.length > 0 ? (
-                filteredOrders.map((o) => (
-                  <tr key={o.id} className="hover:bg-white/5 transition-colors">
-                    <td className="p-4 text-slate-400 font-mono text-[11px]">{o.time}</td>
-                    <td className="p-4 font-mono font-bold text-cyan-300">{o.id}</td>
-                    <td className="p-4">
-                      <div className="font-bold text-white flex items-center gap-1.5">
-                        {o.symbol} <span className="badge-exchange">{o.exchange}</span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        o.type === 'BUY' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                      }`}>
-                        {o.type}
-                      </span>
-                    </td>
-                    <td className="p-4 text-slate-300 font-semibold">{o.orderCategory}</td>
-                    <td className="p-4 text-right font-mono font-bold text-white">{o.qty}</td>
-                    <td className="p-4 text-right font-mono text-white">{formatINR(o.price)}</td>
-                    <td className="p-4 text-right font-mono text-cyan-300">₹{o.charges ? o.charges.toFixed(2) : '25.00'}</td>
-                    <td className="p-4 text-center">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold inline-flex items-center gap-1 ${
-                        o.status === 'EXECUTED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
-                      }`}>
-                        {o.status === 'EXECUTED' ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                        {o.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={9} className="p-8 text-center text-xs text-slate-400">
-                    No orders found under {activeTab}.
+              {filteredTransactions.map((t) => (
+                <tr key={t.txId} className="hover:bg-white/5 transition-colors font-mono">
+                  <td className="p-4 text-slate-300">{t.date}</td>
+                  <td className="p-4 font-bold text-cyan-300">{t.txId}</td>
+                  <td className="p-4 font-sans font-medium text-white">{t.description}</td>
+                  <td className="p-4 text-slate-300 font-sans">{t.type}</td>
+                  <td className="p-4">
+                    <span className={
+                      t.status === 'PENDING' ? 'badge-status-pending' : 'badge-status-completed'
+                    }>
+                      {t.status}
+                    </span>
                   </td>
+                  <td className="p-4 text-right font-bold text-rose-400">{t.debit}</td>
+                  <td className="p-4 text-right font-bold text-emerald-400">{t.credit}</td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
