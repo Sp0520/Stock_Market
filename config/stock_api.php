@@ -218,6 +218,47 @@ function fetchFromMarketstack($ticker) {
     return null;
 }
 
+function generateMockStockData($ticker) {
+    $ticker = strtoupper(trim($ticker));
+    
+    // Seed base prices for known tickers to make them realistic
+    $basePrices = [
+        '^NSEI' => 24300.00,
+        '^BSESN' => 79700.00,
+        '^NSEBANK' => 51200.00,
+        'NIFTY_FIN_SERVICE.NS' => 23400.00,
+        'TCS' => 4150.00,
+        'INFY' => 1750.00,
+        'SBIN' => 840.00,
+        'RELIANCE' => 2550.00,
+        'TMPV' => 980.00,
+        'HDFCBANK' => 1620.00,
+    ];
+    
+    $base = isset($basePrices[$ticker]) ? $basePrices[$ticker] : 100.00;
+    
+    // Generate small random change between -1.5% and +2.5%
+    $changePercent = (rand(-150, 250) / 10000); 
+    $prevClose = $base;
+    $close = $prevClose * (1 + $changePercent);
+    $open = $prevClose;
+    $high = max($close, $open) * (1 + (rand(0, 100) / 10000));
+    $low = min($close, $open) * (1 - (rand(0, 100) / 10000));
+    $volume = rand(100000, 5000000);
+    
+    return normalizeStockResponse(
+        $ticker,
+        $open,
+        $high,
+        $low,
+        $close,
+        $volume,
+        $prevClose,
+        'Simulated Data (API Rate Limited)',
+        true // Mark as stale/simulated
+    );
+}
+
 function fetchStockData($ticker, $cacheTime = null) {
     $ticker = strtoupper(trim($ticker));
     // Map obsolete/demerged symbols to current ones to support legacy watchlists/portfolios
@@ -255,8 +296,16 @@ function fetchStockData($ticker, $cacheTime = null) {
         return $staleCache;
     }
 
+    // Fallback: If all APIs failed and no cache is available, generate simulated data
+    $simulatedData = generateMockStockData($ticker);
+    if ($simulatedData) {
+        writeStockCache($ticker, $simulatedData);
+        return $simulatedData;
+    }
+
     return ['error' => 'Cannot retrieve live stock data for symbol ' . $ticker];
 }
+
 
 function stockDataToTick($data) {
     if (isset($data['error']) || !isset($data['Meta Data'], $data['Time Series (Daily)'])) {
