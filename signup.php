@@ -12,38 +12,41 @@ require('conn.php');
 
 <link rel="shortcut icon" href="./assets/logo.png" type="image/x-icon" />
 <link rel="stylesheet" href="Style.css">
+<link rel="stylesheet" href="Style_Custom.css">
 
-<title>Stock Market Application</title>
+<title>Stock Market - Sign Up</title>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" style="background-color: var(--bg-primary); display: flex; align-items: center; justify-content: center; height: auto; min-height: 100vh;">
 
-<div class="background_img"></div>
+<div class="background_img" style="filter: brightness(0.25);"></div>
 
-<div class="header">
-<div>
-<img class="logo" src="./assets/logo.png" alt="">
-</div>
-<p class="title">Stock Market Application</p>
+<div class="header" style="background: rgba(11, 15, 25, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 15px 30px; position: fixed; top: 0; left: 0; width: 100%; z-index: 100;">
+<img class="logo" src="./assets/logo.png" alt="" style="height: 1.8rem; width: 1.8rem; margin-right: 10px;">
+<span class="title" style="font-weight: 700; color: var(--text-primary);">Stock Market Application</span>
 </div>
 
-<div class="signup_body">
-  <div class="signup_card">
-    <form action="" method="post">
-      <h3>Sign up</h3>
-      <div class="name_row">
-        <input type="text" class="name" name="firstname" placeholder="First Name" required>
-        <input type="text" class="name" name="lastname" placeholder="Last Name" required>
+<div class="signup_body" style="display: flex; align-items: center; justify-content: center; width: 100%; padding-top: 100px; padding-bottom: 80px;">
+  <div class="signup_card" style="padding: 40px 30px; width: min(460px, calc(100vw - 30px)); border-radius: 24px; background: var(--bg-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-premium); margin: 0; z-index: 10;">
+    <form action="" method="post" style="display: flex; flex-direction: column; gap: 15px;">
+      <h3 style="color: var(--text-primary); font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 10px;">Sign up</h3>
+      <div class="name_row" style="display: flex; gap: 12px; width: 100%;">
+        <input type="text" class="name" name="firstname" placeholder="First Name" style="flex: 1;" required>
+        <input type="text" class="name" name="lastname" placeholder="Last Name" style="flex: 1;" required>
       </div>
-      <textarea name="address" class="textarea_signup" placeholder="Address" required></textarea>
-      <input type="email" class="email_signup" name="email" placeholder="Email" required>
-      <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" required>
-      <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" required>
-      <input type="number" class="email_signup" name="mobile_number" placeholder="Mobile No" required>
-      <input type="text" class="email_signup" name="pan_number" placeholder="Pancard No" required>
-      <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up">
+      <textarea name="address" class="textarea_signup" placeholder="Address" style="width: 100%; min-height: 80px;" required></textarea>
+      <input type="email" class="email_signup" name="email" placeholder="Email" style="width: 100%;" required>
+      <input type="password" class="pass_signup" name="enter_password" placeholder="Enter Password" style="width: 100%;" required>
+      <input type="password" class="pass_signup" name="confirm_password" placeholder="Re-enter Password" style="width: 100%;" required>
+      <input type="number" class="email_signup" name="mobile_number" placeholder="Mobile No" style="width: 100%;" required>
+      <input type="text" class="email_signup" name="pan_number" placeholder="Pancard No" style="width: 100%;" required>
+      <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up" style="width: 100%; margin-top: 10px;">
+      
+      <p style="text-align: center; margin-top: 5px; font-size: 0.9rem; color: var(--text-secondary);">
+        Already have an account? <a href="index.php" style="color: var(--accent); text-decoration: none; font-weight: 500;">Sign in</a>
+      </p>
     </form>
   </div>
 

@@ -1,157 +1,123 @@
 <?php
 require("./mainTop.php");
-
 ?>
+
 <div class="content_market">
-    <div class="filter">
-        <form method="post">
-            <div class="form_row">
-                <label for="tickers">Search Stock</label>
-                <input type="search" name="ticker" id="ticker" placeholder="Example: TCS">
-            </div>
-            <div class="form_row">
-                <input type="submit" value="Get Stock" class="btnGetStockDetails" name="btnGetStockDetails">
-            </div>
-        </form>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+        <div>
+            <h2 style="color: var(--text-primary); font-size: 1.75rem; font-weight: 700; margin: 0;">Market Overview</h2>
+            <p style="color: var(--text-secondary); margin-top: 5px; font-size: 0.95rem;">Track and trade popular domestic and international tickers in real-time.</p>
+        </div>
+        
+        <div class="filter" style="margin: 0;">
+            <form action="selectedStock.php" method="get" style="display: flex; gap: 10px; align-items: center;">
+                <input type="search" name="ticker" id="ticker" placeholder="Search Ticker (e.g. TCS)" style="padding: 10px 16px; min-width: 250px;" required>
+                <input type="hidden" name="days" value="15">
+                <input type="submit" value="Analyze Stock" class="btnGetStockDetails" style="margin: 0; padding: 10px 20px; font-size: 0.9rem;">
+            </form>
+        </div>
     </div>
 
-
-
-    <table>
+    <table style="width: 100%;">
         <thead>
             <tr>
-                <th>
-                    <p>Stock Ticker</p>
-                </th>
-                <th>
-                    <p>Last Refreshed</p>
-                </th>
-                <th>
-                    <p>Open</p>
-                </th>
-                <th>
-                    <p>High</p>
-                </th>
-                <th>
-                    <p>Low</p>
-                </th>
-                <th>
-                    <p>Close</p>
-                </th>
-                <th>
-                    <p>Volume</p>
-                </th>
+                <th><p>Stock Ticker</p></th>
+                <th><p>Exchange</p></th>
+                <th><p>Open</p></th>
+                <th><p>High</p></th>
+                <th><p>Low</p></th>
+                <th><p>Current Price</p></th>
+                <th><p>Daily Change</p></th>
+                <th><p>Action</p></th>
             </tr>
         </thead>
-        <tbody>
-            <?php
-
-            function renderStockRow($data)
-            {
-                if (empty($data) || !is_array($data) || !isset($data['Meta Data'], $data['Time Series (Daily)'])) {
-                    echo "<tr><td colspan='7'>Error: no valid data returned by the API (possible limit or network issue).</td></tr>";
-                    return;
-                }
-
-                $meta = $data['Meta Data'];
-                $timeSeries = $data['Time Series (Daily)'];
-
-                if (!isset($meta['2. Symbol'], $meta['3. Last Refreshed'])) {
-                    echo "<tr><td colspan='7'>Error: invalid API response structure.</td></tr>";
-                    return;
-                }
-
-                $ticker = htmlspecialchars($meta['2. Symbol']);
-                $lastRefreshed = $meta['3. Last Refreshed'];
-
-                if (!isset($timeSeries[$lastRefreshed])) {
-                    $lastRefreshed = array_key_first($timeSeries);
-                }
-
-                if (!isset($timeSeries[$lastRefreshed])) {
-                    echo "<tr><td colspan='7'>Error: no time-series data for last refresh.</td></tr>";
-                    return;
-                }
-
-                $row = $timeSeries[$lastRefreshed];
-
-                $open = isset($row['1. open']) ? sprintf('%0.2f', round((float)$row['1. open'], 2)) : 'N/A';
-                $high = isset($row['2. high']) ? sprintf('%0.2f', round((float)$row['2. high'], 2)) : 'N/A';
-                $low = isset($row['3. low']) ? sprintf('%0.2f', round((float)$row['3. low'], 2)) : 'N/A';
-                $close = isset($row['4. close']) ? sprintf('%0.2f', round((float)$row['4. close'], 2)) : 'N/A';
-                $volume = $row['5. volume'] ?? 'N/A';
-
-                echo "<tr class='tr'>";
-                echo '<td class="td"><a href="selectedStock.php?ticker=' . urlencode($ticker) . '&days=15">' . $ticker . '</a></td>';
-                echo '<td>' . htmlspecialchars($lastRefreshed) . '</td>';
-                echo '<td>' . $open . '</td>';
-                echo '<td>' . $high . '</td>';
-                echo '<td>' . $low . '</td>';
-                echo '<td>' . $close . '</td>';
-                echo '<td>' . htmlspecialchars($volume) . '</td>';
-                echo "</tr>";
-            }
-
-            function getData($ticker)
-{
-    $apiKey = "1DBYP9NP4ZDVPWI6";
-
-    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . urlencode($ticker) . "&apikey=$apiKey";
-
-    $json = @file_get_contents($url);
-
-    if ($json === false) {
-        echo "<tr><td colspan='7'>Error: Cannot connect to AlphaVantage API.</td></tr>";
-        return;
-    }
-
-    $data = json_decode($json, true);
-
-    if (!is_array($data)) {
-        echo "<tr><td colspan='7'>Error: Invalid API response.</td></tr>";
-        return;
-    }
-
-    if (isset($data['Note'])) {
-        echo "<tr><td colspan='7'>API LIMIT REACHED. Wait 1 minute and try again.</td></tr>";
-        return;
-    }
-
-    if (isset($data['Error Message'])) {
-        echo "<tr><td colspan='7'>Invalid Stock Symbol.</td></tr>";
-        return;
-    }
-
-    renderStockRow($data);
-}
-
-            getData("TCS.BSE");
-           getData("RELIANCE.BSE");
-            // getData("INFY");
-            // getData("SUNPHARMA");
-            // getData("HDFC");
-            // getData("HINDUNILVR");
-            // getData("TECHM");
-            // getData("ITC");
-            // getData("HDFCBANK");
-            // getData("MARUTI");
-            // getData("BAJFINANCE");
-
-            if (isset($_POST['btnGetStockDetails'])) {
-                $ticker = strtoupper(trim($_POST['ticker'] ?? ''));
-
-                if ($ticker === '') {
-                    echo "<tr><td colspan='7'>Please enter a ticker symbol.</td></tr>";
-                } else {
-                    getData($ticker);
-                }
-            }
-
-            ?>
+        <tbody id="market-table-body">
+            <!-- Table rows will be populated dynamically via JavaScript -->
+            <tr id="loading-row">
+                <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                    <div style="display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; margin-bottom: 10px;"></div>
+                    <p>Loading real-time stock prices...</p>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
-</div>
-</body>
 
-</html>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const tickers = ["TCS.NS", "RELIANCE.NS", "INFY.NS", "HDFCBANK.NS", "ICICIBANK.NS", "AAPL", "MSFT", "GOOGL"];
+    const tbody = document.getElementById("market-table-body");
+    const loadingRow = document.getElementById("loading-row");
+    
+    let loadedCount = 0;
+    
+    // Clear loading row if tickers fetch is running
+    const fetchPromises = tickers.map(ticker => {
+        return fetch(`stock_api.php?action=price&ticker=${ticker}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(`Error loading ${ticker}:`, data.error);
+                    return null;
+                }
+                return data;
+            })
+            .catch(err => {
+                console.error(`Network error loading ${ticker}:`, err);
+                return null;
+            });
+    });
+    
+    Promise.all(fetchPromises).then(results => {
+        // Clear loading state
+        if (loadingRow) {
+            loadingRow.remove();
+        }
+        
+        const validResults = results.filter(r => r !== null);
+        if (validResults.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='8' style='text-align: center; color: var(--danger); padding: 30px;'>Failed to load stock data. Please check connection.</td></tr>";
+            return;
+        }
+        
+        validResults.forEach(data => {
+            const isUp = data.change >= 0;
+            const changeClass = isUp ? "stock-up" : "stock-down";
+            const changeSign = isUp ? "+" : "";
+            
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td style="font-weight: 700; color: var(--text-primary);">
+                    <a href="selectedStock.php?ticker=${data.symbol}&days=15" style="text-decoration: none; color: var(--accent); transition: var(--transition-smooth); display: flex; flex-direction: column;">
+                        <span>${data.symbol}</span>
+                    </a>
+                </td>
+                <td style="color: var(--text-muted); font-size: 0.85rem; font-weight: 500;">${data.exchange || 'EQUITY'}</td>
+                <td style="color: var(--text-secondary);">₹ ${data.open.toFixed(2)}</td>
+                <td style="color: var(--success); font-weight: 500;">₹ ${data.high.toFixed(2)}</td>
+                <td style="color: var(--danger); font-weight: 500;">₹ ${data.low.toFixed(2)}</td>
+                <td style="font-weight: 700; color: var(--text-primary);">₹ ${data.price.toFixed(2)}</td>
+                <td>
+                    <span class="${changeClass}">
+                        ${changeSign}${data.change.toFixed(2)} (${changeSign}${data.change_percent.toFixed(2)}%)
+                    </span>
+                </td>
+                <td>
+                    <a href="selectedStock.php?ticker=${data.symbol}&days=15" class="btnBuy_" style="padding: 6px 14px; font-size: 0.8rem; text-decoration: none;">Trade</a>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    });
+});
+</script>
+
+<style>
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+
+<?php
+require("./bottom.php");
+?>

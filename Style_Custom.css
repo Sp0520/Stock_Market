@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.85);
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.35);
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.15);
+  --danger: #f43f5e;
+  --danger-glow: rgba(244, 63, 94, 0.15);
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-focus: rgba(59, 130, 246, 0.5);
+  --glass-blur: blur(12px);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-premium: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Global Reset & Typography */
+* {
+  font-family: 'Outfit', sans-serif !important;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background gradient highlights */
+body::before {
+  content: '';
+  position: fixed;
+  top: -10%;
+  left: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -10%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Glassmorphic Cards */
+.card-premium, 
+.signinContent, 
+.signup_card, 
+.content_market, 
+.content_portfolios, 
+.content_selectedStock, 
+.content_transactionHistory,
+.content {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-premium), var(--shadow-inset);
+  border-radius: 20px;
+  transition: var(--transition-smooth);
+}
+
+/* Navbar Upgrades */
+.navbar {
+  background: rgba(11, 15, 25, 0.8) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 40px !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .title_logo a {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-primary) !important;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+}
+
+.navbar ul li a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: var(--transition-smooth);
+}
+
+.navbar ul li a:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dropbtn {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.dropbtn:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Dropdown Content */
+.dropdown_content {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-premium) !important;
+  min-width: 150px !important;
+  padding: 8px 0;
+  margin-top: 5px;
+}
+
+.dropdown_content a {
+  color: var(--text-secondary) !important;
+  padding: 10px 16px !important;
+  transition: var(--transition-smooth);
+  font-weight: 500;
+}
+
+.dropdown_content a:hover {
+  background: rgba(244, 63, 94, 0.1) !important;
+  color: var(--danger) !important;
+}
+
+/* Beautiful Premium Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+table th {
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 16px 24px !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+table td {
+  padding: 16px 24px !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  font-size: 0.95rem;
+  background: transparent !important;
+}
+
+table tr {
+  transition: var(--transition-smooth);
+}
+
+table tr:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+table tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Input Fields & Buttons */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+textarea {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  outline: none !important;
+  transition: var(--transition-smooth) !important;
+  font-size: 0.95rem;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 4px var(--accent-glow) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Modern Trading Buttons */
+.btnBuy, .btnBuy_, .btnSignup_singup, .btnGetStockDetails, .btnSearchStock, .btnWithdrawModal, .btnAddMoney {
+  background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.btnBuy:hover, .btnBuy_:hover, .btnSignup_singup:hover, .btnGetStockDetails:hover, .btnSearchStock:hover, .btnWithdrawModal:hover, .btnAddMoney:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+}
+
+.btnSell_, .btnSoldStock {
+  background: linear-gradient(135deg, var(--danger) 0%, #be123c 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25) !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.btnSell_:hover, .btnSoldStock:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.4) !important;
+}
+
+.btnBuyStock {
+  background: linear-gradient(135deg, var(--success) 0%, #047857 100%) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 12px 24px !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.btnBuyStock:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Badges for up and down values */
+.stock-up {
+  color: var(--success) !important;
+  background: var(--success-glow) !important;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.stock-down {
+  color: var(--danger) !important;
+  background: var(--danger-glow) !important;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+/* Layout Padding & Containment */
+.content_market, .content_portfolios, .content_selectedStock, .content_transactionHistory {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px !important;
+}
+
+/* Modals Overlay & Content */
+.modal, .modalWithdraw {
+  background: rgba(11, 15, 25, 0.75) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  display: none;
+}
+
+.modal_content {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 24px !important;
+  box-shadow: var(--shadow-premium) !important;
+  padding: 30px !important;
+  height: auto !important;
+  max-width: 500px !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 0 20px 0 !important;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  color: var(--text-primary) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700;
+}
+
+.modal-header .close {
+  color: var(--text-secondary) !important;
+  font-size: 1.5rem !important;
+  transition: var(--transition-smooth);
+}
+
+.modal-header .close:hover {
+  color: var(--danger) !important;
+}
+
+.modal-body {
+  gap: 15px;
+}
+
+.modal-body > div {
+  padding: 0 !important;
+  height: auto !important;
+  font-size: 1rem !important;
+  color: var(--text-secondary);
+}
+
+.modal-body .lbl {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 20px 0 0 0 !important;
+  margin-top: 20px;
+}
+
+.modal-footer .btnWithdrawModal, .modal-footer .payNow {
+  margin: 0 !important;
+}
+
+/* Live Search Suggestions list */
+.search-suggest-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: var(--shadow-premium);
+}
+
+.search-suggest-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition-smooth);
+}
+
+.search-suggest-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.search-suggest-item .symbol {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.search-suggest-item .name {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-left: 10px;
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-suggest-item .exchange {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Autocomplete suggestion container position relative */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}

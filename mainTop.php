@@ -31,6 +31,7 @@ mysqli_stmt_close($stmt);
     <link rel="stylesheet" href="./selectedStock.css">
     <link rel="stylesheet" href="./portfolios.css">
     <link rel="stylesheet" href="./transactionHistory.css">
+    <link rel="stylesheet" href="./Style_Custom.css">
     <script src="demo.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -39,19 +40,20 @@ mysqli_stmt_close($stmt);
 
 <body>
 
-    <div class="container">
+    <div class="container" style="height: auto; min-height: 100vh; width: 100%;">
         <nav class="navbar">
             <div class="title_logo">
-                <img class="logo" src="./assets/logo.png" alt="">
-                <p class="title"><a href="./market.php">Stock Market Application</a></p>
+                <img class="logo" src="./assets/logo.png" alt="" style="height: 1.8rem; width: 1.8rem; vertical-align: middle; margin-right: 8px;">
+                <span class="title" style="vertical-align: middle;"><a href="./dashboard.php">Stock Market Application</a></span>
             </div>
             <div>
                 <ul>
+                    <li><a href="./dashboard.php">Dashboard</a></li>
                     <li><a href="./portfolios.php">Portfolios</a></li>
                     <li><a href="./market.php">Market</a></li>
                     <li><a href="./searchStock.php">Stock Search</a></li>
                     <div class="dropdown">
-                        <li><button onclick="myFunction()" class="dropbtn">Hello, <?= $database[0]["firstname"] ?></button></li>
+                        <li><button onclick="myFunction()" class="dropbtn">Hello, <?= htmlspecialchars($database[0]["firstname"]) ?></button></li>
                         <div id="myDropdown" class="dropdown_content">
                             <a href="./signOut.php" class="">Sign out</a>
                         </div>
