@@ -45,7 +45,7 @@ require('conn.php');
       <input type="submit" class="btnSignup_singup" name="btnSignup" value="Sign up" style="width: 100%; margin-top: 10px;">
       
       <p style="text-align: center; margin-top: 5px; font-size: 0.9rem; color: var(--text-secondary);">
-        Already have an account? <a href="index.php" style="color: var(--accent); text-decoration: none; font-weight: 500;">Sign in</a>
+        Already have an account? <a href="login.php" style="color: var(--accent); text-decoration: none; font-weight: 500;">Sign in</a>
       </p>
     </form>
   </div>
@@ -113,7 +113,7 @@ if(isset($_POST['btnSignup'])){
 
                 echo "<script>
                 alert('Registration Successful');
-                window.location='index.php';
+                window.location='login.php';
                 </script>";
                 exit();
 

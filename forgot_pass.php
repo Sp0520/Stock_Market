@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="btn" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px; height: auto; padding: 0;">
                     <button type="submit" name="submit" class="btnSignup_singup" style="width: 100%;">Find Email</button>
-                    <a href="index.php" style="color: var(--accent); text-decoration: none; font-weight: 500; font-size: 0.9rem;">Back to Sign In</a>
+                    <a href="login.php" style="color: var(--accent); text-decoration: none; font-weight: 500; font-size: 0.9rem;">Back to Sign In</a>
                 </div>
             </div>
         </form>
