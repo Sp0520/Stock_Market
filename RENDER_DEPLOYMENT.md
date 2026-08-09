@@ -8,10 +8,10 @@ This repository is pre-configured for 1-click or automated deployment on **Rende
 
 ### Option 1: Automatic Blueprint Deployment (Recommended)
 
-1. **Push your code to GitHub** (already pushed to `https://github.com/Sp0520/stock_market_application.git`).
+1. **Push your code to GitHub** (already pushed to `https://github.com/Sp0520/Stock_Market.git`).
 2. Log into [Render.com Dashboard](https://dashboard.render.com/).
 3. Click **New +** -> **Blueprint**.
-4. Connect your GitHub Repository (`Sp0520/stock_market_application`).
+4. Connect your GitHub Repository (`Sp0520/Stock_Market`).
 5. Render will automatically detect `render.yaml` and configure:
    - **Name**: `indian-stock-market-app`
    - **Build Command**: `npm run build`
@@ -24,7 +24,7 @@ This repository is pre-configured for 1-click or automated deployment on **Rende
 
 If you prefer manual configuration:
 1. On Render Dashboard, click **New +** -> **Web Service**.
-2. Select repository: `Sp0520/stock_market_application`.
+2. Select repository: `Sp0520/Stock_Market`.
 3. Configure settings:
    - **Runtime**: `Node`
    - **Build Command**: `npm run build`

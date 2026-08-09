@@ -23,8 +23,8 @@ A PHP-based stock market trading application with real-time stock data integrati
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/Sp0520/stock_market_application.git
-cd stock_market_application
+git clone https://github.com/Sp0520/Stock_Market.git
+cd Stock_Market
 ```
 
 ### Step 2: Configure Environment
@@ -47,9 +47,9 @@ mysql -u root -p < stock_market_application.sql
 ```
 
 ### Step 4: Run Locally with XAMPP
-1. Copy the project to `C:\xampp\htdocs\stock_market_application`
+1. Copy the project to `C:\xampp\htdocs\stock_market`
 2. Start Apache and MySQL from XAMPP Control Panel
-3. Visit `http://localhost/stock_market_application`
+3. Visit `http://localhost/stock_market`
 
 ### Step 5: Run with Docker Locally
 ```bash

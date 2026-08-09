@@ -37,41 +37,72 @@ A full-stack, production-ready **Indian Stock Market Trading Platform** inspired
 
 ---
 
-## 🚀 Quick Start (Local Setup)
+## 🚀 Quick Start & Deployment Options
 
-### Prerequisites
+This repository contains two platforms to run the Stock Market Application:
+1. **Option A (Modern)**: React + Node.js (Express) + MongoDB SPA.
+2. **Option B (Traditional)**: PHP + Apache + MySQL + Yahoo Finance Live API.
+
+---
+
+### Option A: React + Express + MongoDB setup
+
+#### Prerequisites
 - Node.js (v18+)
 - npm (v9+)
 
-### Installation Steps
-
+#### Installation Steps
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Sp0520/stock_market_application.git
-   cd stock_market_application
+   git clone https://github.com/Sp0520/Stock_Market.git
+   cd Stock_Market
    ```
-
-2. **Install all dependencies & build**:
+2. **Install dependencies & build**:
    ```bash
    npm run build
    ```
-
-3. **Start the server**:
+3. **Start the Express server**:
    ```bash
    npm start
    ```
-
 4. **Access the application**:
-   - Web App: [http://localhost:5000/](http://localhost:5000/) or Vite dev server [http://localhost:5173/](http://localhost:5173/)
+   - Production URL: [http://localhost:5000/](http://localhost:5000/)
+   - Vite Dev Server: [http://localhost:5173/](http://localhost:5173/)
+
+---
+
+### Option B: PHP + MySQL + XAMPP setup (Local Windows)
+
+#### Prerequisites
+- XAMPP (Apache with PHP 7.4+ and MySQL)
+
+#### Installation Steps
+1. **Copy workspace to xampp root**:
+   Place the project folder inside `C:\xampp\htdocs\stock_market\`.
+2. **Set up the Database**:
+   - Open XAMPP and start Apache and MySQL.
+   - Go to `http://localhost/phpmyadmin` and create a database named `stock_market_application`.
+   - Import the schema and seed data from [`stock_market_application.sql`](file:///c:/xampp/htdocs/stock_market/stock_market_application.sql).
+3. **Configure Environment**:
+   - Create a `.env` file in the root folder with your database credentials (host, user, database). Alternatively, the connection script fallback will attempt to connect using the default XAMPP user:
+     ```env
+     DB_HOST=127.0.0.1
+     DB_USER=root
+     DB_PASS=
+     DB_NAME=stock_market_application
+     ```
+4. **Run the PHP platform**:
+   - Access the PHP sign-in page at: [http://localhost/stock_market/login.php](http://localhost/stock_market/login.php)
+   - Features include real-time stock prices (via Yahoo Finance proxy), holdings tracking, and Razorpay wallet simulation.
 
 ---
 
 ## 🌐 Deploy to Render.com (1-Click Blueprint)
 
-1. Push code to your GitHub repository (`Sp0520/stock_market_application`).
+1. Push code to your GitHub repository (`Sp0520/Stock_Market`).
 2. Log into [Render.com Dashboard](https://dashboard.render.com/).
 3. Click **New +** ➡️ **Blueprint**.
-4. Connect repository `Sp0520/stock_market_application`.
+4. Connect repository `Sp0520/Stock_Market`.
 5. Render will read `render.yaml`, execute `npm run build`, start `npm start`, and issue a live SSL `.onrender.com` URL!
 
 ---
