@@ -27,25 +27,12 @@ logs/
 tmp/
 temp/
 
-# Build artifacts
+# Node modules
+node_modules/
+**/node_modules/
+client/dist/
 dist/
 build/
+*.log
+~$*.pptx
 
-# Node modules (if using any frontend tools)
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# Docker
-.docker/
-
-# Application specific
-/var/www/html/uploads/
-/var/www/html/files/
-
-# Development/Test files
-demo.php
-test.php
-demo.js
-.DS_Store
-*.bak

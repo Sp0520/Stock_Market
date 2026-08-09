@@ -1,23 +1,13 @@
 services:
   - type: web
-    name: stock-market-app
-    runtime: docker
+    name: indian-stock-market-app
+    env: node
     region: singapore
-    plan: starter
-    healthCheckPath: /
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
     envVars:
-      - key: DB_HOST
-        scope: run
-        value: ${MYSQL_HOST}
-      - key: DB_USER
-        scope: run
-        value: ${MYSQL_USER}
-      - key: DB_PASS
-        scope: run
-        value: ${MYSQL_PASSWORD}
-      - key: DB_NAME
-        scope: run
-        value: ${MYSQL_DATABASE}
-      - key: DB_PORT
-        scope: run
-        value: "3306"
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
