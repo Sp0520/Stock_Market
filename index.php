@@ -9,6 +9,6 @@ if (file_exists($distIndex)) {
     $content = str_replace('src="/assets/', 'src="client/dist/assets/', $content);
     echo $content;
 } else {
-    header("Location: http://localhost:5173/");
+    header("Location: login.php");
     exit();
 }
