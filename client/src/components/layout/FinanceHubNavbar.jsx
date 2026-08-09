@@ -33,10 +33,10 @@ export const FinanceHubNavbar = ({
           className="flex items-center gap-2 cursor-pointer group"
         >
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-500 to-cyan-400 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            f
+            F
           </div>
           <span className="brand-font text-xl font-extrabold text-white tracking-tight">
-            FINANCE<span className="text-cyan-400">.hub</span>
+            Fin<span className="text-cyan-400">Nexa</span>
           </span>
         </div>
 

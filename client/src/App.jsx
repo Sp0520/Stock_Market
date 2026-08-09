@@ -7,7 +7,7 @@ import { AuthModal } from './components/auth/AuthModal.jsx';
 
 export function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [viewMode, setViewMode] = useState('FINANCE_HUB');
+  const [viewMode, setViewMode] = useState('FINNEXA_TERMINAL');
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [portfolio, setPortfolio] = useState({
@@ -55,12 +55,12 @@ export function App() {
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-white/10">
                 <button
-                  onClick={() => setViewMode('FINANCE_HUB')}
+                  onClick={() => setViewMode('FINNEXA_TERMINAL')}
                   className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                    viewMode === 'FINANCE_HUB' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400'
+                    viewMode === 'FINNEXA_TERMINAL' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400'
                   }`}
                 >
-                  ⚡ FINANCE.hub Terminal (Image 1 UI)
+                  ⚡ FinNexa Terminal (Image 1 UI)
                 </button>
                 <button
                   onClick={() => setViewMode('TRADE_FLOW')}
@@ -80,7 +80,7 @@ export function App() {
               </button>
             </div>
 
-            {viewMode === 'FINANCE_HUB' ? (
+            {viewMode === 'FINNEXA_TERMINAL' ? (
               <TradingTerminalView onOrderExecuted={handleOrderExecuted} />
             ) : (
               <TradeFlowView onOrderExecuted={handleOrderExecuted} />
