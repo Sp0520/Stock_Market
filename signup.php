@@ -64,25 +64,29 @@ if(isset($_POST['btnSignup'])){
     $pan_number = trim($_POST['pan_number']);
 
     if($password !== $confirm_password){
-
         echo "<script>alert('Passwords do not match');</script>";
-
+    } else if (strlen($password) < 6) {
+        echo "<script>alert('Password must be at least 6 characters long');</script>";
     } else {
-
         $stmt = mysqli_prepare(
             $conn,
-            "SELECT id FROM users WHERE email=?"
+            "SELECT email, mobile_number, PANCARD_number FROM users WHERE email=? OR mobile_number=? OR PANCARD_number=?"
         );
 
-        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_bind_param($stmt, "sss", $email, $mobile_number, $pan_number);
         mysqli_stmt_execute($stmt);
 
         $result = mysqli_stmt_get_result($stmt);
 
         if(mysqli_num_rows($result) > 0){
-
-            echo "<script>alert('Email already registered');</script>";
-
+            $row = mysqli_fetch_assoc($result);
+            if ($row['email'] === $email) {
+                echo "<script>alert('Email already registered');</script>";
+            } else if ($row['mobile_number'] === $mobile_number) {
+                echo "<script>alert('Mobile number already registered');</script>";
+            } else if ($row['PANCARD_number'] === $pan_number) {
+                echo "<script>alert('PAN Card number already registered');</script>";
+            }
         } else {
 
             $hashed_password = password_hash(

@@ -2,18 +2,43 @@ import React, { useState } from 'react';
 import { PieChart } from 'lucide-react';
 import { formatINR } from '../../utils/formatters.js';
 
-export const Donut3DChart = () => {
+export const Donut3DChart = ({ holdings = [] }) => {
   const [activeSector, setActiveSector] = useState(0);
 
-  const sectors = [
-    { name: "Oil & Gas / Energy", value: 451867.50, pct: 36.3, color: "#00d4ff" },
-    { name: "Information Technology", value: 342824.00, pct: 27.5, color: "#00f5a0" },
-    { name: "Financial Services / Banks", value: 197058.00, pct: 15.8, color: "#7000ff" },
-    { name: "Consumer Services (Q-Commerce)", value: 161040.00, pct: 12.9, color: "#ffb300" },
-    { name: "Defense & Aerospace", value: 92400.00, pct: 7.5, color: "#ff3b5c" }
-  ];
+  // Group holdings by sector or symbol
+  const sectorMap = {};
+  
+  if (holdings.length === 0) {
+    // Return empty placeholder state
+    sectorMap["Cash / Available Funds"] = 100000;
+  } else {
+    holdings.forEach(h => {
+      // Find sector details
+      let sectorName = "Other";
+      if (h.symbol === 'TCS' || h.symbol === 'INFY') sectorName = "Information Technology";
+      else if (h.symbol === 'RELIANCE') sectorName = "Energy & Conglomerates";
+      else if (h.symbol === 'HDFCBANK' || h.symbol === 'ICICIBANK' || h.symbol === 'SBIN') sectorName = "Financial Services / Banking";
+      else if (h.symbol === 'ZOMATO' || h.symbol === 'SWIGGY') sectorName = "Consumer Internet / Q-Commerce";
+      else if (h.symbol === 'HAL' || h.symbol === 'BEL') sectorName = "Defense & Aerospace";
+      else if (h.symbol === 'ITC') sectorName = "FMCG";
+      
+      sectorMap[sectorName] = (sectorMap[sectorName] || 0) + h.currentValue;
+    });
+  }
 
-  const totalVal = sectors.reduce((sum, s) => sum + s.value, 0);
+  const totalVal = Object.values(sectorMap).reduce((sum, v) => sum + v, 0);
+
+  const colors = ["#00d4ff", "#00f5a0", "#7000ff", "#ffb300", "#ff3b5c", "#ff5722", "#9c27b0", "#e91e63"];
+  const sectors = Object.keys(sectorMap).map((name, idx) => {
+    const value = sectorMap[name];
+    const pct = totalVal > 0 ? parseFloat(((value / totalVal) * 100).toFixed(1)) : 0;
+    return {
+      name,
+      value,
+      pct,
+      color: colors[idx % colors.length]
+    };
+  });
 
   let cumulativePct = 0;
 
@@ -24,7 +49,7 @@ export const Donut3DChart = () => {
           <PieChart className="w-4 h-4 text-cyan-400" />
           3D Asset Allocation Donut
         </h3>
-        <span className="badge-gain text-[10px]">NSE Equity</span>
+        <span className="badge-exchange text-[10px]">NSE Equity</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -68,12 +93,12 @@ export const Donut3DChart = () => {
             <span className="text-base font-extrabold font-mono text-white tracking-tight">
               {formatINR(totalVal, { compact: true })}
             </span>
-            <span className="text-[10px] text-emerald-400 font-bold mt-0.5">100% Equity</span>
+            <span className="text-[10px] text-emerald-400 font-bold mt-0.5">100% Allocation</span>
           </div>
 
         </div>
 
-        <div className="space-y-2 text-xs">
+        <div className="space-y-2 text-xs max-h-56 overflow-y-auto pr-1">
           {sectors.map((sec, idx) => {
             const isSelected = activeSector === idx;
             return (
@@ -87,11 +112,11 @@ export const Donut3DChart = () => {
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="w-3 h-3 rounded-full" style={{ backgroundColor: sec.color, boxShadow: `0 0 8px ${sec.color}` }}></span>
-                  <span className="font-semibold text-slate-200">{sec.name}</span>
+                  <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: sec.color, boxShadow: `0 0 8px ${sec.color}` }}></span>
+                  <span className="font-semibold text-slate-200 truncate max-w-[130px]">{sec.name}</span>
                 </div>
 
-                <div className="text-right font-mono">
+                <div className="text-right font-mono shrink-0">
                   <div className="font-bold text-white">{formatINR(sec.value)}</div>
                   <div className="text-[10px] text-slate-400">{sec.pct}%</div>
                 </div>

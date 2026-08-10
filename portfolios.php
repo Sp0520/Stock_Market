@@ -153,6 +153,7 @@ if (isset($_GET["id"])) {
             <thead>
                 <tr>
                     <th>Stock Ticker</th>
+                    <th>Quantity</th>
                     <th><?php echo (isset($_GET["sell"])) ? "Sold Price" : "Purchase Price"; ?></th>
                     <th><?php echo (isset($_GET["sell"])) ? "Purchase Price" : "Current Price"; ?></th>
                     <th>Net Profit/Loss</th>
@@ -178,12 +179,14 @@ if (isset($_GET["id"])) {
                             $ticker = htmlspecialchars($value["stock_name"]);
                             $sellPrice = floatval($value["sell_price"]);
                             $purchasePrice = floatval($value["purchase_price"]);
-                            $netPL = $sellPrice - $purchasePrice;
+                            $qty = intval($value["qty"] ?? 1);
+                            $netPL = ($sellPrice - $purchasePrice) * $qty;
                             $plClass = $netPL >= 0 ? "stock-up" : "stock-down";
                             $plSign = $netPL >= 0 ? "+" : "";
                             
                             echo "<tr>";
                             echo "<td style='font-weight: 700; color: var(--text-primary);'>{$ticker}</td>";
+                            echo "<td style='color: var(--text-secondary);'>{$qty}</td>";
                             echo "<td style='color: var(--text-secondary);'>₹ " . number_format($sellPrice, 2) . "</td>";
                             echo "<td style='color: var(--text-secondary);'>₹ " . number_format($purchasePrice, 2) . "</td>";
                             echo "<td><span class='{$plClass}'>{$plSign}₹ " . number_format($netPL, 2) . "</span></td>";
@@ -192,7 +195,7 @@ if (isset($_GET["id"])) {
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6' style='text-align: center; color: var(--text-muted); padding: 30px;'>You haven't sold any stocks yet.</td></tr>";
+                        echo "<tr><td colspan='7' style='text-align: center; color: var(--text-muted); padding: 30px;'>You haven't sold any stocks yet.</td></tr>";
                     }
                 } else {
                     $stockData = array();
@@ -210,9 +213,11 @@ if (isset($_GET["id"])) {
                         foreach ($stockData as $value) {
                             $ticker = htmlspecialchars($value["stock_name"]);
                             $purchasePrice = floatval($value["purchase_price"]);
+                            $qty = intval($value["qty"] ?? 1);
                             
-                            echo "<tr class='portfolio-row' data-symbol='{$ticker}' data-purchase-price='{$purchasePrice}'>";
+                            echo "<tr class='portfolio-row' data-symbol='{$ticker}' data-purchase-price='{$purchasePrice}' data-qty='{$qty}'>";
                             echo "<td style='font-weight: 700; color: var(--text-primary);'>{$ticker}</td>";
+                            echo "<td style='color: var(--text-secondary);'>{$qty}</td>";
                             echo "<td style='color: var(--text-secondary);'>₹ " . number_format($purchasePrice, 2) . "</td>";
                             echo "<td class='col-current-price' style='color: var(--text-secondary); font-weight: 500;'>Evaluating...</td>";
                             echo "<td class='col-profit-loss'>Evaluating...</td>";
@@ -221,7 +226,7 @@ if (isset($_GET["id"])) {
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6' style='text-align: center; color: var(--text-muted); padding: 30px;'>You do not own any active stock holdings.</td></tr>";
+                        echo "<tr><td colspan='7' style='text-align: center; color: var(--text-muted); padding: 30px;'>You do not own any active stock holdings.</td></tr>";
                     }
                 }
                 ?>
@@ -448,7 +453,9 @@ if (isset($_GET["id"])) {
         rows.forEach(row => {
             const symbol = row.getAttribute("data-symbol");
             const purchasePrice = parseFloat(row.getAttribute("data-purchase-price"));
-            totalInvested += purchasePrice;
+            const qty = parseInt(row.getAttribute("data-qty") || "1", 10);
+            const rowInvested = purchasePrice * qty;
+            totalInvested += rowInvested;
 
             fetch(`stock_api.php?action=price&ticker=${symbol}`)
                 .then(res => res.json())
@@ -457,16 +464,17 @@ if (isset($_GET["id"])) {
                     if (data.error) {
                         row.querySelector(".col-current-price").textContent = "N/A";
                         row.querySelector(".col-profit-loss").textContent = "N/A";
-                        totalCurrent += purchasePrice; // fallback
+                        totalCurrent += rowInvested; // fallback
                         checkCompletion();
                         return;
                     }
 
                     const currentPrice = data.price;
-                    totalCurrent += currentPrice;
+                    const rowCurrent = currentPrice * qty;
+                    totalCurrent += rowCurrent;
 
-                    const pl = currentPrice - purchasePrice;
-                    const plPercent = purchasePrice > 0 ? (pl / purchasePrice) * 100 : 0;
+                    const pl = rowCurrent - rowInvested;
+                    const plPercent = rowInvested > 0 ? (pl / rowInvested) * 100 : 0;
                     
                     const plClass = pl >= 0 ? "stock-up" : "stock-down";
                     const plSign = pl >= 0 ? "+" : "";

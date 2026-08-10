@@ -93,12 +93,13 @@ if (isset($_POST['btnSignin'])) {
 
     $stmt = mysqli_prepare(
         $conn,
-        "SELECT * FROM users WHERE email=?"
+        "SELECT * FROM users WHERE email=? OR mobile_number=?"
     );
 
     mysqli_stmt_bind_param(
         $stmt,
-        "s",
+        "ss",
+        $email,
         $email
     );
 
