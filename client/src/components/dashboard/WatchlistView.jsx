@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Trash2, TrendingUp, TrendingDown, Eye, Plus, Search } from 'lucide-react';
 import { fetchWatchlist, addToWatchlist, removeFromWatchlist, fetchStocksList } from '../../services/api.js';
 import { formatINR } from '../../utils/formatters.js';
+import { Card3D } from '../common/Card3D.jsx';
 
 export const WatchlistView = ({ onSelectStock }) => {
   const [watchlist, setWatchlist] = useState([]);
@@ -149,9 +150,10 @@ export const WatchlistView = ({ onSelectStock }) => {
           {watchlist.map((stock) => {
             const isUp = stock.change >= 0;
             return (
-              <div 
+              <Card3D 
                 key={stock.symbol} 
-                className="glass-card p-5 relative border border-white/5 hover:border-cyan-400/20 group transition-all flex flex-col justify-between"
+                className="p-5 relative border border-white/5 hover:border-cyan-400/20 group transition-all flex flex-col justify-between"
+                onClick={() => onSelectStock(stock.symbol)}
               >
                 {/* Header */}
                 <div className="flex justify-between items-start">
@@ -192,7 +194,7 @@ export const WatchlistView = ({ onSelectStock }) => {
                     Trade
                   </button>
                 </div>
-              </div>
+              </Card3D>
             );
           })}
         </div>

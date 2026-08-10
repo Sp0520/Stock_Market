@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Mail, Eye, EyeOff, User, Phone, MapPin, CreditCard, X } from 'lucide-react';
 import { loginUser, signupUser } from '../../services/api.js';
+import { Card3D } from '../common/Card3D.jsx';
 
 export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isLoginView, setIsLoginView] = useState(true);
@@ -96,7 +97,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
         <div className="w-full h-full bg-[radial-gradient(#00d4ff_1px,transparent_1px)] [background-size:20px_20px]"></div>
       </div>
 
-      <div className="glass-card max-w-lg w-full p-6 md:p-8 space-y-5 relative border border-white/10 shadow-2xl rounded-3xl bg-slate-900/60 backdrop-blur-3xl my-8">
+      <Card3D className="max-w-lg w-full p-6 md:p-8 space-y-5 relative border border-white/10 shadow-2xl rounded-3xl bg-slate-900/60 backdrop-blur-3xl my-8">
         
         {/* Close Button */}
         <button 
@@ -356,7 +357,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
           )}
         </div>
 
-      </div>
+      </Card3D>
     </div>
   );
 };

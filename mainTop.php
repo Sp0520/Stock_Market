@@ -36,9 +36,22 @@ mysqli_stmt_close($stmt);
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+$bodyClass = 'page-dashboard';
+if ($currentPage === 'market.php' || $currentPage === 'selectedStock.php') {
+    $bodyClass = 'page-market';
+} elseif ($currentPage === 'searchStock.php') {
+    $bodyClass = 'page-search';
+} elseif ($currentPage === 'portfolios.php') {
+    $bodyClass = 'page-portfolio';
+} elseif ($currentPage === 'transactionHistory.php') {
+    $bodyClass = 'page-transactions';
+}
+?>
 </head>
 
-<body>
+<body class="<?= $bodyClass ?>">
 
     <div class="container" style="height: auto; min-height: 100vh; width: 100%;">
         <nav class="navbar">

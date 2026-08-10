@@ -311,8 +311,8 @@ app.get('/api/indices', async (req, res) => {
   const indexMappings = [
     { label: "NIFTY 50", symbol: "^NSEI" },
     { label: "SENSEX", symbol: "^BSESN" },
-    { label: "BANK NIFTY", symbol: "^NSEBANK" },
-    { label: "NIFTY MIDCAP", symbol: "^NSEMDCP50" },
+    { label: "NIFTY BANK", symbol: "^NSEBANK" },
+    { label: "USD/INR", symbol: "USDINR=X" },
     { label: "NIFTY IT", symbol: "^CNXIT" },
     { label: "India VIX", symbol: "^INDIAVIX" }
   ];
@@ -434,6 +434,38 @@ app.get('/api/stocks/search', async (req, res) => {
   }
 
   res.json({ success: true, data: finalData });
+});
+
+app.get('/api/stocks/quote', async (req, res) => {
+  const symbol = (req.query.symbol || '').toUpperCase().trim();
+  if (!symbol) {
+    return res.status(400).json({ success: false, message: "Symbol query parameter is required" });
+  }
+
+  // Try fetching live price
+  const livePrice = await fetchYahooPrice(symbol);
+  
+  // Find fundamental card profile matching the symbol
+  const localProfile = STOCKS_DATABASE.find(s => s.symbol === symbol);
+  
+  if (!livePrice && !localProfile) {
+    return res.status(404).json({ success: false, message: "Stock not found" });
+  }
+
+  const quote = {
+    symbol,
+    price: livePrice ? livePrice.price : (localProfile ? localProfile.price : 0),
+    change: livePrice ? livePrice.change : (localProfile ? localProfile.change : 0),
+    changePercent: livePrice ? livePrice.changePercent : (localProfile ? localProfile.changePercent : 0),
+    prevClose: livePrice ? livePrice.prevClose : (localProfile ? localProfile.prevClose : 0),
+    open: livePrice ? livePrice.open : (localProfile ? localProfile.open : 0),
+    high: livePrice ? livePrice.high : (localProfile ? localProfile.high : 0),
+    low: livePrice ? livePrice.low : (localProfile ? localProfile.low : 0),
+    volume: livePrice ? livePrice.volume : (localProfile ? localProfile.volume : 0),
+    lastUpdated: livePrice ? livePrice.lastUpdated : new Date().toISOString()
+  };
+
+  res.json({ success: true, data: quote });
 });
 
 app.get('/api/stocks/:symbol', async (req, res) => {

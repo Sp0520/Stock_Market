@@ -44,21 +44,36 @@
 }
 
 body {
-  background-color: #0b1120;
+  background-color: #05070d;
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px),
-    radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
-  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
+  position: relative;
   background-attachment: fixed;
 }
 
-h1, h2, h3, h4, h5, .brand-font, .number-font {
-  font-family: 'Space Grotesk', 'Outfit', sans-serif;
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('./assets/city_skyline_motif.jpg');
+  background-size: cover;
+  background-position: right center;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: -1;
+}
+
+h1, h2, h3, h4, h5, .brand-font {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.number-font, .font-mono, td.font-mono, span.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
 }
 
 /* Glassmorphism Panel Utilities */
@@ -190,4 +205,48 @@ h1, h2, h3, h4, h5, .brand-font, .number-font {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--electric-blue);
+}
+
+/* Tick flash animations */
+@keyframes tick-flash-green {
+  0% { background-color: rgba(0, 227, 138, 0.25); }
+  100% { background-color: transparent; }
+}
+
+@keyframes tick-flash-red {
+  0% { background-color: rgba(255, 59, 92, 0.25); }
+  100% { background-color: transparent; }
+}
+
+.animate-tick-green {
+  animation: tick-flash-green 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-tick-red {
+  animation: tick-flash-red 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 3D and perspective custom styling */
+.perspective-container {
+  perspective: 1000px;
+}
+
+.glass-card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+  .glass-card-3d:hover {
+    transform: none !important;
+  }
 }

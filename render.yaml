@@ -1,13 +1,25 @@
 services:
   - type: web
-    name: indian-stock-market-app
+    name: indian-stock-market-platform
     env: node
-    region: singapore
-    plan: free
+    plan: free # Can be scaled up if needed
     buildCommand: npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 5000
       - key: JWT_SECRET
-        generateValue: true
+        generateValue: true # Render will automatically generate a secure key
+      # Database connection parameters (Optional, server runs on in-memory fallbacks if absent)
+      - key: MONGODB_URI
+        value: ""
+      - key: DB_HOST
+        value: ""
+      - key: DB_USER
+        value: ""
+      - key: DB_PASS
+        value: ""
+      - key: DB_NAME
+        value: ""

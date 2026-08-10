@@ -4,12 +4,15 @@ import { TradingTerminalView } from './components/dashboard/TradingTerminalView.
 import { TradeFlowView } from './components/dashboard/TradeFlowView.jsx';
 import { OrdersView } from './components/orders/OrdersView.jsx';
 import { AuthModal } from './components/auth/AuthModal.jsx';
+import { LoginView } from './components/auth/LoginView.jsx';
 import { PortfolioView } from './components/dashboard/PortfolioView.jsx';
 import { WatchlistView } from './components/dashboard/WatchlistView.jsx';
 import { NewsView } from './components/dashboard/NewsView.jsx';
 import { AiInsightsView } from './components/dashboard/AiInsightsView.jsx';
 import { fetchPortfolio } from './services/api.js';
 import { formatINR } from './utils/formatters.js';
+import { BackgroundLayer } from './components/common/BackgroundLayer.jsx';
+import { MarketView } from './components/dashboard/MarketView.jsx';
 
 export function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,6 +20,7 @@ export function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedStockTicker, setSelectedStockTicker] = useState('RELIANCE');
+  const [isGuestMode, setIsGuestMode] = useState(false);
 
   const [portfolio, setPortfolio] = useState({
     profile: {
@@ -101,13 +105,30 @@ export function App() {
   const handleLogOut = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('guestPortfolio');
     setCurrentUser(null);
+    setIsGuestMode(false);
     setActiveTab('dashboard');
     alert('Logged out successfully.');
   };
 
+  if (!currentUser && !isGuestMode) {
+    return (
+      <LoginView
+        onLoginSuccess={(userObj) => {
+          setCurrentUser(userObj);
+          setIsGuestMode(false);
+        }}
+        onContinueAsGuest={() => {
+          setIsGuestMode(true);
+        }}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#0a0d14] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#05070D] text-slate-100 flex flex-col font-sans relative">
+      <BackgroundLayer activeTab={activeTab} />
       
       <FinanceHubNavbar
         activeTab={activeTab}
@@ -171,7 +192,7 @@ export function App() {
         )}
 
         {activeTab === 'markets' && (
-          <TradingTerminalView onOrderExecuted={handleOrderExecuted} />
+          <MarketView onSelectStock={handleSelectStock} />
         )}
 
         {activeTab === 'watchlist' && (

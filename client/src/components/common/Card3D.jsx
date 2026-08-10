@@ -9,6 +9,11 @@ export const Card3D = ({ children, className = '', onClick }) => {
     const card = cardRef.current;
     if (!card) return;
 
+    // Check system preferences for reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
