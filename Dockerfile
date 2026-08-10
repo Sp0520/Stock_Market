@@ -35,5 +35,5 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
-# Start Node API in background, Apache in foreground
-CMD node server/server.js & apache2-foreground
+# Start Node API in background on port 5000, Apache in foreground
+CMD PORT=5000 node server/server.js & apache2-foreground
