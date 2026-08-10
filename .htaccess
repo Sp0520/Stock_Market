@@ -6,6 +6,9 @@ Options -Indexes
 # Enable Apache rewrite engine
 RewriteEngine On
 
+# Proxy /api requests to the Node.js Express server running on port 5000
+RewriteRule ^api/(.*)$ http://127.0.0.1:5000/api/$1 [P,L]
+
 # Redirect HTTP to HTTPS (uncomment when using SSL)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

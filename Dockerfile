@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache modules
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers proxy proxy_http
 
 # Set working directory
 WORKDIR /var/www/html
@@ -34,3 +34,6 @@ EXPOSE 80
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
+
+# Start Node API in background, Apache in foreground
+CMD node server/server.js & apache2-foreground
