@@ -23,7 +23,12 @@ const getHeaders = () => {
 
 // Error handler helper
 const handleResponse = async (res) => {
-  const json = await res.json();
+  let json;
+  try {
+    json = await res.json();
+  } catch (err) {
+    throw new Error(`Server returned invalid response (Status ${res.status}). The API server might be offline or restarting.`);
+  }
   if (!res.ok || json.success === false) {
     throw new Error(json.message || `API request failed with status ${res.status}`);
   }
