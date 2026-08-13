@@ -1,6 +1,5 @@
 <?php
 require('conn.php');
-require_once('otp_service.php');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -12,7 +11,7 @@ if (isset($_POST['submit'])) {
 
     if ($email == "") {
 
-        echo "<script>alert('Please enter your email address');</script>";
+        echo "<script>alert('Please enter your email');</script>";
 
     } else {
 
@@ -25,32 +24,27 @@ if (isset($_POST['submit'])) {
             mysqli_stmt_bind_result($stmt, $userId);
 
             if (mysqli_stmt_fetch($stmt)) {
-                mysqli_stmt_close($stmt);
 
-                $_SESSION['pending_forgot_email'] = $email;
-                $otpRes = createAndSendOtp($conn, $email, 'password_reset', $userId);
+                // Keep the same session key used by reset.php.
+                $_SESSION['forgot_user_id_verified'] = $userId;
 
                 echo "<script>
-                        alert('If an account is associated with this email, an OTP verification code has been sent.');
-                        window.location='verify_otp.php?purpose=password_reset';
+                        alert('Email found. Reset your password.');
+                        window.location='reset.php';
                       </script>";
                 exit();
 
             } else {
-                mysqli_stmt_close($stmt);
 
-                // Generic message to prevent user enumeration
-                echo "<script>
-                        alert('If an account is associated with this email, an OTP verification code has been sent.');
-                        window.location='login.php';
-                      </script>";
-                exit();
+                echo "<script>alert('Email not found');</script>";
 
             }
 
+            mysqli_stmt_close($stmt);
+
         } else {
 
-            echo "<script>alert('Database error. Please try again.');</script>";
+            echo "<script>alert('Database error');</script>";
 
         }
     }

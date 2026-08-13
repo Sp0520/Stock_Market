@@ -1,6 +1,5 @@
 <?php
 require('conn.php');
-require_once('otp_service.php');
 ?>
 
 <!DOCTYPE html>
@@ -95,28 +94,37 @@ if(isset($_POST['btnSignup'])){
                 PASSWORD_DEFAULT
             );
 
-            // Store pending registration data in session
-            $_SESSION['pending_signup'] = [
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'address' => $address,
-                'email' => $email,
-                'password' => $hashed_password,
-                'mobile_number' => $mobile_number,
-                'pan_number' => $pan_number
-            ];
+            $stmt = mysqli_prepare(
+                $conn,
+                "INSERT INTO users
+                (firstname, lastname, address, email, password, mobile_number, PANCARD_number)
+                VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
 
-            // Send OTP
-            $otpRes = createAndSendOtp($conn, $email, 'signup');
+            mysqli_stmt_bind_param(
+                $stmt,
+                "sssssss",
+                $firstname,
+                $lastname,
+                $address,
+                $email,
+                $hashed_password,
+                $mobile_number,
+                $pan_number
+            );
 
-            if ($otpRes['success']) {
+            if(mysqli_stmt_execute($stmt)){
+
                 echo "<script>
-                        alert('An OTP has been sent to your email. Please verify to complete registration.');
-                        window.location='verify_otp.php?purpose=signup';
-                      </script>";
+                alert('Registration Successful');
+                window.location='login.php';
+                </script>";
                 exit();
+
             } else {
-                echo "<script>alert('" . addslashes($otpRes['message']) . "');</script>";
+
+                echo "<script>alert('".mysqli_error($conn)."');</script>";
+
             }
         }
     }
