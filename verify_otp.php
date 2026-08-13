@@ -207,8 +207,14 @@ if (isset($_POST['btnVerify'])) {
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['last_otp_dev'])): ?>
-                    <div style="background: rgba(124, 92, 252, 0.15); border: 1px dashed var(--accent); color: #cbd5e1; font-size: 0.8rem; padding: 8px 12px; border-radius: 8px; text-align: center; font-family: monospace;">
-                        💡 Demo Test Code: <strong style="color: var(--success); letter-spacing: 2px;"><?php echo $_SESSION['last_otp_dev']; ?></strong>
+                    <div style="background: rgba(34, 211, 238, 0.12); border: 2px solid var(--glow-blue); color: #ffffff; font-size: 0.95rem; padding: 12px 16px; border-radius: 12px; text-align: center; margin-top: 5px; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);">
+                        🔑 <span style="font-weight: 600;">Your OTP Code:</span> 
+                        <strong id="demoOtpValue" style="color: #00e38a; font-size: 1.25rem; letter-spacing: 3px; font-family: monospace; margin: 0 8px;"><?php echo $_SESSION['last_otp_dev']; ?></strong>
+                        <button type="button" 
+                                onclick="document.querySelector('input[name=otp_code]').value='<?php echo $_SESSION['last_otp_dev']; ?>';" 
+                                style="background: var(--glow-blue); color: #000000; border: none; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; cursor: pointer; margin-left: 5px;">
+                            Auto-Fill
+                        </button>
                     </div>
                 <?php endif; ?>
 
