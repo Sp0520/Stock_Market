@@ -53,24 +53,6 @@ export const signupUser = async (userPayload) => {
   return handleResponse(res);
 };
 
-export const verifyOtp = async (identifier, otp, purpose) => {
-  const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier, otp, purpose })
-  });
-  return handleResponse(res);
-};
-
-export const resendOtp = async (identifier, purpose) => {
-  const res = await fetch(`${API_BASE_URL}/auth/resend-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier, purpose })
-  });
-  return handleResponse(res);
-};
-
 export const fetchMarketIndices = async () => {
   try {
     const res = await fetch(`${API_BASE_URL}/indices`);
