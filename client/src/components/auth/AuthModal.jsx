@@ -140,7 +140,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                   placeholder="name@company.com or 10-digit mobile"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  className="w-full glass-input pl-10 text-white"
+                  className="w-full glass-input pl-10 text-black bg-white"
                 />
               </div>
             </div>
@@ -155,7 +155,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                   placeholder="••••••••"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  className="w-full glass-input pl-10 pr-10 text-white"
+                  className="w-full glass-input pl-10 pr-10 text-black bg-white"
                 />
                 <button
                   type="button"
@@ -194,7 +194,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="Rahul"
                     value={signupData.firstname}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>
@@ -209,7 +209,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="Sharma"
                     value={signupData.lastname}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>
@@ -228,7 +228,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="name@company.com"
                     value={signupData.email}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="9876543210"
                     value={signupData.mobile_number}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>
@@ -261,7 +261,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                   placeholder="ABCDE1234F"
                   value={signupData.pan_number}
                   onChange={handleInputChange}
-                  className="w-full glass-input pl-9 text-white font-mono uppercase"
+                  className="w-full glass-input pl-9 text-black bg-white font-mono uppercase"
                   maxLength={10}
                 />
               </div>
@@ -279,7 +279,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                   placeholder="Enter full billing address..."
                   value={signupData.address}
                   onChange={handleInputChange}
-                  className="w-full glass-input pl-9 text-white"
+                  className="w-full glass-input pl-9 text-black bg-white"
                 />
               </div>
             </div>
@@ -297,7 +297,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="••••••••"
                     value={signupData.enter_password}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>
@@ -312,7 +312,7 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
                     placeholder="••••••••"
                     value={signupData.confirm_password}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-9 text-white"
+                    className="w-full glass-input pl-9 text-black bg-white"
                   />
                 </div>
               </div>

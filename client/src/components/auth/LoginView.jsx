@@ -137,7 +137,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="Enter email or 10-digit mobile"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
-                    className="w-full glass-input pl-10 text-white"
+                    className="w-full glass-input pl-10 text-black bg-white"
                   />
                 </div>
               </div>
@@ -161,7 +161,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="••••••••"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    className="w-full glass-input pl-10 pr-10 text-white"
+                    className="w-full glass-input pl-10 pr-10 text-black bg-white"
                   />
                   <button
                     type="button"
@@ -205,7 +205,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                       placeholder="e.g. Rahul"
                       value={signupData.firstname}
                       onChange={handleInputChange}
-                      className="w-full glass-input pl-8.5 text-white"
+                      className="w-full glass-input pl-8.5 text-black bg-white"
                     />
                   </div>
                 </div>
@@ -220,7 +220,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                       placeholder="e.g. Sharma"
                       value={signupData.lastname}
                       onChange={handleInputChange}
-                      className="w-full glass-input pl-8.5 text-white"
+                      className="w-full glass-input pl-8.5 text-black bg-white"
                     />
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                       placeholder="rahul@domain.com"
                       value={signupData.email}
                       onChange={handleInputChange}
-                      className="w-full glass-input pl-8.5 text-white"
+                      className="w-full glass-input pl-8.5 text-black bg-white"
                     />
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                       placeholder="10-digit number"
                       value={signupData.mobile_number}
                       onChange={handleInputChange}
-                      className="w-full glass-input pl-8.5 text-white"
+                      className="w-full glass-input pl-8.5 text-black bg-white"
                     />
                   </div>
                 </div>
@@ -270,7 +270,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="10-digit PAN (e.g. ABCDE1234F)"
                     value={signupData.pan_number}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-8.5 text-white font-mono uppercase"
+                    className="w-full glass-input pl-8.5 text-black bg-white font-mono uppercase"
                     maxLength={10}
                   />
                 </div>
@@ -287,7 +287,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="Enter full address details..."
                     value={signupData.address}
                     onChange={handleInputChange}
-                    className="w-full glass-input pl-8.5 text-white"
+                    className="w-full glass-input pl-8.5 text-black bg-white"
                   />
                 </div>
               </div>
@@ -302,7 +302,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="Min 6 chars"
                     value={signupData.enter_password}
                     onChange={handleInputChange}
-                    className="w-full glass-input text-white"
+                    className="w-full glass-input text-black bg-white"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -314,7 +314,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
                     placeholder="Retype password"
                     value={signupData.confirm_password}
                     onChange={handleInputChange}
-                    className="w-full glass-input text-white"
+                    className="w-full glass-input text-black bg-white"
                   />
                 </div>
               </div>
