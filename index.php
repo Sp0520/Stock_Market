@@ -1,15 +1,14 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Indian Stock Market Platform - Route to HTML5, CSS, JS React SPA
+$distIndex = __DIR__ . '/client/dist/index.html';
 
-// If user is already authenticated via session, go to market dashboard
-if (isset($_SESSION['user_id'])) {
-    header("Location: market.php");
+if (file_exists($distIndex)) {
+    $content = file_get_contents($distIndex);
+    $content = str_replace('./assets/', 'client/dist/assets/', $content);
+    $content = str_replace('href="/assets/', 'href="client/dist/assets/', $content);
+    $content = str_replace('src="/assets/', 'src="client/dist/assets/', $content);
+    echo $content;
+} else {
+    header("Location: login.php");
     exit();
 }
-
-// If unauthenticated, redirect to login.php for secure credentials & OTP 2FA verification
-header("Location: login.php");
-exit();
-?>
