@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Lock, Mail, Eye, EyeOff, User, Phone, MapPin, CreditCard, X } from 'lucide-react';
-import { loginUser, signupUser } from '../../services/api.js';
+import { Lock, Mail, Eye, EyeOff, User, Phone, MapPin, CreditCard, X, KeyRound, ShieldCheck } from 'lucide-react';
+import { loginUser, signupUser, verifyOtp, resendOtp } from '../../services/api.js';
 import { Card3D } from '../common/Card3D.jsx';
 
 export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -8,6 +8,10 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  // OTP Verification States
+  const [otpState, setOtpState] = useState(null); // { identifier, purpose, devOtp }
+  const [otpInput, setOtpInput] = useState('');
 
   // Login Form States
   const [loginEmail, setLoginEmail] = useState('');
@@ -34,10 +38,18 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
     try {
       const res = await loginUser(loginEmail, loginPassword);
-      localStorage.setItem('authToken', res.token);
-      localStorage.setItem('currentUser', JSON.stringify(res.user));
-      onLoginSuccess(res.user);
-      onClose();
+      if (res.requireOtp) {
+        setOtpState({
+          identifier: res.identifier,
+          purpose: res.purpose,
+          devOtp: res.devOtp
+        });
+      } else {
+        localStorage.setItem('authToken', res.token);
+        localStorage.setItem('currentUser', JSON.stringify(res.user));
+        onLoginSuccess(res.user);
+        onClose();
+      }
     } catch (err) {
       setErrorMessage(err.message || 'Invalid credentials');
     } finally {
@@ -70,14 +82,57 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
         confirm_password
       });
 
+      if (res.requireOtp) {
+        setOtpState({
+          identifier: res.identifier,
+          purpose: res.purpose,
+          devOtp: res.devOtp
+        });
+      } else {
+        localStorage.setItem('authToken', res.token);
+        localStorage.setItem('currentUser', JSON.stringify(res.user));
+        onLoginSuccess(res.user);
+        onClose();
+      }
+    } catch (err) {
+      setErrorMessage(err.message || 'Signup failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtpSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage(null);
+
+    if (!otpInput || otpInput.trim().length !== 6) {
+      setErrorMessage("Please enter a valid 6-digit OTP code.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await verifyOtp(otpState.identifier, otpInput, otpState.purpose);
       localStorage.setItem('authToken', res.token);
       localStorage.setItem('currentUser', JSON.stringify(res.user));
       onLoginSuccess(res.user);
       onClose();
     } catch (err) {
-      setErrorMessage(err.message || 'Signup failed');
+      setErrorMessage(err.message || 'OTP verification failed.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setErrorMessage(null);
+    try {
+      const res = await resendOtp(otpState.identifier, otpState.purpose);
+      setOtpState(prev => ({ ...prev, devOtp: res.devOtp }));
+      alert(res.message || 'New OTP sent!');
+    } catch (err) {
+      setErrorMessage(err.message || 'Failed to resend OTP.');
     }
   };
 
@@ -127,7 +182,83 @@ export const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
           </div>
         )}
 
-        {isLoginView ? (
+        {otpState ? (
+          /* OTP VERIFICATION FORM */
+          <form onSubmit={handleVerifyOtpSubmit} className="space-y-4 text-xs">
+            <div className="text-center space-y-1">
+              <h2 className="text-lg font-bold text-white flex items-center justify-center gap-2">
+                <KeyRound className="w-5 h-5 text-cyan-400" /> Verify OTP Code
+              </h2>
+              <p className="text-[11px] text-slate-400">
+                Enter 6-digit verification code sent to <br/>
+                <strong className="text-cyan-300 font-semibold">{otpState.identifier}</strong>
+              </p>
+            </div>
+
+            {otpState.devOtp && (
+              <div className="bg-cyan-500/10 border border-cyan-400/40 p-3 rounded-xl text-center space-y-1">
+                <div className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">🔑 Your OTP Code</div>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-lg font-mono font-black text-emerald-400 tracking-widest">{otpState.devOtp}</span>
+                  <button
+                    type="button"
+                    onClick={() => setOtpInput(otpState.devOtp)}
+                    className="px-2 py-0.5 text-[10px] font-extrabold bg-cyan-400 text-slate-950 rounded hover:bg-cyan-300 transition-all cursor-pointer"
+                  >
+                    Auto-Fill
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-1.5">
+              <label className="text-slate-300 font-semibold">6-Digit Code</label>
+              <input
+                type="text"
+                required
+                maxLength={6}
+                placeholder="Enter 6-digit OTP"
+                value={otpInput}
+                onChange={(e) => setOtpInput(e.target.value)}
+                className="w-full text-center text-lg font-extrabold tracking-widest text-black bg-white glass-input"
+                autoFocus
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3.5 rounded-xl font-extrabold text-xs text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 transition-all shadow-lg shadow-emerald-500/20 uppercase tracking-widest flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {loading ? (
+                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+              ) : (
+                <>
+                  <ShieldCheck className="w-4 h-4" />
+                  Verify & Access
+                </>
+              )}
+            </button>
+
+            <div className="flex justify-between items-center text-slate-400 text-[11px] pt-1">
+              <button
+                type="button"
+                onClick={() => { setOtpState(null); setErrorMessage(null); }}
+                className="hover:text-white underline font-semibold cursor-pointer"
+              >
+                ← Back
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                className="text-cyan-400 hover:underline font-bold cursor-pointer"
+              >
+                Resend OTP
+              </button>
+            </div>
+          </form>
+        ) : isLoginView ? (
           /* LOGIN FORM */
           <form onSubmit={handleLoginSubmit} className="space-y-4 text-xs">
             <div className="space-y-1.5">

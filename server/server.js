@@ -222,6 +222,14 @@ function getMarketStatus() {
 refreshStockCache();
 setInterval(refreshStockCache, 60000); // refresh every 1 minute
 
+// In-Memory OTP Store for Node/Express auth flow
+const PENDING_OTPS = {};
+
+// Helper: Generate 6-digit OTP
+function generateExpressOtp() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 // === AUTH ENDPOINTS ===
 app.post('/api/auth/signup', async (req, res) => {
   const { firstname, lastname, email, mobile_number, pan_number, address, password, confirm_password } = req.body;
@@ -266,60 +274,24 @@ app.post('/api/auth/signup', async (req, res) => {
       if (existingUser.PANCARD_number === pan_number || existingUser.pan === pan_number) return res.status(400).json({ success: false, message: "PAN Card number already registered" });
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const welcomeBalance = 100000.00; // ₹1,00,000 welcome virtual cash
-    let userId = Math.floor(1000 + Math.random() * 9000);
+    const otp = generateExpressOtp();
+    PENDING_OTPS[email] = {
+      purpose: 'signup',
+      signupData: { firstname, lastname, email, mobile_number, pan_number, address, password },
+      otp,
+      expiresAt: Date.now() + (10 * 60 * 1000),
+      attempts: 0
+    };
 
-    try {
-      const [insertResult] = await db.query(
-        "INSERT INTO users (firstname, lastname, address, email, password, mobile_number, PANCARD_number, available_balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [firstname, lastname, address, email, hashedPassword, mobile_number, pan_number, welcomeBalance]
-      );
-      userId = insertResult.insertId;
-
-      // Insert welcome transaction
-      await db.query(
-        "INSERT INTO users_transaction (credit, payment_id, description, user_id, status) VALUES (?, ?, ?, ?, 'COMPLETED')",
-        [welcomeBalance, `DEP_${Math.floor(10000 + Math.random() * 90000)}`, "Welcome Wallet Fund Bonus", userId]
-      );
-    } catch (dbErr) {
-      console.warn("MySQL database insert failed, storing user in-memory:", dbErr.message);
-      // Store in memory
-      const newUser = {
-        id: userId,
-        firstname,
-        lastname,
-        email,
-        password: hashedPassword,
-        mobile: mobile_number,
-        pan: pan_number,
-        address,
-        availableBalance: welcomeBalance,
-        holdings: [],
-        orders: [],
-        watchlist: ["RELIANCE", "TCS", "INFY"],
-        transactions: [
-          { id: `DEP_${Math.floor(10000 + Math.random() * 90000)}`, payment_date: new Date().toISOString(), payment_id: `DEP_${Math.floor(10000 + Math.random() * 90000)}`, description: "Welcome Wallet Fund Bonus", status: "COMPLETED", debit: 0, credit: welcomeBalance }
-        ]
-      };
-      IN_MEMORY_USERS.push(newUser);
-    }
-
-    const token = jwt.sign({ id: userId, email: email, name: `${firstname} ${lastname}` }, JWT_SECRET, { expiresIn: '7d' });
+    console.log(`🔑 Express OTP for [signup] ${email}: ${otp}`);
 
     return res.json({
       success: true,
-      token,
-      user: {
-        id: userId,
-        name: `${firstname} ${lastname}`,
-        email,
-        mobile: mobile_number,
-        pan: pan_number,
-        address,
-        kycStatus: "VERIFIED",
-        availableBalance: welcomeBalance
-      }
+      requireOtp: true,
+      identifier: email,
+      purpose: 'signup',
+      devOtp: otp,
+      message: 'OTP verification required to complete registration.'
     });
   } catch (err) {
     console.error("Signup Error:", err);
@@ -390,8 +362,101 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid password" });
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email, name: `${user.firstname} ${user.lastname}` }, JWT_SECRET, { expiresIn: '7d' });
+    const otp = generateExpressOtp();
+    PENDING_OTPS[email] = {
+      purpose: 'login',
+      user,
+      otp,
+      expiresAt: Date.now() + (10 * 60 * 1000),
+      attempts: 0
+    };
 
+    console.log(`🔑 Express OTP for [login] ${email}: ${otp}`);
+
+    return res.json({
+      success: true,
+      requireOtp: true,
+      identifier: email,
+      purpose: 'login',
+      devOtp: otp,
+      message: 'Two-Factor Authentication Required. Please enter the OTP sent to your email.'
+    });
+  } catch (err) {
+    console.error("Login Error:", err);
+    return res.status(500).json({ success: false, message: "Login failed due to internal error." });
+  }
+});
+
+app.post('/api/auth/verify-otp', async (req, res) => {
+  const { identifier, otp, purpose } = req.body;
+
+  if (!identifier || !otp) {
+    return res.status(400).json({ success: false, message: "Identifier and OTP code are required" });
+  }
+
+  const record = PENDING_OTPS[identifier];
+  if (!record || record.purpose !== purpose) {
+    return res.status(400).json({ success: false, message: "No pending OTP request found. Please sign in again." });
+  }
+
+  if (Date.now() > record.expiresAt) {
+    delete PENDING_OTPS[identifier];
+    return res.status(400).json({ success: false, message: "OTP has expired. Please request a new code." });
+  }
+
+  if (record.attempts >= 5) {
+    delete PENDING_OTPS[identifier];
+    return res.status(400).json({ success: false, message: "Maximum verification attempts exceeded." });
+  }
+
+  if (record.otp !== otp.trim()) {
+    record.attempts++;
+    const remaining = 5 - record.attempts;
+    return res.status(400).json({ success: false, message: `Invalid OTP code. ${remaining} attempt(s) remaining.` });
+  }
+
+  // OTP verified successfully!
+  delete PENDING_OTPS[identifier];
+
+  if (purpose === 'signup') {
+    const { firstname, lastname, email, mobile_number, pan_number, address, password } = record.signupData;
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const welcomeBalance = 100000.00;
+    let userId = Math.floor(1000 + Math.random() * 9000);
+
+    try {
+      const [insertResult] = await db.query(
+        "INSERT INTO users (firstname, lastname, address, email, password, mobile_number, PANCARD_number, available_balance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        [firstname, lastname, address, email, hashedPassword, mobile_number, pan_number, welcomeBalance]
+      );
+      userId = insertResult.insertId;
+      await db.query(
+        "INSERT INTO users_transaction (credit, payment_id, description, user_id, status) VALUES (?, ?, ?, ?, 'COMPLETED')",
+        [welcomeBalance, `DEP_${Math.floor(10000 + Math.random() * 90000)}`, "Welcome Wallet Fund Bonus", userId]
+      );
+    } catch (dbErr) {
+      console.warn("MySQL insert failed during OTP verify:", dbErr.message);
+    }
+
+    const token = jwt.sign({ id: userId, email: email, name: `${firstname} ${lastname}` }, JWT_SECRET, { expiresIn: '7d' });
+    return res.json({
+      success: true,
+      token,
+      user: {
+        id: userId,
+        name: `${firstname} ${lastname}`,
+        email,
+        mobile: mobile_number,
+        pan: pan_number,
+        address,
+        kycStatus: "VERIFIED",
+        availableBalance: welcomeBalance
+      }
+    });
+  } else {
+    // Login verification
+    const user = record.user;
+    const token = jwt.sign({ id: user.id, email: user.email, name: `${user.firstname} ${user.lastname}` }, JWT_SECRET, { expiresIn: '7d' });
     return res.json({
       success: true,
       token,
@@ -406,10 +471,27 @@ app.post('/api/auth/login', async (req, res) => {
         availableBalance: user.availableBalance
       }
     });
-  } catch (err) {
-    console.error("Login Error:", err);
-    return res.status(500).json({ success: false, message: "Login failed due to internal error." });
   }
+});
+
+app.post('/api/auth/resend-otp', (req, res) => {
+  const { identifier, purpose } = req.body;
+  if (!identifier || !PENDING_OTPS[identifier]) {
+    return res.status(400).json({ success: false, message: "No active session to resend OTP." });
+  }
+
+  const otp = generateExpressOtp();
+  PENDING_OTPS[identifier].otp = otp;
+  PENDING_OTPS[identifier].expiresAt = Date.now() + (10 * 60 * 1000);
+  PENDING_OTPS[identifier].attempts = 0;
+
+  console.log(`🔑 Resent Express OTP for [${purpose}] ${identifier}: ${otp}`);
+
+  return res.json({
+    success: true,
+    devOtp: otp,
+    message: "New verification OTP code sent successfully."
+  });
 });
 
 // === INDICES ===
