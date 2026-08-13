@@ -30,9 +30,8 @@ if (isset($_POST['submit'])) {
                 $_SESSION['pending_forgot_email'] = $email;
                 $otpRes = createAndSendOtp($conn, $email, 'password_reset', $userId);
 
-                $codeMsg = isset($_SESSION['last_otp_dev']) ? "\\n\\n[Test OTP Code: " . $_SESSION['last_otp_dev'] . "]" : "";
                 echo "<script>
-                        alert('An OTP verification code has been sent to your email." . $codeMsg . "');
+                        alert('If an account is associated with this email, an OTP verification code has been sent.');
                         window.location='verify_otp.php?purpose=password_reset';
                       </script>";
                 exit();

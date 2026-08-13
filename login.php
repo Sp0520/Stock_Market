@@ -125,9 +125,8 @@ if (isset($_POST['btnSignin'])) {
             $otpRes = createAndSendOtp($conn, $row['email'], 'login', $row['id']);
 
             if ($otpRes['success']) {
-                $codeMsg = isset($_SESSION['last_otp_dev']) ? "\\n\\n[Test OTP Code: " . $_SESSION['last_otp_dev'] . "]" : "";
                 echo "<script>
-                        alert('Two-Factor Authentication Required. An OTP has been sent to your email." . $codeMsg . "');
+                        alert('Two-Factor Authentication Required. An OTP has been sent to your email.');
                         window.location='verify_otp.php?purpose=login';
                       </script>";
                 exit();

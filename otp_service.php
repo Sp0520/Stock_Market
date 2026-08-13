@@ -19,7 +19,6 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
  * Ensure otp_verifications table exists in database
  */
 function ensureOtpTableExists($conn) {
-    if (!$conn) return;
     $sql = "CREATE TABLE IF NOT EXISTS otp_verifications (
       id INT AUTO_INCREMENT PRIMARY KEY,
       user_id INT NULL,
@@ -33,9 +32,7 @@ function ensureOtpTableExists($conn) {
       INDEX idx_identifier_purpose (identifier, purpose)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
     
-    if (!mysqli_query($conn, $sql)) {
-        error_log("Failed to create otp_verifications table: " . mysqli_error($conn));
-    }
+    @mysqli_query($conn, $sql);
 }
 
 // Auto-run schema check
@@ -137,16 +134,13 @@ function createAndSendOtp($conn, $identifier, $purpose, $userId = null) {
         mysqli_stmt_close($stmt_inv);
     }
 
-    // Ensure schema table exists before insertion
-    ensureOtpTableExists($conn);
-
     // Insert new OTP record
     $stmt = mysqli_prepare(
         $conn,
         "INSERT INTO otp_verifications (user_id, identifier, otp_hash, purpose, expires_at) VALUES (?, ?, ?, ?, ?)"
     );
     if (!$stmt) {
-        return ['success' => false, 'message' => 'Database error preparing OTP record: ' . mysqli_error($conn)];
+        return ['success' => false, 'message' => 'Database error preparing OTP record.'];
     }
 
     mysqli_stmt_bind_param($stmt, "issss", $userId, $identifier, $otp_hash, $purpose, $expires_at);

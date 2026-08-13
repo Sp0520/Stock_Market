@@ -110,9 +110,8 @@ if(isset($_POST['btnSignup'])){
             $otpRes = createAndSendOtp($conn, $email, 'signup');
 
             if ($otpRes['success']) {
-                $codeMsg = isset($_SESSION['last_otp_dev']) ? "\\n\\n[Test OTP Code: " . $_SESSION['last_otp_dev'] . "]" : "";
                 echo "<script>
-                        alert('An OTP has been sent to your email." . $codeMsg . "');
+                        alert('An OTP has been sent to your email. Please verify to complete registration.');
                         window.location='verify_otp.php?purpose=signup';
                       </script>";
                 exit();
