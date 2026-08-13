@@ -1,5 +1,6 @@
 <?php
 require('conn.php');
+require_once('otp_service.php');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -113,15 +114,25 @@ if (isset($_POST['btnSignin'])) {
 
         if(password_verify($password, $row['password'])){
 
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['firstname'] = $row['firstname'];
-            $_SESSION['email'] = $row['email'];
+            // Store pending 2FA session state
+            $_SESSION['pending_2fa'] = [
+                'id' => $row['id'],
+                'firstname' => $row['firstname'],
+                'email' => $row['email']
+            ];
 
-            echo "<script>
-            alert('Login Successful');
-            window.location='market.php';
-            </script>";
-            exit();
+            // Send 2FA OTP
+            $otpRes = createAndSendOtp($conn, $row['email'], 'login', $row['id']);
+
+            if ($otpRes['success']) {
+                echo "<script>
+                        alert('Two-Factor Authentication Required. An OTP has been sent to your email.');
+                        window.location='verify_otp.php?purpose=login';
+                      </script>";
+                exit();
+            } else {
+                echo "<script>alert('" . addslashes($otpRes['message']) . "');</script>";
+            }
 
         }else{
 
