@@ -12,9 +12,14 @@ services:
         value: 5000
       - key: JWT_SECRET
         generateValue: true # Render will automatically generate a secure key
-      # Database connection parameters (Optional, server runs on in-memory fallbacks if absent)
-      - key: MONGODB_URI
+      # External Market Data Keys (Optional, platform auto-fetches AMFI/NSE/BSE if blank)
+      - key: STOCK_API_KEY
         value: ""
+      - key: MUTUAL_FUND_API_KEY
+        value: ""
+      - key: NEWS_API_KEY
+        value: ""
+      # Database connection parameters (Optional, server runs on resilient fallback store if absent)
       - key: DB_HOST
         value: ""
       - key: DB_USER
@@ -23,3 +28,5 @@ services:
         value: ""
       - key: DB_NAME
         value: ""
+      - key: DB_PORT
+        value: "3306"

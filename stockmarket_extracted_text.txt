@@ -1,0 +1,2142 @@
+=== PAGE 1 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+1 
+ 
+In partial fulfillment for the award of the degree of 
+ 
+BACHELOR OF TECHNOLOGY 
+in 
+INFORMATION TECHNOLOGY 
+ 
+ 
+ 
+DEPARTMENT OF INFORMATION TECHNOLOGY, 
+PARUL INSTITUTE OF ENGINEERING AND TECHNOLOGY, 
+PARUL UNIVERSITY, 
+VADODARA, GUJARAT 
+ 
+Stock Market Application 
+Web-service to BUY & SELL Stocks. 
+ 
+Submitted by: 
+MR. SNEH JITENDRAKUMAR PATEL (2303031080112) 
+MS. BHUMI NARENDRABHAI PATEL (2303031080093) 
+      MR. SATYAM DATTUBHAI  PATEL (2303031080073) 
+      MR. BHAVIN ANURAGBHAI RANA (2303031080243) 
+Under the Guidance of 
+Assistant Professor MS. SONALI KORI 
+
+
+=== PAGE 2 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+2 
+ 
+ 
+Submitted in partial fulfillment of the requirement for the award of the degree 
+Of 
+Bachelor of Technology 
+in 
+Information Technology 
+                            
+ 
+ 
+ 
+DEPARTMENT OF INFORMATION TECHNOLOGY, 
+PARUL INSTITUTE OF ENGINEERING AND TECHNOLOGY, 
+PARUL UNIVERSITY, 
+VADODARA, GUJARAT 
+ 
+Submitted by: 
+ MR. SNEH JITENDRAKUMAR PATEL (2303031080112) 
+MS. BHUMI NARENDRABHAI PATEL (2303031080093) 
+       MR. SATYAM DATTUBHAI  PATEL (2303031080073) 
+       MR. BHAVIN ANURAGBHAI RANA (2303031080243) 
+ 
+Under supervision of 
+ 
+ 
+ 
+
+
+=== PAGE 3 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+3 
+ 
+CERTIFICATE 
+ 
+This is to certify that the Project Report entitled,”Stock Market Application 
+web-service to BUY & SELL Stock” submitted by “Sneh Jitendrakumar 
+Patel, Bhumi Narendrabhai Patel, Stayam Datuubhai Patel, Bhavin 
+Anuragabhai Rana” to Parul University, Vadodara, Gujarat, is a record of 
+bonafide Project workcarried out by them under my supervision and guidance, 
+and is worthy of consideration for the awardof the degree of Bachelor of 
+Technology in Information Technology of the University. 
+ 
+Date: 
+Place: 
+ 
+ 
+ 
+ 
+ 
+ 
+Supervisor 
+ 
+Ms. Sonali Kori 
+ 
+ 
+Project Coordinator 
+ 
+Ms. Dhenuka Patel 
+Assistant Professor 
+ 
+ 
+ 
+ 
+ 
+Head, Dept. of Information 
+Technology 
+ 
+Dr. Pooja Sapra 
+ 
+ 
+External Supervisor 
+ 
+Name: 
+Designation: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 4 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+4 
+ 
+ 
+ 
+Acknowledgement 
+ 
+It is matter of great pleasure for us to get this opportunity expressing our sincere sense 
+of gratitude to South Gujarat University. Firstly, I would like to express my heartily thanks to 
+Parul University for providing lab facility. As part of our academic study as the student of 6th 
+semester of B-Tech Information Technology we are required to undergo training for Project 
+as institute in order to obtain practical knowledge and broaden our views regarding the same. 
+ 
+ 
+As first, we would like to express our special & humble thanks and gratitude to 
+the Dr.Pooja Sapra (H.O.D, Department of Information Technology) who has provided us 
+such a great, co-operative and progressive environment. Secondly, at this moment we would 
+like to express our deepest sense of gratitude to our professors as well as Project Internal guide 
+Assistant Professor Ms. Sonali Kori have contributed their precious time for the purpose of 
+giving us the correct information with special interest and guidance throughout the small 
+project definition work and treat us as their younger Brother. 
+ 
+Thanking to All 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Submitted By: - 
+                                                                                                           MR. SNEH  PATEL (2303031080112) 
+                                                                                         MS. BHUMI PATEL (2303031080093) 
+                                                                                              MR. SATYAM  PATEL (2303031080073) 
+                                                                                              MR. BHAVIN RANA (2303031080243) 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 5 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+5 
+ 
+ABSTRACT 
+          The Stock Market Application Web-Service is a web-based application developed to 
+simulate the basic operations of a real stock trading system. The main objective of this project 
+is to provide users with a platform where they can register, log in, view available stocks, and 
+perform simulated buying and selling of shares in a secure and user-friendly environment. This 
+application is especially useful for students and beginners who want to understand the 
+fundamentals of stock market trading without financial risk. 
+          The system is developed using modern web technologies such as HTML, CSS, and 
+JavaScript for the front end, PHP for server-side processing, and MySQL for database 
+management. The application includes essential features such as user authentication, stock 
+listing, transaction management, and portfolio tracking. An admin module is also provided to 
+manage stocks, users, and transaction data efficiently. 
+          This project demonstrates the practical implementation of database connectivity, server-
+side scripting, and dynamic web page generation. It also highlights important concepts such as 
+session management, data security, and CRUD operations. The Stock Market Application Web-
+Service serves as an educational tool and can be further enhanced by integrating real-time stock 
+APIs, advanced analytics, and mobile compatibility in the future. 
+Keywords: Stock Market, Web Application, PHP, MySQL, Trading Simulation, Web-Service 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 6 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+6 
+ 
+Content 
+ 
+CONTENT .......................................................................................................................... 6 
+LIST OF TABLE ................................................................................................................ 9 
+LIST OF FIGURE .............................................................................................................. 9 
+1.INTRODUCTION .......................................................................................................... 10 
+1.1 Executive Summary .................................................................................................... 10 
+1.2 Project Profile: ............................................................................................................ 11 
+1.3 Project Summary......................................................................................................... 12 
+1.4 Project Purpose ........................................................................................................... 12 
+1.5 Scope ............................................................................................................................ 12 
+2.LITERATURE REVIEW .............................................................................................. 13 
+2.1 Existing Stock Market Systems................................................................................... 13 
+2.2 Web-Based Stock Market Applications ...................................................................... 13 
+2.3 Software Requirements: .............................................................................................. 13 
+3. PROBLEM DEFINITION AND REQUIREMENT ANALYSIS ................................ 14 
+3.1 Problem Definition ...................................................................................................... 14 
+3.2 Requirement Analysis ................................................................................................. 14 
+  3.2.1 Functional Requirements .................................................................................... 15 
+3.2.2 Non-Functional Requirements ............................................................................. 16 
+4. DESIGN AND IMPLEMENTATION .......................................................................... 17 
+4.1 System Design .............................................................................................................. 17 
+4.1.1 System Architecture .............................................................................................. 17 
+4.2 Database Design .......................................................................................................... 17 
+4.3 Data Flow Diagram (DFD) .......................................................................................... 20 
+
+
+=== PAGE 7 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+7 
+ 
+4.3.1 Context Level DFD ............................................................................................... 22 
+4.3.2 First Level DFD..................................................................................................... 22 
+4.4 Software Development Life Cycle (SDLC) ................................................................. 23 
+4.4.1 Waterfall Model .................................................................................................... 24 
+4.4.2 Why we are using Waterfall Model? .................................................................... 25 
+4.5 Implementation ........................................................................................................... 26 
+4.5.1 Front-End Implementation................................................................................... 26 
+4.5.2 Back-End Implementation.................................................................................... 29 
+5. TESTING AND DEPLOYMENT ................................................................................. 32 
+5.1 Testing.......................................................................................................................... 32 
+5.1.1 Unit Testing ........................................................................................................... 32 
+5.1.2 Integration Testing................................................................................................ 32 
+5.1.3 System Testing ...................................................................................................... 33 
+5.1.4 User Acceptance Testing (UAT) ........................................................................... 33 
+5.2 Testing Techniques Used ............................................................................................. 33 
+5.3 Sample Test Cases ....................................................................................................... 34 
+5.4 Deployment .................................................................................................................. 34 
+5.4.1 Deployment Environment ..................................................................................... 34 
+5.4.2 Deployment Steps .................................................................................................. 34 
+5.4.3 Deployment Verification ....................................................................................... 35 
+6. ANALYSIS AND RESULTS ........................................................................................ 36 
+6.1 System Analysis ........................................................................................................... 36 
+6.2 Functional Analysis ..................................................................................................... 36 
+6.2.1 User Authentication .............................................................................................. 36 
+6.2.2 Stock Search and Display ..................................................................................... 36 
+6.2.3 Buy Stock Operation ............................................................................................. 36 
+6.2.4 Sell Stock Operation ............................................................................................. 37 
+6.2.5 Portfolio Management .......................................................................................... 37 
+6.3 Performance Analysis ................................................................................................. 37 
+6.4 Security Analysis ......................................................................................................... 37 
+6.5 Usability Analysis ........................................................................................................ 38 
+6.6 Result Analysis ............................................................................................................ 38 
+6.7 Overall Results ............................................................................................................ 38 
+
+
+=== PAGE 8 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+8 
+ 
+7. CONCLUSION AND FUTURE ENHANCEMENTS .................................................. 39 
+7.1 
+Self-Analysis and Project Viabilities:.................................................................... 39 
+7.2 
+Problem Encountered and Possible Solutions ...................................................... 39 
+7.3 Future Enhancements ................................................................................................. 39 
+7.3.1 Real-Time Stock Price Integration ....................................................................... 39 
+7.3.2 Advanced Charts and Analytics ........................................................................... 40 
+7.3.3 Mobile Application Support ................................................................................. 40 
+7.3.4 Enhanced Security Features ................................................................................. 40 
+7.3.5 Payment Gateway Integration .............................................................................. 40 
+7.3.6 Admin Dashboard Enhancements ........................................................................ 40 
+7.4Summary of Project Work ........................................................................................... 40 
+8. REFERENCES .............................................................................................................. 42 
+8.1 Websites Referred ....................................................................................................... 42 
+8.1.1 APIs Used .............................................................................................................. 42 
+8.2 Libraries Included ....................................................................................................... 42 
+9.LIST OF APPENDICES ................................................................................................ 43 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 9 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+9 
+ 
+ 
+ 
+ 
+List Of Table 
+ 
+Table No 
+Table Name 
+Page No 
+1 
+Project Profile 
+11 
+2 
+Users 
+18-19 
+3 
+User-Transation 
+19 
+4 
+Stock-Details 
+19 
+ 
+List Of Figure 
+ 
+Figure No 
+Figure Name 
+Page No 
+1 
+Use Case Diagram 
+15 
+2 
+Architecture of stock market web application 
+17 
+3 
+Entity-Relation Diagram 
+19 
+4 
+DFD Diagram 
+22 
+5 
+Level 1 DFD 
+22 
+6 
+SDLC Diagram 
+23 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 10 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+10 
+ 
+1.Introduction 
+ 
+1.1 Executive Summary 
+ 
+ Technology has changed the landscape of the stock markets. They now don't 
+require a trading floor & can, from a single location anywhere can service 
+investors across the country. 
+ 
+ Before screen based trading was introduce Regional Stock Exchange were 
+playing a very important role in the Capital Market as they were local investors. 
+Now they are all developed screens based trading is connecting floors with other 
+stock Exchanges. 
+ 
+ When you place an order to buy or sell stock, you might not think about where of 
+how your broker will execute the trade. But where and how your order is executed 
+can impact the overall costs of the transaction, including the price you pay for the 
+stock. Here's what you should know about trade execution. 
+ 
+ The increasingly popular activity of buying and selling securities over the 
+internet, or to a lesser extent, through a broker’s proprietary software. 
+ 
+ Buying and selling securities using the Internet or broker-provided proprietary 
+software that works trough the Internet. Online trading is distinguished from 
+Wireless Trading, a nascent area of service where brokerage customers can trade 
+via cell phones, pagers, and hand-held organizers. 
+ 
+ An account similar to a traditional bank account, holding cash and securities, and 
+is administered by an investment dealer. An account held at a financial institution 
+and administered by an investment dealer that the account holder uses to employ 
+a trading strategy rather than a buy-and-hold investment strategy. 
+ 
+
+
+=== PAGE 11 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+11 
+ 
+ Though trading account are traditionally thought to hold only stocks, a trading 
+account can hold cash, foreign cash, securities and a number of other types of 
+investment. 
+ 
+1.2 Project Profile: 
+ 
+Project title 
+Stock Market Application 
+Platform 
+Visual Studio Code 
+Front-end 
+HTML5, CSS3 
+Back-end 
+PHP 
+Database 
+MySQL Database 
+Documentation tool 
+Microsoft word 
+Guided By 
+Ms. Sonali Kori  
+Developed By 
+Sneh Patel/Bhumi Patel 
+Satyam Patel/Bhavin Rana  
+Submitted to 
+Parul University 
+ 
+ 
+ 
+
+
+=== PAGE 12 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+12 
+ 
+ 
+1.3 Project Summary 
+ 
+ Project summary is something which gives detailed information on how the project 
+works and what is all about it.  
+ This is the online trending application for buying and selling the stocks. 
+ For payment, we have included the online payment system that user can easily added 
+money with help of razor pay API. This great feature of our website that is user-
+friendly and easy to understand. 
+1.4 Project Purpose 
+ 
+ A trading account is used to buy and sell securities that you wish to trade on the stock 
+market.  
+ Both Demat and trading account are mandatory for investing in the share market. 
+  The Bombay Stock Exchange and the National Stock Exchange are primary exchanges 
+where stocks are listed. 
+ 
+1.5 Scope 
+ 
+ The whole project is PHP  based so it can be used as an internet application from any 
+Web device so there is no any constraint on accessibility of the application. 
+ It can handle all the requests from the Internet and responds to it accordingly. Scope 
+of the system is used by User. 
+ Upgrading Alpha vantage API to get all stocks details likes BSE & NSE and also 
+USA Stock Market Data. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 13 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+13 
+ 
+2.Literature Review 
+ 
+2.1 Existing Stock Market Systems 
+Earlier stock market systems were mostly manual and required physical presence at stock 
+exchanges. These systems were slow, error-prone, and had limited access to market 
+information. With the introduction of computerized systems, trading became faster and more 
+reliable. 
+ 
+ 
+2.2 Web-Based Stock Market Applications 
+Web-based stock market applications allow users to buy and sell stocks online. Previous 
+studies show that such systems provide real-time stock prices, user portfolio management, 
+and easy accessibility through the internet. These applications reduce human effort and 
+improve efficiency. 
+ 
+2.3 Software Requirements: 
+ 
+Minimum Software Requirement: 
+ 
+ .NET framework 5.0  
+ SQL Server Express Edition  
+ Window XP-sp3 or Windows 7 
+Software In-use: 
+ 
+ .NET framework 5.0  
+ SQL server database 
+ Windows 10 Pro 
+ 
+ 
+ 
+
+
+=== PAGE 14 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+14 
+ 
+3. Problem Definition and Requirement Analysis 
+ 
+3.1 Problem Definition 
+ The stock market plays a vital role in the financial system, but many people find stock 
+trading complex and risky due to lack of knowledge and complicated platforms. 
+Existing stock trading systems are often difficult for beginners to use, require 
+intermediaries, and provide limited understanding of how buying and selling of stocks 
+actually works. 
+ Manual or broker-based trading systems involve higher costs, delays, and reduced 
+transparency. New users need a simple, web-based platform where they can learn and 
+perform stock trading operations in an easy and secure manner. 
+The problem is to design and develop a user-friendly, web-based Stock Market 
+Application that allows users to: 
+ 
+View stock information 
+ 
+Buy and sell stocks virtually 
+ 
+Manage their portfolio 
+ 
+Track transaction history 
+The system should be simple, secure, and efficient, providing a simulated or real-time trading 
+experience that helps users understand stock market operations without unnecessary 
+complexity. 
+ 
+3.2 Requirement Analysis 
+Requirement analysis identifies the functional and non-functional needs of the system to 
+ensure smooth operation and user satisfaction. 
+
+
+=== PAGE 15 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+15 
+ 
+  3.2.1 Functional Requirements  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure:Use case diagram 
+1. User Authentication 
+ 
+The system shall allow users to register using valid credentials. 
+ 
+The system shall authenticate users during login. 
+ 
+The system shall maintain user sessions securely. 
+2. Stock Viewing 
+ 
+The system shall display available stocks with current prices. 
+ 
+The system shall allow searching stocks using ticker symbols. 
+3. Buy Stock 
+ 
+The system shall allow users to buy stocks. 
+ 
+The system shall check available balance before purchase. 
+ 
+The system shall update the portfolio after purchase. 
+4. Sell Stock 
+ 
+The system shall allow users to sell owned stocks. 
+ 
+The system shall validate stock quantity before selling. 
+ 
+ 
+
+
+=== PAGE 16 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+16 
+ 
+5. Portfolio Management 
+ 
+The system shall display user’s portfolio. 
+ 
+The system shall calculate profit and loss. 
+6. Transaction History 
+ 
+The system shall store all buy and sell transactions. 
+ 
+The system shall display transaction details with date and time. 
+7. Admin Functions 
+ 
+The admin shall manage users and stock data. 
+ 
+The admin shall monitor all transactions. 
+ 
+ 
+3.2.2 Non-Functional Requirements 
+ 
+Usability: Simple and intuitive UI 
+ 
+Performance: Fast response time 
+ 
+Security: Encrypted passwords, secure sessions 
+ 
+Reliability: Accurate transaction processing 
+ 
+Scalability: Supports future growth 
+ 
+Compatibility: Works on major browsers 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 17 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+17 
+ 
+4. Design and Implementation 
+4.1 System Design 
+System design defines the overall structure of the Stock Market Application and explains how 
+different components interact with each other. The system is designed as a web-based client–
+server application, where users access the system through a web browser. 
+ 
+4.1.1 System Architecture 
+The system architecture consists of the following components: 
+ 
+User (Client): 
+Users interact with the system using a web browser. 
+ 
+Web Application (Server): 
+Developed using PHP, HTML, CSS, and JavaScript. It processes user requests such as login, 
+buy/sell stocks, and portfolio management. 
+ 
+Database (MySQL): 
+Stores user details, stock data, portfolio information, and transaction history. 
+ 
+Stock Market API / Dataset: 
+Provides stock prices and market-related data. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure: Architecture of Stock Market Web Application 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 18 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+18 
+ 
+4.2 Database Design 
+ 
+• users: 
+Sr. No 
+Field Name 
+Datatype 
+Size 
+ Null  
+Key 
+1 
+user_id 
+Int 
+- 
+No 
+Primary Key 
+2 
+firstname 
+Varchar 
+255 
+No 
+- 
+3. 
+lastname 
+Varchar 
+255 
+No 
+- 
+4. 
+address 
+Text 
+- 
+No 
+- 
+5. 
+email 
+Text 
+- 
+No 
+ 
+6. 
+enter_password 
+Varchar 
+255 
+No 
+- 
+7. 
+confirm_password Varchar 
+255 
+No 
+- 
+8. 
+Pancard_number 
+Varchar 
+20 
+No 
+- 
+9. 
+mobile_number 
+Int 
+10 
+No 
+- 
+10. 
+Created_at 
+Timestamp 
+- 
+No 
+- 
+11. 
+Updated_at 
+Timestamp 
+- 
+No 
+- 
+12. 
+available_balance 
+Float 
+- 
+No 
+- 
+ 
+• user_ transation:  
+Sr. No 
+Field Name 
+Datatype 
+Size 
+ Null  
+Key 
+1 
+id 
+Int 
+- 
+No 
+Primary Key 
+2 
+credit 
+Int 
+- 
+No 
+- 
+3 
+debit 
+int 
+- 
+No 
+- 
+4 
+Payment_id 
+Varchar 
+255 
+No 
+- 
+5 
+Descripation 
+Varchar 
+255 
+No 
+- 
+6 
+User_id 
+int 
+- 
+No 
+Foreign Key 
+7 
+Payment_date 
+Timestamp 
+- 
+No 
+- 
+
+
+=== PAGE 19 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+19 
+ 
+ 
+ stock_details :  
+ 
+Sr. No 
+Field Name 
+Datatype 
+Size 
+ Null  
+Key 
+1. 
+Id 
+Int 
+- 
+No 
+Primary Key 
+2. 
+stock_name 
+Varchar 
+255 
+No 
+- 
+3. 
+purchase_price Float 
+- 
+No 
+- 
+4. 
+User_id 
+Int 
+- 
+No 
+Foreign key 
+5. 
+Sell_price 
+Float 
+- 
+No 
+- 
+6. 
+Status 
+Int 
+- 
+No 
+- 
+7. 
+purchase_date 
+Timestamp - 
+No 
+- 
+8. 
+updated_at 
+Timestamp - 
+No 
+- 
+ 
+                                           Figure: Entity-Relation Diagram (ERD) 
+ 
+
+
+=== PAGE 20 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+20 
+ 
+ 
+4.3 Data Flow Diagram (DFD) 
+ 
+Data flow design is concerned with designing a sequence of functional transformation 
+that converts system imports into the required outputs. The design represented as data 
+flow diagram illustrated how data flows through a system and how the output is 
+derived from the input through a sequence of functional transformations. 
+ 
+DFD is used for following two purposes. 
+1.  
+To provide an indication of how data are transformed as they move through the 
+system. 
+ 
+ 
+ 2.  
+To show the functions and sub functions that transforms the data flow. 
+ A DFD is graphical representation that shows information flow and the 
+transforms that are applied as data move from input and output. 
+ The data flow diagrams are an intuitive way of showing how data is 
+processed by a system. The symbols used in the DFD for this project are 
+shown below. 
+ 
+ 
+DATA FLOW: 
+Following symbol is used to show data flow. The data flow is packet of data. 
+ 
+ 
+ 
+PROCESSES: 
+ People, procedures or devices that use or produce data. 
+ 
+ 
+ 
+ 
+   
+SOURCE OR DESTINATION OF DATA: 
+These are the entities, which interact with the system from outside its 
+boundaries. 
+
+
+=== PAGE 21 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+21 
+ 
+  
+ 
+ 
+ 
+ 
+DATA STORAGE: 
+Here data are stored or referenced process in the system. 
+ 
+ 
+In the DFD diagram we define the flow of data and how the system data flow managed 
+by grouping the data with the entity relationship.  In this way we find out the need of the 
+system and managed it in particular way by which we can easily access with the system. 
+ 
+ 
+ By the use of DFD diagram all the complete data fellow is understood by the 
+system analysis. Here in our DFD there is a once the patient is going for treatment 
+the management of hospital first inform the patient that which kind of treatment is 
+available and what kind of task is performed by the person and which kind of 
+function should be implemented by the management person who is managing. 
+ Data flow diagrams are useful and intuitive way to describing a system.  They are 
+normally understandable without special training, especially if control information is 
+excluded. They show end-to-end processing. That is the flow of processing from when 
+data enters the system to where it leaves the application can be traced. 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 22 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+22 
+ 
+4.3.1 Context Level DFD 
+ 
+It is also known as fundamental system model, or 0 - zero level diagram represents the 
+entire software requirement. 
+ 
+Figure: DFD Diagram 
+4.3.2 First Level DFD 
+ 
+ 
+ 
+ 
+ 
+Figure: Level 1 DFD 
+ 
+
+
+=== PAGE 23 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+23 
+ 
+ 
+4.4 Software Development Life Cycle (SDLC)   
+ 
+ SDLC is a systematic process for building software that ensures the quality 
+and correctness of the software built. SDLC process aims to produce high-
+quality software that meets customer expectations.  
+ The system development should be complete in the pre-defined time frame 
+and cost. 
+ The simplest process model is the waterfall-model which states that the force 
+is organized in a linear order.  
+ 
+ 
+ The linear sequential model is oldest and the most widely used paradigm for 
+software engineering. Linear sequential model suggests a systematic, 
+sequential approach to software development that begins at the system level 
+and progresses through analysis, design, coding, testing and maintenance.  
+ 
+ 
+Figure: SDLC Diagram 
+
+
+=== PAGE 24 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+24 
+ 
+4.4.1 Waterfall Model 
+ 
+ 
+ The Waterfall Model was the first Process Model to be introduced. It is also 
+referred to as a linear-sequential life cycle model. It is very simple to 
+understand and use. In a waterfall model, each phase must be completed 
+before the next phase can begin and there is no overlapping in the phases. 
+ The Waterfall model is the earliest SDLC approach that was used for software 
+development. 
+ The waterfall Model illustrates the software development process in a linear 
+sequential flow. This means that any phase in the development process begins 
+only if the previous phase is complete. In this waterfall model, the phases do 
+not overlap. 
+ 
+Different Phases of Waterfall Model  
+1   System / Information Engineering 
+ Because software is always part of a larger system (or business), work begins 
+by establishing requirements for all system elements and then allocating some 
+subset of these requirements to software. 
+ This view is essential when software must interface with other elements such 
+as hardware, people, and databases. This provides Top-Level design and 
+analysis.  
+2.     Software requirements analysis 
+ The requirements gathering process is intensified and focused specifically on 
+software. 
+ Analysis is important for software engineer to understand the information 
+domain for the software, required functions, behaviour, performance, and 
+interfacing. 
+ Requirements for both the system and the software are documented and 
+reviewed with the customer.  
+ 
+
+
+=== PAGE 25 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+25 
+ 
+ 
+ 
+3.     Design 
+ Software design is actually a multi-step process that focuses on data structure, 
+software architecture, procedural detail and interface characterization. The 
+design process translates requirements into a representation of the software 
+that can be assessed for quality before code generation begins. 
+4.     Code generation 
+ The code generation step translates the design into a machine-readable form. If 
+design is performed in a detailed manner, code generation can be 
+accomplished mechanistically. 
+ 5.     Testing 
+ Once code has been generated, program testing begins. The testing process 
+focuses on the logical internals of the software, assuring that all statements 
+have been tested, and on the functional externals – that is, conducting test to 
+uncover errors and ensure that defined input will produce actual results that 
+agree with required results 
+6.     Maintenance 
+ Software will undergo change after it is delivered to the customer. Change will 
+occur because, errors have been encountered or to accommodate changes in its 
+external environment (e.g., change in device) or customer requires functional 
+or peripheral enhancement 
+ 
+4.4.2 Why we are using Waterfall Model? 
+ 
+ Our requirements are not changing frequently. 
+ Web Application is not complicated and big 
+ Project is short, requirement is clear and environment is stable 
+ Technology and tools used are not dynamic and is stable 
+
+
+=== PAGE 26 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+26 
+ 
+ Resources are available and trained  
+ 
+4.5 Implementation 
+4.5.1 Front-End Implementation 
+ 
+Front-End: HTML5, CSS3 , AJAX, JavaScript 
+ 
+Justification 
+ The technology or tool used to develop Co-Immunity Gun Web 
+Application, HTML, CSS, JavaScript, ASP as a Front-End and SQLite 
+Database as the Back-End.  
+ The main reason behind using this language (C#) instead of any other 
+technology is that we have to develop the application that can be run on Web 
+browser without getting too much load.  
+ If the application was developed in high configuration wanted technology 
+then it will slow down the efficiency of the system of generating the output. 
+ 
+ 
+ 
+HTML5 
+ HTML stands for Hyper Text Markup Language. It is used to design web 
+pages using markup language. HTML is the combination of Hypertext and 
+Markup language. 
+ Hypertext defines the link between the web pages. Markup language is used 
+to define the text document within tag which defines the structure of web 
+pages. This language is used to annotate (make notes for the computer) text 
+so that a machine can understand it and manipulate text accordingly. 
+ HTML is a markup language which is used by the browser to manipulate 
+text, images and other content to display it in required format. HTML was 
+created by Tim Berners-Lee in 1991.  
+ The first ever version of HTML was HTML 1.0 but the first standard 
+version was HTML 2.0 which was published in 1999. 
+
+
+=== PAGE 27 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+27 
+ 
+ 
+ 
+CSS3 
+ Stands for "Cascading Style Sheet." Cascading style sheets are used to 
+format the layout of Web pages. They can be used to define text styles, table 
+sizes, and other aspects of Web pages that previously could only be defined 
+in a page's HTML. 
+ CSS helps Web developers create a uniform look across several pages of a 
+Web site. Instead of defining the style of each table and each block of text 
+within a page's HTML, commonly used styles need to be defined only once 
+in a CSS document. 
+ Once the style is defined in cascading style sheet, it can be used by any page 
+that references the CSS file. Plus, CSS makes it easy to change styles across 
+several pages at once. 
+ For example, a Web developer may want to increase the default text size 
+from 10pt to 12pt for fifty pages of a Web site. If the pages all reference the 
+same style sheet, the text size only needs to be changed on the style sheet 
+and all the pages will show the larger text. While CSS is great for creating 
+text styles, it is helpful for formatting other aspects of Web page layout 
+as well.  
+ For example, CSS can be used to define the cell padding of table cells, the 
+style, thickness, and color of a table's border, and the padding around images 
+or other objects.  
+ CSS gives Web developers more exact control over how Web pages will 
+look than HTML does. This is why most Web pages today incorporate 
+cascading style sheets. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 28 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+28 
+ 
+JavaScript 
+ JavaScript, often abbreviated JS, is a programming language that is one of the core 
+technologies of the World Wide Web, alongside HTML and CSS. 
+  Over 97% of websites use JavaScript on the client side for web page behavior, often 
+incorporating third-party libraries. 
+ All major web browsers have a dedicated JavaScript engine to execute 
+the code on users' devices. 
+ JavaScript is a high-level, often just-in-time compiled language that conforms to 
+the ECMAScript standard.  
+ It has dynamic typing, prototype-based object-orientation, and first-class functions. It 
+is multi-paradigm, supporting event-driven, functional, and imperative programming 
+styles. It has application programming interfaces (APIs) for working with text, 
+dates, regular expressions, standard data structures, and the Document Object 
+Model (DOM). 
+ The ECMAScript standard does not include any input/output (I/O), such 
+as networking, storage, or graphics facilities. 
+  In practice, the web browser or other runtime system provides JavaScript APIs for 
+I/O. 
+ JavaScript engines were originally used only in web browsers, but are now core 
+components of some servers and a variety of applications.  
+ The most popular runtime system for this usage is Node.js. 
+ 
+ 
+AJAX 
+ AJAX = Asynchronous JavaScript And XML 
+ AJAX is not a programming language. 
+ AJAX just uses a combination of: 
+ A browser built-in XMLHttpRequest object (to request data from a web 
+server) 
+ JavaScript and HTML DOM (to display or use the data) 
+
+
+=== PAGE 29 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+29 
+ 
+ Ajax is a set of web development techniques that uses various web technologies on 
+the client-side to create asynchronous web applications.  
+ With Ajax, web applications can send and retrieve data from a server asynchronously 
+without interfering with the display and behaviour of the existing page. 
+ By decoupling the data interchange layer from the presentation layer, Ajax allows web 
+pages and, by extension, web applications, to change content dynamically without the 
+need to reload the entire page. 
+  In practice, modern implementations commonly utilize JSON instead of XML. 
+ Ajax is not a technology, but rather a programming concept.  
+ HTML and CSS can be used in combination to mark up and style information.  
+ The webpage can be modified by JavaScript to dynamically display—and allow the 
+user to interact with the new information.  
+ The built-in XMLHttpRequest object is used to execute Ajax on webpages, allowing 
+websites to load content onto the screen without refreshing the page.  
+ Ajax is not a new technology, nor is it a new language. Instead, it is existing 
+technologies used in a new way. 
+ 
+ 
+4.5.2 Back-End Implementation 
+About the Back-End Tool  
+ 
+ 
+Back-end: PHP 
+ The PHP development team announces the immediate availability of PHP 8.1.4. This 
+is a bug fix release. 
+ PHP is a popular general-purpose scripting language that is especially suited to web 
+development. 
+ Fast, flexible and pragmatic, PHP powers everything from your blog to the most 
+popular websites in the world. 
+ PHP is a general-purpose scripting language geared towards web development. 
+  It was originally created by Danish-Canadian programmer Rasmus Lerdorf in 1994.  
+ The PHP reference implementation is now produced by The PHP Group. 
+
+
+=== PAGE 30 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+30 
+ 
+  PHP originally stood for Personal Home Page, but it now stands for the recursive 
+initialism PHP: Hypertext Preprocessor.  
+ 
+ PHP code is usually processed on a web server by a PHP interpreter implemented as 
+a module, a daemon or as a Common Gateway Interface (CGI) executable. On a web 
+server, the result of the interpreted and executed PHP code – which may be any type 
+of data, such as generated HTML or binary image data – would form the whole or 
+part of an HTTP response.  
+ Various web template systems, web content management systems, and web 
+frameworks exist which can be employed to orchestrate or facilitate the generation of 
+that response.  
+ Additionally, PHP can be used for many programming tasks outside the web context, 
+such as standalone  and robotic drone control. 
+  PHP code can also be directly executed from the command line. 
+ The standard PHP interpreter, powered by the Zend Engine, is free software released 
+under the PHP License.  
+ PHP has been widely ported and can be deployed on most web servers on a variety 
+of operating systems and platforms.  
+ 
+ The PHP language evolved without a written formal specification or standard until 
+2014, with the original implementation acting as the de facto standard which other 
+implementations aimed to follow. Since 2014, work has gone on to create a formal 
+PHP specification.  
+ W3Techs reports that, as of January 2022, "PHP is used by 78.1% of all the websites 
+whose server-side programming language we know." 
+  PHP version 7.4 is the most used version. Support for version 7.3 was dropped on 6 
+December 2021. 
+ 
+ 
+ 
+
+
+=== PAGE 31 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+31 
+ 
+Database: MySQL Database 
+ MySQL is an open-source relational database management system (RDBMS). Its 
+name is a combination of "My", the name of co-founder Michael Widenius's daughter, 
+and "SQL", the abbreviation for Structured Query Language. A relational database 
+organizes data into one or more data tables in which data types may be related to each 
+other; these relations help structure the data.  
+ SQL is a language programmers use to create, modify and extract data from the 
+relational database, as well as control user access to the database. In addition to 
+relational databases and SQL, an RDBMS like MySQL works with an operating 
+system to implement a relational database in a computer's storage system, manages 
+users, allows for network access and facilitates testing database integrity and creation 
+of backups. 
+ 
+MySQL is free and open-source software under the terms of the GNU General Public 
+License, and is also available under a variety of proprietary licenses. 
+ 
+ MySQL was owned and sponsored by the Swedish company MySQL AB, which was 
+bought by Sun Microsystems (now Oracle Corporation). 
+ 
+ In 2010, when Oracle acquired Sun, Widenius forked the open-source MySQL 
+project to create MariaDB. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 32 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+32 
+ 
+5. Testing and Deployment 
+ 
+ 
+5.1 Testing 
+ Testing was carried out to ensure that the Stock Market Application works correctly, securely, 
+and efficiently. The testing phase focused on validating all core features such as user 
+authentication, stock buying and selling, portfolio updates, and transaction history. 
+ 
+5.1.1 Unit Testing 
+Unit testing was performed on individual modules of the application to verify their correctness. 
+Modules Tested: 
+ 
+User Registration and Login Module 
+ 
+Stock Search Module 
+ 
+Buy Stock Module 
+ 
+Sell Stock Module 
+ 
+Portfolio Management Module 
+ 
+Transaction History Module 
+Examples: 
+ 
+Valid and invalid login credentials 
+ 
+Buying stocks with sufficient and insufficient balance 
+ 
+Selling stocks from user portfolio 
+Each PHP function and database query was tested independently to ensure correct output. 
+ 
+5.1.2 Integration Testing 
+Integration testing ensured that different modules interact correctly with each other. 
+Tested Integrations: 
+ 
+Frontend (HTML, CSS, JavaScript) with Backend (PHP) 
+ 
+Backend with MySQL Database 
+ 
+Stock price retrieval with buy/sell logic 
+ 
+ 
+ 
+
+
+=== PAGE 33 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+33 
+ 
+Examples: 
+ 
+After buying a stock, portfolio balance updates correctly 
+ 
+Transaction details stored properly in the database 
+ 
+User dashboard reflects real-time portfolio changes 
+ 
+5.1.3 System Testing 
+System testing was conducted on the complete application to verify overall functionality. 
+Functional Testing: 
+ 
+User registration and login 
+ 
+Viewing available stocks 
+ 
+Buying and selling stocks 
+ 
+Viewing portfolio and profit/loss 
+ 
+Viewing transaction history 
+Non-Functional Testing: 
+ 
+Performance under multiple user sessions 
+ 
+Security against invalid input and SQL injection 
+ 
+Usability and UI responsiveness 
+ 
+5.1.4 User Acceptance Testing (UAT) 
+User Acceptance Testing was performed by end users to ensure the system meets real-world 
+expectations. 
+ 
+Users tested stock buying and selling scenarios 
+ 
+Feedback was collected on UI design and ease of use 
+ 
+Minor improvements were made in navigation and error messages 
+ 
+5.2 Testing Techniques Used 
+ 
+Black Box Testing: 
+Used to test application functionality without considering internal code. 
+ 
+White Box Testing: 
+Used to test backend logic, PHP scripts, and SQL queries. 
+ 
+ 
+ 
+
+
+=== PAGE 34 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+34 
+ 
+5.3 Sample Test Cases 
+ 
+    Tast Cases 
+Test Case   ID Description 
+Input 
+Expected Output 
+Status 
+TC01 
+User Login 
+Valid email & 
+password 
+Login success 
+Pass 
+TC02 
+User Login 
+Invalid password 
+Error message 
+Pass 
+TC03 
+Buy Stock 
+Valid quantity 
+Stock purchased 
+Pass 
+TC04 
+Buy Stock 
+Insufficient balance 
+Warning message 
+Pass 
+TC05 
+Sell Stock 
+Valid stock quantity 
+Stock sold 
+Pass 
+TC06 
+View Portfolio User dashboard 
+Portfolio details shown Pass 
+ 
+5.4 Deployment 
+Deployment is the process of making the Stock Market Application available for use in a real 
+environment. 
+ 
+5.4.1 Deployment Environment 
+ 
+Operating System: Windows / Linux 
+ 
+Web Server: Apache 
+ 
+Backend Language: PHP 
+ 
+Database: MySQL 
+ 
+Frontend Technologies: HTML, CSS, JavaScript 
+ 
+Server Package: XAMPP 
+ 
+Browser: Chrome, Firefox 
+ 
+5.4.2 Deployment Steps 
+1. Install XAMPP on the system. 
+2. Start Apache and MySQL services. 
+3. Extract the project ZIP file. 
+4. Copy the project folder into: 
+xampp/htdocs/ 
+5. Open phpMyAdmin and create a database (e.g., stock_market_db). 
+ 
+
+
+=== PAGE 35 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+35 
+ 
+6. Import the provided .sql database file. 
+7. Configure database credentials in config.php. 
+8. Open browser and run: 
+http://localhost/stock_market_application 
+ 
+5.4.3 Deployment Verification 
+After deployment, the following checks were performed: 
+ 
+Database connection established successfully 
+ 
+User authentication working correctly 
+ 
+Stock buy and sell operations functioning properly 
+ 
+Portfolio and transaction history updated accurately 
+ 
+No critical runtime errors observed 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 36 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+36 
+ 
+6. Analysis and Results 
+6.1 System Analysis 
+ System analysis evaluates how effectively the Stock Market Application meets the 
+project objectives and user requirements. The application was analyzed based on 
+functionality, performance, security, and usability after testing and deployment. 
+The analysis focuses on: 
+ 
+Accuracy of stock transactions 
+ 
+System response time 
+ 
+Data consistency 
+ 
+User experience 
+ 
+6.2 Functional Analysis 
+The functional analysis verifies whether all intended features operate correctly. 
+6.2.1 User Authentication 
+ 
+Users can successfully register and log in using valid credentials. 
+ 
+Invalid login attempts are properly handled with error messages. 
+ 
+Session management ensures secure access. 
+Result: 
+✔ Authentication module works correctly and securely. 
+ 
+6.2.2 Stock Search and Display 
+ 
+Users can search stocks using ticker symbols. 
+ 
+Stock details such as price, volume, and change are displayed correctly. 
+ 
+Search results load without delay. 
+Result: 
+✔ Stock search functionality produces accurate and fast results. 
+ 
+6.2.3 Buy Stock Operation 
+ 
+System checks user balance before allowing purchase. 
+ 
+Stock quantity and total amount are calculated correctly. 
+ 
+Purchased stocks are added to the user portfolio. 
+Result: 
+✔ Buy operation executes accurately with correct balance deduction. 
+
+
+=== PAGE 37 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+37 
+ 
+ 
+6.2.4 Sell Stock Operation 
+ 
+Users can sell stocks only if available in their portfolio. 
+ 
+Stock value is calculated based on current price. 
+ 
+User balance updates correctly after selling. 
+Result: 
+✔ Sell operation functions reliably and maintains data consistency. 
+ 
+6.2.5 Portfolio Management 
+ 
+Portfolio displays current holdings, invested amount, and profit/loss. 
+ 
+Data updates automatically after each transaction. 
+Result: 
+✔ Portfolio module reflects real-time transaction updates. 
+ 
+6.3 Performance Analysis 
+Performance analysis measures system efficiency under different conditions. 
+Parameter 
+Observation 
+Result 
+Page Load Time 
+Less than 2 seconds 
+Acceptable 
+Transaction Processing Instant response 
+Efficient 
+Concurrent Users 
+Handles multiple sessions Stable 
+Database Queries 
+Optimized 
+Reliable 
+Result: 
+✔ The system performs efficiently under normal usage conditions. 
+ 
+6.4 Security Analysis 
+Security mechanisms were analyzed to protect user data and transactions. 
+ 
+Passwords are stored in encrypted (hashed) format. 
+ 
+Input validation prevents SQL injection and XSS attacks. 
+ 
+Session handling prevents unauthorized access. 
+Result: 
+✔ Application meets basic web security standards. 
+ 
+
+
+=== PAGE 38 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+38 
+ 
+6.5 Usability Analysis 
+Usability analysis evaluates ease of use and user satisfaction. 
+ 
+Simple and intuitive user interface 
+ 
+Clear navigation between dashboard, portfolio, and transaction pages 
+ 
+Error messages guide users effectively 
+User Feedback: 
+ 
+Easy to understand buy/sell process 
+ 
+Clean and professional layout 
+ 
+Smooth user experience 
+Result: 
+✔ High usability with minimal learning curve. 
+ 
+6.6 Result Analysis 
+The results obtained after system testing and deployment are summarized below: 
+Feature 
+Expected Outcome 
+Actual Outcome 
+User Login 
+Secure access 
+Achieved 
+Stock Buy 
+Correct calculation 
+Achieved 
+Stock Sell 
+Accurate balance update Achieved 
+Portfolio Update 
+Real-time data 
+Achieved 
+Transaction History Accurate records 
+Achieved 
+ 
+6.7 Overall Results 
+ 
+All functional requirements were successfully implemented. 
+ 
+The system produced accurate transaction results. 
+ 
+Performance and security were within acceptable limits. 
+ 
+User feedback was positive. 
+ 
+ 
+ 
+
+
+=== PAGE 39 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+39 
+ 
+7. CONCLUSION and Future Enhancements 
+ 
+7.1 
+Self-Analysis and Project Viabilities: 
+ 
+ We have experienced the energetic and live working environment, norms and ethics. 
+ That one has to follow, proper business procedures, planned and 
+disciplined approach required for the work and much more. This helped to 
+enrich our knowledge and gain confidence to work in such a professional 
+organization and to deal with such corporate world and practical situations. 
+ And most importantly we got the problem-solving attitude while 
+developing the project. 
+7.2 
+Problem Encountered and Possible Solutions 
+ 
+ Problem: while started designing application we faced the designing issue 
+like layout should be proper in every pages and main problem for design 
+charts on statistic page. 
+ Solution: Solution for above mention problem we use ChartJS named 
+JavaScript framework to design chart and it will little easier than it 
+before. 
+ 
+7.3 Future Enhancements 
+Although the current system meets the project objectives, several 
+enhancements can be implemented in the future to improve functionality, 
+security, and scalability. 
+7.3.1 Real-Time Stock Price Integration 
+ 
+Integrate real-time stock market APIs (e.g., NSE/BSE or third-party 
+APIs). 
+ 
+Automatically update stock prices without manual refresh. 
+ 
+
+
+=== PAGE 40 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+40 
+ 
+7.3.2 Advanced Charts and Analytics 
+ 
+Add interactive charts for price trends and performance analysis. 
+ 
+Show profit/loss graphs and investment insights. 
+7.3.3 Mobile Application Support 
+ 
+Develop Android and iOS versions of the application. 
+ 
+Enable mobile-friendly responsive UI for better accessibility. 
+7.3.4 Enhanced Security Features 
+ 
+Two-factor authentication (2FA). 
+ 
+CAPTCHA for login and registration. 
+ 
+Improved encryption techniques. 
+7.3.5 Payment Gateway Integration 
+ 
+Integrate secure payment gateways for adding real funds. 
+ 
+Support UPI, net banking, and card payments. 
+7.3.6 Admin Dashboard Enhancements 
+ 
+Advanced admin controls for managing users and stocks. 
+ 
+Detailed transaction and user activity reports. 
+ 
+7.4 Summary of Project Work 
+ 
+ After doing this project, we have learned many things and we would like 
+to thank all the concerned individuals who have contributed to our 
+precious learning. 
+ We have also understood the importance of naming conventions and 
+coding conventions in development process. As our nature of the project, 
+we were following proper steps of development properly. 
+ In first phase, we have learned to prepare the requirement catalogue 
+functional specification, design specification, system development life 
+cycle. We went on many websites and application which are providing 
+same facilities as our project to understand real case scenario. In the next 
+phase we have whole system to develop which should be user friendly and 
+easy to use. 
+
+
+=== PAGE 41 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+41 
+ 
+ 
+We have also understood the importance of naming conventions and coding 
+conventions in development process. Though the project was taking too long 
+and we faced many difficulties which had been resolved by effective 
+guidance of professors and our external guide. 
+ 
+ 
+ Every organization faces the situation in which it has to deal with vast 
+amount of data. Moreover, this data has to be analyzed over a long period 
+of time. Hence not only a Reliable storage, but proper medium to study the 
+data is required. We are sure that we can perform better and better as we step 
+up on the ladders of the experience. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 42 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+42 
+ 
+8. References  
+ 
+ 
+8.1 Websites Referred 
+ 
+ 
+https://www.w3schools.com/xml/ajax_intro.asp 
+ https://jquery.com/ 
+ https://www.php.net/ 
+ https://www.chartjs.org/ 
+ 
+8.1.1 APIs Used 
+ 
+ https://marketstack.com/documentation 
+ https://www.alphavantage.co/ 
+ https://www.chartjs.org/ 
+ 
+ 
+8.2 Libraries Included 
+ 
+ jQuery 
+ AJAX 
+ ChartJS 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 43 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+43 
+ 
+9.List of Appendices 
+ 
+Appendix A: Source Code 
+This appendix contains the complete source code of the Stock Market Web Application 
+including frontend and backend files such as HTML, CSS, JavaScript, and PHP used to 
+develop the system. 
+Appendix B: Database Structure and SQL Scripts 
+This appendix includes the database schema and SQL queries used to create and manage the 
+tables such as users, user_transaction, and stock_details in the MySQL database. 
+Appendix C: System Diagrams 
+This appendix contains all the design diagrams used in the project including System 
+Architecture Diagram, Use Case Diagram, Entity Relationship Diagram (ERD), and Data 
+Flow Diagrams (DFD). 
+Appendix D: Test Cases and Results 
+This appendix contains sample test cases, testing techniques, and results used to verify the 
+functionality and performance of the system. 
+Appendix E: User Manual 
+This appendix provides step-by-step instructions for installing, configuring, and using the 
+Stock Market Web Application. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 44 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+44 
+ 
+ 
+ 
+ 
+ 
+ 
+THANK 
+YOU 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 45 ===
+Stock Market Web Application 
+ 
+PREPARED BY: SNEH PATEL                                              
+BHUMI PATEL                                                                    
+SATYAM PATEL                                                                  
+BHAVIN RANA 
+45 
+ 
+ 
+
+

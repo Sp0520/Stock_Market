@@ -156,8 +156,33 @@ export const withdrawFunds = async (amount) => {
   return handleResponse(res);
 };
 
-export const fetchIpos = async () => {
-  const res = await fetch(`${API_BASE_URL}/ipos`);
+export const fetchIpos = async (status = 'ALL', search = '') => {
+  let url = `${API_BASE_URL}/ipos?status=${encodeURIComponent(status)}`;
+  if (search) url += `&search=${encodeURIComponent(search)}`;
+  const res = await fetch(url);
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const fetchIpoDetails = async (id) => {
+  const res = await fetch(`${API_BASE_URL}/ipos/${id}`);
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const applyIpo = async (payload) => {
+  const res = await fetch(`${API_BASE_URL}/ipos/apply`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
+  });
+  return handleResponse(res);
+};
+
+export const fetchMyIpoApplications = async () => {
+  const res = await fetch(`${API_BASE_URL}/ipos/my-applications`, {
+    headers: getHeaders()
+  });
   const json = await handleResponse(res);
   return json.data;
 };
@@ -171,15 +196,90 @@ export const checkIpoAllotment = async (pan, ipoId) => {
   return handleResponse(res);
 };
 
-export const fetchMutualFunds = async () => {
-  const res = await fetch(`${API_BASE_URL}/mutual-funds`);
+export const fetchMutualFunds = async (category = 'ALL', search = '', sortBy = '') => {
+  let url = `${API_BASE_URL}/mutual-funds?category=${encodeURIComponent(category)}`;
+  if (search) url += `&search=${encodeURIComponent(search)}`;
+  if (sortBy) url += `&sortBy=${encodeURIComponent(sortBy)}`;
+  const res = await fetch(url);
   const json = await handleResponse(res);
   return json.data;
+};
+
+export const fetchMutualFundDetails = async (id) => {
+  const res = await fetch(`${API_BASE_URL}/mutual-funds/${id}`);
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const investMutualFund = async (payload) => {
+  const res = await fetch(`${API_BASE_URL}/mutual-funds/invest`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
+  });
+  return handleResponse(res);
+};
+
+export const fetchSipPlans = async () => {
+  const res = await fetch(`${API_BASE_URL}/sip`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const createSipPlan = async (payload) => {
+  const res = await fetch(`${API_BASE_URL}/sip/create`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
+  });
+  return handleResponse(res);
+};
+
+export const updateSipStatus = async (id, status) => {
+  const res = await fetch(`${API_BASE_URL}/sip/${id}/status`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify({ status })
+  });
+  return handleResponse(res);
+};
+
+export const modifySipPlan = async (id, payload) => {
+  const res = await fetch(`${API_BASE_URL}/sip/${id}/modify`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(payload)
+  });
+  return handleResponse(res);
+};
+
+export const fetchSipTransactions = async (id) => {
+  const res = await fetch(`${API_BASE_URL}/sip/${id}/transactions`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const fetchUnifiedPortfolio = async () => {
+  const res = await fetch(`${API_BASE_URL}/portfolio/unified`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.portfolio;
 };
 
 export const fetchNews = async () => {
   const res = await fetch(`${API_BASE_URL}/news`);
   return handleResponse(res);
+};
+
+export const fetchLiveNews = async () => {
+  const res = await fetch(`${API_BASE_URL}/news/live`);
+  const json = await handleResponse(res);
+  return json.data;
 };
 
 export const fetchAiInsights = async () => {
@@ -195,4 +295,71 @@ export const fetchTransactions = async () => {
   });
   const json = await handleResponse(res);
   return json.data;
+};
+
+// Admin endpoints
+export const fetchAdminStats = async () => {
+  const res = await fetch(`${API_BASE_URL}/admin/stats`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.stats;
+};
+
+export const fetchAdminUsers = async () => {
+  const res = await fetch(`${API_BASE_URL}/admin/users`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const updateUserBalance = async (userId, amount) => {
+  const res = await fetch(`${API_BASE_URL}/admin/users/${userId}/balance`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify({ amount })
+  });
+  return handleResponse(res);
+};
+
+export const createAdminIpo = async (ipoData) => {
+  const res = await fetch(`${API_BASE_URL}/admin/ipos`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(ipoData)
+  });
+  return handleResponse(res);
+};
+
+export const updateAdminIpo = async (ipoId, ipoData) => {
+  const res = await fetch(`${API_BASE_URL}/admin/ipos/${ipoId}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(ipoData)
+  });
+  return handleResponse(res);
+};
+
+export const fetchAdminOrders = async () => {
+  const res = await fetch(`${API_BASE_URL}/admin/orders`, {
+    headers: getHeaders()
+  });
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const fetchAnnouncements = async () => {
+  const res = await fetch(`${API_BASE_URL}/admin/announcements`);
+  const json = await handleResponse(res);
+  return json.data;
+};
+
+export const createAnnouncement = async (annData) => {
+  const res = await fetch(`${API_BASE_URL}/admin/announcements`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(annData)
+  });
+  return handleResponse(res);
 };

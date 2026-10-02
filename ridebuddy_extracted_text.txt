@@ -1,0 +1,3648 @@
+=== PAGE 1 ===
+A Project Report      
+on 
+     “Ride Buddy” 
+ 
+ 
+ 
+Submitted by 
+ 
+Akshar Patel              ​(2303031080220) 
+Om Dobariya             ​(2303031080039) 
+Divyrajsinh Thakor   ​(2303031080249) 
+Dhruvansh Maniya  ​ (2303031080212) 
+ 
+Under the Guidance of 
+                 Ms. Himani Parmar 
+Assistant Professor 
+ 
+ 
+In partial fulfillment for the award of the degree of 
+ 
+BACHELOR OF TECHNOLOGY 
+in 
+INFORMATION TECHNOLOGY 
+ 
+ 
+ 
+ 
+ 
+ 
+PARUL INSTITUTE OF ENGINEERING AND TECHNOLOGY, 
+PARUL UNIVERSITY,  
+VADODARA, GUJARAT 
+ 
+[2025-2026] 
+1 
+
+
+=== PAGE 2 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+                                                              
+A Project Report      
+on 
+     “Ride Buddy” 
+ 
+ 
+ 
+Submitted by 
+ 
+Akshar Patel              ​(2303031080220) 
+Om Dobariya             ​(2303031080039) 
+Divyrajsinh Thakor   ​(2303031080249) 
+Dhruvansh Maniya  ​ (2303031080212) 
+ 
+Under the Guidance of 
+                 Ms. Himani Parmar 
+Assistant Professor 
+ 
+ 
+In partial fulfillment for the award of the degree of 
+ 
+BACHELOR OF TECHNOLOGY 
+in 
+INFORMATION TECHNOLOGY 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+PARUL INSTITUTE OF ENGINEERING AND TECHNOLOGY, 
+PARUL UNIVERSITY,  
+VADODARA, GUJARAT 
+[2025-2026] 
+2 
+
+
+=== PAGE 3 ===
+ 
+CERTIFICATE 
+ 
+This is to certify that the Project Report entitled, “Ride Buddy” submitted by “Akshar Patel,              
+Om Dobariya, Divyrajsinh Thakor and Dhruvansh Maniya  ” to Parul University, Vadodara, 
+Gujarat, is a record of bonafide Project work carried out by them under my supervision and 
+guidance, and is worthy of consideration for the award of the degree of Bachelor of Technology 
+in Information Technology of the University. 
+ 
+ 
+ 
+ 
+Date : 
+ 
+Place : 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Supervisor 
+ 
+                Ms. Himani Parmar 
+              Assistant Professor 
+ 
+ 
+ 
+Project Coordinator 
+ 
+Ms. Dhenuka Patel 
+Assistant Professor 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+              Head, Dept. of Information  Technology  
+ 
+Dr. Pooja Sapra 
+ 
+ 
+External Supervisor 
+ 
+Name: 
+Designation: 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+
+
+=== PAGE 4 ===
+ 
+Acknowledgement 
+ 
+ 
+Behind any major work undertaken by an individual there lies the contribution of the 
+people who helped him to cross all the hurdles to achieve his goal. 
+ 
+ 
+It gives me the immense pleasure to express my sense of sincere gratitude towards my 
+respected guide (Assistant Professor) Prof. Himani Parmar for their persistent, 
+outstanding, invaluable co-operation and guidance. It is my achievement to be guided 
+under them. They are a constant source of encouragement and momentum that any 
+intricacy becomes simple. I gained a lot of invaluable guidance and prompt suggestions 
+from them during entire project work. I will be indebted to them forever and I take pride 
+in working under them. 
+ 
+ 
+We also express my deep sense of regards and thanks to Prof. Dr. Pooja Sapra, (Associate 
+Professor) and Head of INFORMATION TECHNOLOGY Engineering Department. I feel 
+very privileged to have had their precious advice, guidance, and leadership. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Akshar Patel              ​(2303031080220) 
+Om Dobariya             ​(2303031080039) 
+Divyrajsinh Thakor   ​(2303031080249) 
+Dhruvansh Maniya  ​ (2303031080212) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 5 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ABSTRACT 
+ 
+ 
+RideBuddy is a web based ride-sharing application designed specifically for university students, enabling 
+safe and affordable intra city transportation from campus. Built to address the daily commuting challenges 
+faced by students at Parul University, the platform connects student passengers with verified student riders 
+through a seamless, real time booking experience. 
+ 
+The system operates on a predefined route model, offering popular destinations such as Waghodia Road, 
+Vadodara Railway Station, Alkapuri, and Manjalpur allowing students to book rides with a single tap. 
+Riders can register through a structured application process that includes vehicle and license verification, 
+ensuring safety and accountability within the campus community. 
+ 
+Key features include role based access control (admin, rider, and user roles), real time ride tracking with 
+live map integration using Leaflet and OSRM routing, a rider dashboard for managing ride requests and 
+earnings, and an admin panel for managing user verification and rider applications. Authentication is 
+restricted to university email domains (@paruluniversity.ac.in), reinforcing the closed-campus ecosystem. 
+ 
+The platform is built using modern web technologies including React, TypeScript, and Tailwind CSS on 
+the frontend, with Supabase Cloud providing backend services for database management, authentication, 
+file storage, and serverless edge functions. Real-time updates are powered through database subscriptions, 
+ensuring both riders and passengers stay informed throughout the ride lifecycle. 
+ 
+RideBuddy aims to promote carpooling culture within university campuses, reduce transportation costs for 
+students, and provide a trusted, student only ride sharing ecosystem. 
+ 
+ 
+Keywords: Ride Sharing Platform, Student Carpooling, University Email Authentication, Intra-City 
+Student Mobility, User-friendly 
+5 
+
+
+=== PAGE 6 ===
+ 
+ 
+TABLE OF CONTENTS 
+Certificate.......................................................................................................................3 
+Acknowledgements........................................................................................................4 
+Abstract..........................................................................................................................5 
+Table Of Content........................................................................................................... 6 
+List of Tables.................................................................................................................. 8 
+List of Figures...............................................................................................................10 
+1.​ Introduction...................................................................................................................11 
+​
+1.1 Problem Statement............................................................................................ 11 
+​
+1.2 Aim and Objective............................................................................................ 12 
+​
+1.3 Motivations....................................................................................................... 13 
+​
+1.4 Scope.................................................................................................................14 
+​       2.   Literature Review.........................................................................................................15 
+​
+2.1 Literature Survey...............................................................................................15 
+​
+2.2 Summary of Research Paper............................................................................. 20 
+       3.   Problem Definition and Requirement Analysis..........................................................22 
+​
+3.1 Approach Strategy............................................................................................ 22 
+​
+3.2 Model Selection................................................................................................ 23 
+​
+                   3.2.1 Project Development Model....................................................... 24 
+​
+                   3.2.2 Phase........................................................................................... 24 
+ ​
+                   3.2.3 Why This Model?....................................................................... 25 
+​
+ 3.3 System Analysis...............................................................................................26 
+​
+                   3.3.1 Study of Existing System............................................................26 
+​
+                   3.3.2 Problem and Weakness of Existing System................................26 
+​
+ 3.4 Feasibility Study.............................................................................................. 27 
+​
+                  3.4.1 Technical Feasibility.................................................................... 27 
+​
+                  3.4.2 Operationa Feasibility..................................................................27 
+​
+                  3.4.3 Scheduling Feasibility..................................................................27 
+​
+                  3.4.4 Financial Feasibility.....................................................................27 
+​
+3.5 Requirement Analysis.......................................................................................28 
+​
+                  3.5.1 Non-Functional Requirement.......................................................28 
+​
+                  3.5.2 Functional Requirement...............................................................28 
+​
+                  3.5.3 Hardware Requirement................................................................ 28 
+​
+                  3.5.4 Software Requirement................................................................. 29 
+​
+3.6 Information of Tools......................................................................................... 29 
+​
+3.7 Mechanism of Action........................................................................................31 
+ 
+ 
+ 
+ 
+ 
+
+
+=== PAGE 7 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.   Design and Implementation.........................................................................................34 
+​
+4.1 Overview of Existing System............................................................................. 34 
+​
+4.2 Overview of Proposed System............................................................................... 34 
+​
+4.3 Proposed System Architecture and Design..........................................................34 
+​
+        4.3.1 System Architecture................................................................................ 34 
+​
+        4.3.2 Proposed System Architecture & Design....................................................34 
+​
+                4.3.2.1 System Architecture Diagram........................................................ 35 
+​
+               4.3.2.2 Proposed System Design............................................................... 35 
+​
+                          4.3.2.1 System Architecture Diagram................................................35 
+​
+                          4.2.3.2 Flow Chart............................................................................. 36 
+​
+                          4.2.3.3 Use Case Daigram................................................................. 37  
+​
+                          4.2.3.4 Activity Daigram................................................................... 38 
+​
+                          4.2.3.5 DFD Daigram........................................................................ 40 
+​
+                          4.2.3.6 ER Daigram...................................................................... 42 
+​
+4.4 Data Dictionary.................................................................................................. 43 
+​
+            4.4.1 profiles................................................................................................ 43 
+​
+            4.4.2 user_roles.................................................................................................44 
+​
+            4.4.3  rides.........................................................................................................44 
+​
+            4.4.4  rider_applications....................................................................................45 
+​
+            4.4.5  rider_earnings..........................................................................................46 
+​
+            4.4.6  app_role...................................................................................................46 
+​
+4.5 Snapshots.......................................................................................................... 47 
+5.   Testing and Deployment...............................................................................................54 
+     5.1 Testing...................................................................................................................... 54 
+​
+            5.1.1 Unit Testing.........................................................................................54 
+​
+            5.1.2 Integration Testing................................................................................54 
+​
+            5.1.3 Simulated Testing and User Acceptance............................................... 55 
+    5.2 Deployment............................................................................................................... 55 
+​
+          5.2.1. Hosting and Cloud Server Setup...............................................................55 
+                 5.5.2. Progressive Web Compatibility................................................................ 55 
+                 5.2.3. User Onboarding and Verification Workflow...........................................55 
+                 5.2.4. Continuous Maintenance and Monitoring................................................ 55 
+                 5.2.5. Challenges in Deployment........................................................................56 
+6.   Analysis And Results.................................................................................................... 57 
+ 6.1 System Performance Evaluation...................................................................................57 
+                6.1.1. Geospatial Routing and Tracking Performance.........................................57 
+                6.1.2. Authentication & Access Control Stability............................................... 57 
+                6.1.3. Database Throughput and Response Times............................................ 57 
+6.2 Results........................................................................................................................... 58 
+ 
+7 
+
+
+=== PAGE 8 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+7.   Conclusion And Future Enhancement........................................................................59 
+ 7.1 Conclusion....................................................................................................................59 
+ 7.1 Future Enhancement.....................................................................................................59 
+8.   References......................................................................................................................60 
+ 
+8 
+
+
+=== PAGE 9 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+LIST OF TABLES 
+ 
+1.1    Table: Aim and Objective...........................................................................................43 
+2.1    Table: Summary of Research Paper................................................................................43 
+4.4.1 Table: profiles.............................................................................................................43 
+4.4.2 Table: user_roles.........................................................................................................44 
+4.4.3 Table: rides..................................................................................................................44 
+4.4.4 Table: rider_applications............................................................................................ 45 
+4.4.5 Table: rider_earnings.................................................................................................. 46 
+4.4.6 Enum: app_role...........................................................................................................46 
+6.1    System Latency And Execution Benchmarks............................................................ 57 
+6.1    Student Commuting Cost Comparison.......................................................................58 
+ 
+9 
+
+
+=== PAGE 10 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+LIST OF FIGURES 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+3.1 Agile Model.................................................................................................................. 24 
+3.2 React............................................................................................................................. 28 
+3.3 Type Script................................................................................................................... 28 
+3.4 Tailwindcss................................................................................................................... 29 
+3.5 Supabase.......................................................................................................................29 
+4.3.2.1 System Architecture Diagram.............................................................................. 34 
+4.2.2.2 Use Case Daigram..................................................................................................35 
+4.2.2.3 Activity Daigram....................................................................................................36 
+​
+4.2.2.3.1 Admin.............................................................................................................36 
+​
+4.2.2.3.2 Student........................................................................................................... 37 
+4.2.2.4 Class Daigram........................................................................................................38 
+4.2.2.5 Sequence Daigram................................................................................................39 
+4.2.2.6 DFD Daigram.........................................................................................................40 
+​
+4.2.2.6.1 Level 0............................................................................................................40 
+​
+4.2.2.6.2 Level 1............................................................................................................40 
+​
+4.2.2.6.3 Level 2............................................................................................................41 
+4.2.2.7 ER Daigram............................................................................................................42 
+10 
+
+
+=== PAGE 11 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+CHAPTER 1 
+  INTRODUCTION 
+ 
+1.1 Problem Statement 
+ 
+Parul University has a sprawling campus with multiple hostels, academic blocks, and facilities spread across 
+a large area. With over 25,000 students and limited campus transportation options, students frequently face 
+challenges moving between locations, especially during: 
+ 
+●​
+Peak class hours when shuttle buses are overcrowded 
+●​
+Late evening when public transport is scarce 
+●​
+Emergency situations requiring immediate travel 
+ 
+Key Problems Identified: 
+ 
+1. Inefficient Campus Transportation 
+●​
+Existing shuttle services operate on fixed schedules with limited routes 
+●​
+Long waiting times (15-30 minutes) during peak hours 
+●​
+No real-time tracking of available transport 
+●​
+Students miss classes due to transportation delays 
+ 
+2. High Transportation Costs 
+●​
+Auto-rickshaws charge ₹30-50 for short campus distances 
+●​
+Daily commuting expenses burden students from economically weaker backgrounds 
+●​
+No cost-sharing mechanism exists among students traveling the same route 
+ 
+3. Safety Concerns 
+●​
+Students traveling alone late at night face security risks 
+●​
+No verified identity system for drivers/passengers 
+●​
+Limited emergency response mechanisms 
+●​
+Parents lack visibility of their children's travel status 
+ 
+4. Environmental Impact 
+●​
+Individual vehicle usage creates traffic congestion 
+●​
+Increased carbon footprint from multiple vehicles 
+●​
+No sustainable mobility solution for campus 
+ 
+5. Social Disconnection 
+●​
+Students miss opportunities to network with peers 
+●​
+New students struggle to find travel companions 
+●​
+Limited platform for community building among commuters 
+ 
+ 
+ 
+ 
+ 
+ 
+11 
+
+
+=== PAGE 12 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+1.2 Aim and Objective 
+ 
+Aim: 
+ 
+To design and develop Ride Buddy a secure, real-time peer-to-peer ride-sharing mobile web application 
+exclusively for Parul University students that facilitates cost-effective transportation, enhances campus 
+safety, and fosters student community engagement through verified ride-sharing. 
+ 
+Objective: 
+Table 1.1 : Aim and Objective 
+ 
+ 
+Table 1.2 : Aim and Objective(Future) 
+ 
+12 
+No. 
+Objective 
+Implementation Status 
+1 
+Develop a role-based authentication system restricting 
+access to verified Parul University students through 
+college email verification (.ac.in domain) 
+✅ Implemented 
+2 
+Enable 
+student-to-rider 
+transformation 
+allowing 
+students to apply as verified riders with document 
+upload (license, vehicle registration, vehicle photo) 
+✅ Implemented 
+3 
+Build real-time ride booking system with live 
+pickup/drop location selection, route visualization 
+using Leaflet maps, and dynamic fare estimation 
+✅ Implemented 
+4 
+Implement ride lifecycle management with status 
+tracking: pending → accepted → in_progress → 
+completed, including rider location updates 
+✅ Implemented 
+5 
+Create dedicated dashboards for students (booking 
+history), riders (earnings, availability toggle), and 
+admins (user verification, ride monitoring) 
+✅ Implemented 
+6 
+Design responsive cross-platform UI with scroll-based 
+animations, ensuring seamless experience across 
+mobile and desktop devices 
+✅ Implemented 
+ 
+7 
+Implement secure payment gateway integration (UPI, 
+wallets) for automatic fare settlement 
+🔄 Future 
+8 
+Add real-time in-app chat between rider and passenger 
+for coordination 
+🔄 Future 
+
+
+=== PAGE 13 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 3.1Motivation 
+The motivation behind developing the RideBuddy platform arises from the common transportation 
+challenges faced by university students. Many students need to travel frequently between the campus and 
+different parts of the city for academic activities, internships, personal errands, and social engagements. 
+However, finding affordable, reliable, and safe transportation is often difficult. Public transportation may not 
+always be convenient or available at the required time, while private ride-hailing services can be expensive 
+for students on a limited budget. 
+Another motivating factor is the lack of a trusted ride-sharing environment specifically designed for students 
+within a university community. Although several ride-sharing applications exist, they are open to the public 
+and may not provide the level of trust and safety that students require. A campus-specific platform ensures 
+that users interact only with verified members of the university, creating a more secure ecosystem. 
+The concept of carpooling also plays an important role in motivating the development of RideBuddy. Many 
+students travel to similar locations at similar times, but due to the absence of a structured system, these 
+opportunities for shared travel are often missed. By enabling students to share rides easily, the platform 
+helps reduce transportation costs and makes commuting more efficient. 
+In addition, the growing adoption of modern web technologies provides an opportunity to develop 
+innovative digital solutions for everyday problems. RideBuddy demonstrates how technologies such as 
+real-time tracking, cloud-based backend services, and modern web frameworks can be used to build a smart 
+transportation solution tailored for a university environment. 
+Therefore, the main motivation of RideBuddy is to create a safe, reliable, and student-focused ride-sharing 
+platform that simplifies commuting, reduces travel expenses, and encourages a collaborative and 
+environmentally friendly transportation culture within the campus community. 
+ 
+1.4 Scope 
+The scope of the RideBuddy project focuses on providing a reliable and efficient ride-sharing solution 
+specifically designed for students within the university community. The platform aims to facilitate safe and 
+13 
+9 
+Develop rating and review system for riders and 
+passengers to maintain service quality 
+🔄 Future 
+10 
+Introduce dynamic pricing based on demand, distance, 
+and time of day 
+🔄 Future 
+11 
+Integrate SOS emergency button with direct campus 
+security contact 
+🔄 Future 
+12 
+Build analytics dashboard for admin to track ride 
+statistics and popular routes 
+🔄 Future 
+
+
+=== PAGE 14 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+affordable transportation between the campus and commonly visited locations in the city. By creating a 
+closed ecosystem limited to verified university members, the system ensures a secure and trusted 
+environment for ride-sharing. 
+The project primarily covers the development of a web-based application that allows students to register, 
+search for available rides, and book rides to predefined destinations. Verified student riders can offer rides to 
+passengers traveling in the same direction. The system also includes a structured rider verification process 
+where users must submit valid vehicle and license information before they are approved to provide rides. 
+Another important aspect within the scope of the project is the implementation of role-based access control. 
+Different functionalities are provided to administrators, riders, and passengers. Administrators can manage 
+user verification and monitor platform activities, riders can manage ride requests and track their earnings 
+through a dashboard, and passengers can easily book rides and track their journey in real time. 
+The platform also integrates mapping and route visualization features to provide real-time ride tracking and 
+improve the overall user experience. Additionally, the system uses secure authentication through university 
+email domains to ensure that only members of the university community can access the platform. 
+However, the scope of the project is limited to transportation within and around the university campus and 
+selected predefined routes. The system is not intended to function as a large-scale public ride-sharing 
+platform but rather as a specialized solution designed for campus mobility. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+14 
+
+
+=== PAGE 15 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+CHAPTER 2  
+Literature Review 
+ 
+ 
+​2.1 Literature Survey 
+ 
+1. Dynamic Ride Sharing: Theory and Practice  
+ 
+Author: Niels Agatz, Alan Erera, Martin Savelsbergh, Xing Wang 
+ 
+Year: 2012 
+ 
+Description :​
+This research focuses on dynamic ride-sharing systems where drivers and passengers are matched in real 
+time using optimization algorithms. The paper explains how intelligent systems process travel requests and 
+match riders efficiently. It highlights the use of route optimization and scheduling techniques to minimize 
+travel time and fuel consumption. The study also evaluates system scalability and user participation 
+challenges. The results demonstrate that ride-sharing systems improve transportation efficiency and reduce 
+traffic congestion in urban environments. 
+ 
+2. A Survey of Ridesharing Systems 
+ 
+Author: Niels Agatz 
+ 
+Year: 2011 
+ 
+Description :​
+This paper provides a comprehensive review of existing ride-sharing platforms and technologies. It 
+discusses various ride matching algorithms used to connect passengers with available drivers. The study 
+highlights important factors such as user trust, privacy, and system reliability. It also examines the role of 
+mobile applications and GPS tracking in improving ride-sharing services. The research concludes that 
+efficient system architecture and real-time data processing are essential for successful ride-sharing 
+platforms. 
+ 
+ 
+3. Shared Mobility: Current Practices and Future Directions 
+ 
+Author: Susan Shaheen, Adam Cohen 
+ 
+Year: 2016 
+ 
+Description :​
+This study examines the growth of shared mobility systems including ride-sharing, car-sharing, and 
+bike-sharing services. It explains how digital platforms allow users to share transportation resources 
+effectively. The research highlights environmental benefits such as reduced emissions and improved energy 
+efficiency. It also discusses technological innovations that support shared mobility systems. The paper 
+emphasizes that shared transportation solutions are important for building sustainable smart cities. 
+ 
+ 
+15 
+
+
+=== PAGE 16 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4. Real-Time Ridesharing and Dynamic Route Matching 
+ 
+Author: Michael Furuhata 
+ 
+Year: 2013 
+ 
+Description :​
+This paper explores the design of real-time ride-sharing systems that use dynamic route matching 
+algorithms. The study explains how GPS tracking helps identify the location of drivers and passengers. It 
+focuses on reducing passenger waiting time through intelligent ride matching. The research also discusses 
+system architecture for handling large numbers of ride requests. Results show that real-time ride-sharing 
+systems significantly improve transportation efficiency and service quality. 
+ 
+5. Ride-Sharing and Sustainable Urban Transport 
+ 
+Author: David A. Hensher 
+ 
+Year: 2017 
+ 
+Description :​
+This research focuses on the role of ride-sharing in promoting sustainable urban transportation systems. It 
+explains how shared rides reduce the number of vehicles on roads, leading to lower congestion and 
+pollution. The study analyzes commuter behavior and factors influencing ride-sharing adoption. It also 
+discusses government policies that encourage shared mobility services. The paper concludes that 
+ride-sharing platforms contribute to efficient and environmentally friendly transportation. 
+ 
+6.Smart Ride Sharing Using Cloud Computing 
+ 
+Author: Rajesh Kumar 
+ 
+Year: 2019 
+ 
+Description :​
+This paper proposes a cloud-based ride-sharing architecture designed for scalability and reliability. The 
+system stores ride data on cloud servers, allowing efficient processing of ride requests. The research 
+explains how cloud computing supports real-time communication between drivers and passengers. It also 
+highlights improved data storage and system performance. The study concludes that cloud-based solutions 
+are effective for large-scale ride-sharing platforms. 
+ 
+7. Mobile-Based Ride Sharing Application 
+ 
+Author: Amit Sharma 
+ 
+Year: 2020 
+ 
+Description :​
+This research focuses on the development of a mobile-based ride-sharing application. It explains how 
+smartphones enable users to request rides using location services. The system uses GPS tracking to match 
+passengers with nearby drivers. The study also highlights user interface design and secure authentication 
+mechanisms. The results show that mobile technology improves convenience and accessibility for 
+ride-sharing users. 
+ 
+16 
+
+
+=== PAGE 17 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+8. Location-Based Services for Ride Sharing Systems 
+ 
+Author: John Krumm 
+ 
+Year: 2015 
+ 
+Description :​
+This study explores the use of location-based technologies in ride-sharing platforms. It explains how GPS 
+and mapping systems help identify nearby drivers and passengers. The research highlights the importance of 
+accurate positioning systems for effective ride matching. It also discusses privacy concerns related to 
+location tracking. The paper concludes that location-based services are essential for modern ride-sharing 
+applications. 
+ 
+9. Design of a Smart Carpooling System 
+ 
+Author: Sandeep Gupta 
+ 
+Year: 2018 
+ 
+Description :​
+This research proposes a smart carpooling system that connects users traveling along similar routes. The 
+system uses automated ride matching algorithms to optimize vehicle utilization. The study highlights 
+economic and environmental benefits of shared rides. It also discusses system design and implementation 
+challenges. The research concludes that carpooling systems can significantly reduce commuting costs. 
+ 
+10. Web-Based Carpooling System 
+ 
+Author: Rahul Verma 
+ 
+Year: 2019 
+ 
+Description :​
+This paper discusses the design of a web-based platform for ride-sharing services. The system allows users 
+to register as drivers or passengers and book rides online. The research highlights the importance of secure 
+authentication and database management. It also explains how web technologies improve system 
+accessibility. The study demonstrates that web-based ride-sharing systems provide scalable and flexible 
+transportation solutions. 
+ 
+11. Transportation Optimization Using Ride Sharing 
+ 
+Author: Daniel Work 
+ 
+Year: 2016 
+ 
+Description :​
+This study focuses on optimizing transportation networks using ride-sharing strategies. It explains how 
+ride-sharing reduces traffic congestion and travel time. The research highlights the role of intelligent 
+algorithms in route planning. The system improves vehicle utilization and minimizes fuel consumption. The 
+results show that ride-sharing systems contribute to efficient urban mobility. 
+ 
+ 
+ 
+17 
+
+
+=== PAGE 18 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+12. Secure Ride Sharing System 
+ 
+Author: Neha Singh 
+ 
+Year: 2021 
+ 
+Description :​
+This paper focuses on security mechanisms used in ride-sharing platforms. It explains authentication 
+methods and encryption techniques used to protect user data. The research highlights the importance of 
+identity verification and secure communication channels. The system prevents unauthorized access and data 
+breaches. The study concludes that strong security measures increase user trust in ride-sharing applications. 
+ 
+13. Campus Ride Sharing System 
+ 
+Author: Karthik Reddy 
+ 
+Year: 2020 
+ 
+Description :​
+This research proposes a ride-sharing system designed specifically for university campuses. It connects 
+students traveling along similar routes to share rides. The system improves safety by restricting access to 
+verified campus members. The research highlights cost savings and convenience for students. The results 
+show that campus-based ride-sharing platforms improve commuting efficiency. 
+ 
+14. IoT-Based Smart Transportation System 
+ 
+Author: Raj Jain 
+ 
+Year: 2019 
+ 
+Description :​
+This paper discusses how Internet of Things (IoT) technologies enhance transportation systems. Sensors and 
+connected devices collect real-time traffic and vehicle data. The system improves transportation monitoring 
+and decision-making. The research also explains how IoT supports ride-sharing platforms. The study 
+concludes that IoT improves the efficiency of smart transportation systems. 
+ 
+15. Artificial Intelligence in Ride Sharing Systems 
+ 
+Author: Fei Fang 
+ 
+Year: 2021 
+ 
+Description :​
+This research examines the role of artificial intelligence in ride-sharing platforms. AI algorithms analyze 
+ride demand and optimize route planning. The study explains how machine learning improves 
+driver-passenger matching. The research also highlights predictive analytics for ride demand forecasting. 
+The results show that AI improves overall ride-sharing system efficiency. 
+ 
+ 
+ 
+ 
+ 
+18 
+
+
+=== PAGE 19 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+16. Smart Mobility and Ride Sharing Platforms 
+ 
+Author: Carlo Ratti 
+ 
+Year: 2017 
+ 
+Description :​
+This paper discusses smart mobility solutions that integrate ride-sharing platforms. It explains how digital 
+transportation systems improve urban mobility. The research highlights environmental and economic 
+benefits of shared transportation. The study also discusses technological innovations in smart city 
+transportation. The paper concludes that ride-sharing platforms are key components of future urban mobility 
+systems. 
+ 
+17. Cloud-Based Transportation Management 
+ 
+Author: Andrew Tanenbaum 
+ 
+Year: 2018 
+ 
+Description :​
+This research focuses on the use of cloud computing in transportation management systems. It explains how 
+cloud infrastructure supports large-scale ride-sharing platforms. The system provides reliable data storage 
+and processing capabilities. The study highlights improved system performance and scalability. The 
+research concludes that cloud technology enables efficient transportation management. 
+ 
+18.Real-Time Navigation for Ride Sharing 
+ 
+Author: Sebastian Thrun 
+ 
+Year: 2016 
+ 
+Description :​
+This study focuses on real-time navigation systems used in ride-sharing platforms. It explains how mapping 
+technologies analyze traffic conditions and optimize routes. The research highlights improved travel 
+efficiency through intelligent navigation systems. The system also reduces travel delays and improves 
+passenger satisfaction. The study concludes that real-time navigation is essential for ride-sharing services. 
+ 
+19. Digital Platforms for Shared Transportation 
+ 
+Author: Geoffrey Parker 
+ 
+Year: 2019 
+ 
+Description :​
+This research explores digital platforms that support shared transportation services. It explains how 
+technology connects service providers with users efficiently. The study highlights the role of mobile 
+applications and cloud infrastructure. The system supports scalable and efficient ride-sharing operations. 
+The research concludes that digital platforms play a major role in modern transportation systems. 
+ 
+ 
+ 
+ 
+19 
+
+
+=== PAGE 20 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+20. Smart Transportation Systems Using Mobile Technology 
+ 
+Author: Daniel Sperling 
+ 
+Year: 2018 
+ 
+Description :​
+This paper explores mobile technology used in modern transportation systems. It explains how smartphones 
+enable real-time ride booking and driver tracking. The research highlights the role of mobile applications in 
+improving commuter convenience. The system integrates GPS tracking and secure payment systems. The 
+study concludes that mobile technology is essential for efficient ride-sharing services. 
+ 
+ 
+​2.2 Summary of Research Paper 
+​ 
+​Table:2.1 Summary Of Research Paper 
+​ 
+20 
+No 
+Paper/ 
+Author 
+Year 
+Technology/ 
+Method Used 
+Key Contribution 
+Limitation 
+1 
+Niels Agatz  
+2012 
+Dynamic 
+ride-sharing 
+algorithms 
+Real-time 
+driver–passenger 
+matching 
+Complex computation 
+for large systems 
+2 
+Niels Agatz 
+2011 
+Ride-matching 
+optimization 
+Survey of ride-sharing 
+systems 
+Limited real-world 
+deployment 
+3 
+Susan 
+Shaheen 
+2016 
+Shared mobility 
+platforms 
+Improved transportation 
+efficiency 
+Requires strong 
+infrastructure 
+4 
+Michael 
+Furuhata 
+2013 
+Dynamic route 
+matching 
+Reduced passenger 
+waiting time 
+High data processing 
+requirement 
+5 
+David A. 
+Hensher 
+2017 
+Shared 
+transportation 
+models 
+Sustainable urban 
+mobility 
+Adoption challenges 
+6 
+Rajesh 
+Kumar 
+2019 
+Cloud computing 
+Scalable ride-sharing 
+architecture 
+Internet dependency 
+7 
+Amit 
+Sharma 
+2020 
+Mobile app 
+development 
+Real-time ride booking 
+system 
+Limited to smartphone 
+users 
+8 
+John Krumm 2015 
+GPS location 
+services 
+Accurate 
+driver-passenger 
+location 
+Privacy concerns 
+
+
+=== PAGE 21 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+​ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+21 
+9 
+Sandeep 
+Gupta 
+2018 
+Smart carpooling 
+system 
+Improved vehicle 
+utilization 
+Matching limitations 
+10 
+Rahul Verma 2019 
+Web-based 
+system 
+Online ride management Limited real-time 
+capability 
+11 
+Daniel Work 
+2016 
+Transportation 
+optimization 
+Reduced travel time 
+Data dependency 
+12 
+Neha Singh 
+2021 
+Security 
+authentication 
+Secure ride-sharing 
+platform 
+Implementation 
+complexity 
+13 
+Karthik 
+Reddy 
+2020 
+Campus 
+ride-sharing 
+model 
+Safe student 
+transportation 
+Limited to campus 
+users 
+14 
+Raj Jain 
+2019 
+IoT-based 
+transportation 
+Real-time system 
+monitoring 
+High infrastructure 
+cost 
+15 
+Fei Fang 
+2021 
+Artificial 
+Intelligence 
+Demand prediction and 
+ride matching 
+Data training required 
+16 
+Carlo Ratti 
+2017 
+Smart mobility 
+systems 
+Smart city transportation 
+integration 
+Infrastructure 
+requirements 
+17 
+Andrew 
+Tanenbaum 
+2018 
+Cloud-based 
+systems 
+Reliable data storage 
+and scalability 
+Cloud dependency 
+18 
+Sebastian 
+Thrun 
+2016 
+Real-time 
+navigation 
+Route optimization for 
+drivers 
+Traffic data 
+dependency 
+19 
+Geoffrey 
+Parker 
+2019 
+Digital platform 
+economy 
+Platform-based service 
+model 
+Platform competition 
+20 
+Daniel 
+Sperling 
+2018 
+Mobile 
+transportation 
+systems 
+Improved commuter 
+experience 
+Requires network 
+connectivity 
+
+
+=== PAGE 22 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 3  
+Problem Definition and Requirement Analysis 
+ 
+3.1 Approach Strategy: 
+ 
+In the initial phase, we will collaborate with university administration, student organizations, and campus 
+transportation authorities to introduce the RideBuddy platform within the campus ecosystem. Establishing 
+partnerships with these stakeholders will help create awareness and ensure smooth adoption among students. 
+Promotional activities such as campus demonstrations, orientation sessions, and student workshops will be 
+conducted to familiarize users with the platform and encourage participation. 
+ 
+Additionally, verified student riders will be encouraged to register through an organized application process. 
+Incentives such as reduced platform fees, early adopter benefits, and campus promotions will help increase 
+rider participation and expand the ride-sharing network within the university. 
+ 
+Target Audience 
+ 
+University students who require daily transportation between campus and nearby city areas. Students who 
+own vehicles and are willing to share rides with fellow students.University administrators who monitor and 
+manage the platform. Students traveling to popular locations such as Waghodia Road, Vadodara Railway 
+Station, Alkapuri, and Manjalpur. 
+ 
+Define Platform Objectives 
+ 
+Provide a safe and affordable ride-sharing solution for university students.Encourage carpooling culture 
+within the campus community.Reduce transportation costs and travel time for students.Enable secure 
+connections between verified student riders and passengers. 
+ 
+User Experience (UX) and User Interface (UI) 
+ 
+The platform will feature a simple, modern, and user-friendly interface designed for easy 
+navigation.Students can quickly view available rides, select destinations, and book rides with minimal 
+steps.The interface will include map-based ride tracking, clear route visualization, and intuitive dashboards 
+for riders and users. 
+ 
+Technology Selection 
+ 
+The platform will be developed using modern web technologies to ensure performance and scalability. 
+ 
+●​
+React and TypeScript for frontend development 
+●​
+Tailwind CSS for responsive UI design 
+●​
+Supabase Cloud for backend services, authentication, and database management 
+●​
+Leaflet Maps for map visualization 
+●​
+OSRM (Open Source Routing Machine) for route calculation and navigation​
+ 
+These technologies allow real-time ride updates and smooth interaction between riders and passengers. 
+ 
+Ride Booking and Interaction Features 
+ 
+The platform will include several interactive features: 
+22 
+
+
+=== PAGE 23 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+●​
+One-click ride booking on predefined routes 
+●​
+Real-time ride tracking through map integration​
+ 
+●​
+Rider dashboard to manage ride requests and earnings 
+●​
+Ride status updates and notifications for passengers 
+●​
+Admin panel for managing users, riders, and platform activities​
+ 
+These features ensure efficient communication and smooth ride coordination. 
+ 
+Safety and Security Measures 
+ 
+RideBuddy will implement multiple security measures to maintain a safe environment. 
+ 
+●​
+Access restricted to university email domains (@paruluniversity.ac.in) 
+●​
+Rider verification through vehicle and license validation 
+●​
+Role-based access control for users, riders, and administrators 
+●​
+Secure authentication and encrypted data storage​
+ 
+These safety mechanisms ensure that only trusted students participate in the ride-sharing ecosystem. 
+ 
+Quality Assurance and Testing 
+ 
+The system will undergo extensive testing to ensure reliability and performance. 
+ 
+●​
+Functional testing of ride booking and user registration 
+●​
+Security testing for authentication and access control 
+●​
+Cross-platform testing on desktop, tablet, and mobile devices 
+●​
+User testing with students to improve usability and performance​
+ 
+Maintenance and Support 
+ 
+Regular system updates will be provided to enhance performance and introduce new features.Technical 
+support will be available to resolve issues faced by users or riders.Future improvements may include mobile 
+application development, payment integration, and ride rating systems. 
+ 
+Institutional and Campus Collaboration 
+ 
+To ensure successful implementation, collaboration will be established with: 
+ 
+●​
+University administration 
+●​
+Student organizations and campus communities 
+●​
+Campus security and transportation departments​
+ 
+These partnerships will help expand the RideBuddy network and maintain a safe ride-sharing ecosystem 
+within the campus. 
+ 
+3.2  Model Selection: 
+To ensure a smooth user experience and efficient ride management, the development of the RideBuddy 
+system requires a structured yet flexible development approach. The platform must support features such as 
+real-time ride booking, rider verification, route management, and user interaction. Therefore, selecting an 
+23 
+
+
+=== PAGE 24 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+appropriate software development model is essential to guarantee system reliability, scalability, and 
+continuous improvement. 
+3.2.1 Project Development Model 
+The Agile development methodology is considered the most suitable approach for developing the 
+RideBuddy platform. Agile focuses on iterative development, continuous feedback, and flexibility, 
+allowing developers to improve the system gradually while responding to user needs. 
+Since RideBuddy is a dynamic web application involving multiple components such as ride booking, rider 
+dashboards, map integration, and admin management, user requirements may evolve over time. Agile 
+enables the development team to implement new features, test them, and improve the platform continuously. 
+Through Agile, the system can be developed in small functional modules, ensuring that each component 
+works effectively before integration into the final system. This approach allows the platform to remain 
+scalable, reliable, and user-friendly while adapting to feedback from students, riders, and administrators. 
+Because RideBuddy includes interactive elements such as ride tracking, route selection, and real-time 
+notifications, the Agile model helps the development team quickly design, test, and refine these features. 
+This iterative development process ensures that the RideBuddy platform remains efficient and responsive to 
+the needs of the campus community. 
+3.2.2 Phases 
+In the Agile methodology, the development process is divided into multiple iterative stages known as 
+sprints. Each sprint focuses on developing specific functionalities of the system. The key phases involved in 
+the development of RideBuddy are as follows: 
+Planning 
+This phase involves defining the overall objectives of the RideBuddy platform. The development team 
+identifies stakeholders such as students, riders, and administrators, and determines the key features required 
+for the system. A development roadmap is created to guide the project. 
+ Sprint Planning 
+At the beginning of each sprint, the team selects tasks from the project backlog to be completed during that 
+sprint. These tasks may include features such as user authentication, ride booking functionality, or 
+dashboard development. The effort required for each task is estimated, and the team commits to delivering 
+the planned features within the sprint duration. 
+ Development 
+During this phase, developers begin implementing the selected features. This includes coding the system 
+modules, designing the user interface, integrating map services, and connecting the frontend with the 
+backend database. Collaboration among developers ensures smooth system integration. 
+24 
+
+
+=== PAGE 25 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+Testing 
+Testing is performed alongside development to ensure that each feature works correctly. The system is tested 
+for functionality, security, and performance. Issues or bugs discovered during testing are fixed promptly to 
+maintain system stability. 
+Review and Demonstration 
+At the end of each sprint, the development team reviews the completed work and demonstrates the newly 
+developed features. Feedback is collected from stakeholders or potential users, which helps guide 
+improvements for the next development cycle. 
+ Retrospective 
+After the sprint review, the team evaluates the development process and identifies areas for improvement. 
+Lessons learned during the sprint are documented so that future development cycles can be more efficient 
+and productive. 
+3.2.3 Why This Model? 
+Considering the dynamic nature of the RideBuddy project and the need for continuous improvements, the 
+Agile model is the most suitable development approach. RideBuddy is a web-based ride sharing platform 
+that includes multiple interactive components such as ride booking, route selection, rider dashboards, and 
+real-time ride tracking. These features require regular updates and improvements based on user feedback. 
+Agile Model 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 3.1 Agile Model 
+ 
+• Flexibility:​
+ Agile allows developers to quickly adapt to changing requirements. As RideBuddy evolves, new features 
+such as improved route management, ride notifications, or payment systems may be added. Agile supports 
+these modifications efficiently. 
+25 
+
+
+=== PAGE 26 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+• Iterative Development:​
+ Agile follows an incremental development process where the system is built and improved in small stages. 
+Each module of RideBuddy, such as user authentication, ride booking, and rider verification, can be 
+developed and refined step by step. 
+• Cross-functional Collaboration:​
+ Agile encourages collaboration between developers, designers, and system testers. This helps integrate 
+different components such as the user interface, backend database, and map-based route services smoothly. 
+• User-Centric Approach:​
+ Agile focuses on delivering value to users quickly. Since RideBuddy is designed for university students, the 
+development process continuously considers feedback from students and administrators to improve the 
+platform experience. 
+By following the Agile methodology, RideBuddy can evolve continuously, ensuring that the platform 
+remains efficient, scalable, and user-friendly for the campus community. 
+3.3 System Analysis 
+System analysis involves examining the current transportation system used by students and identifying its 
+limitations. This process helps in understanding the requirements and designing a better solution 
+3.3.1 Study of Existing Solutions 
+Students currently rely on several transportation options to travel between campus and different parts of the 
+city. 
+• Public Transportation 
+Public buses are commonly used by students for commuting. However, they often operate on fixed 
+schedules and may not be available near the campus at convenient times. 
+• Auto Rickshaws 
+Auto rickshaws provide flexible transportation but can be expensive for regular travel. Fare negotiations and 
+availability issues may also create inconvenience. 
+• Ride-Hailing Applications 
+Applications like Uber and Ola provide quick transportation services. However, these platforms are 
+designed for general public use and may be costly for students who travel frequently. 
+• Personal Vehicles 
+Some students use their own vehicles for commuting. While this option provides convenience, many 
+vehicles travel with empty seats, leading to inefficient resource utilization. 
+ 
+26 
+
+
+=== PAGE 27 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+3.3.2 Problems and Weaknesses of the Current System 
+• High Transportation Costs:​
+ Frequent travel using taxis or auto rickshaws can become expensive for students. 
+• Limited Availability:​
+ Public transport options are not always available near the campus or during late hours. 
+• Safety Concerns:​
+ Students may feel unsafe traveling with unknown drivers or strangers. 
+• Lack of Student-Focused Platforms:​
+ Most ride sharing services are designed for the general public and do not focus specifically on university 
+students. 
+• Underutilization of Vehicles:​
+ Students traveling alone in personal vehicles leave empty seats unused, resulting in inefficient 
+transportation. 
+3.4 Feasibility Study 
+Feasibility analysis evaluates whether the RideBuddy system can be successfully developed and 
+implemented. 
+3.4.1 Technical Feasibility 
+RideBuddy is technically feasible because it uses modern web development technologies. The platform 
+integrates authentication systems, real-time ride tracking, and database management. Technologies such as 
+React, TypeScript, Tailwind CSS, and Supabase provide reliable performance and scalability for the 
+system. 
+Map services such as Leaflet and routing tools like OSRM ensure accurate route visualization and 
+navigation features. 
+3.4.2 Operational Feasibility 
+The RideBuddy system is designed to be simple and user-friendly. Students can easily register using their 
+university email and book rides through a straightforward interface. 
+Riders can manage ride requests and track earnings through their dashboard, while administrators can 
+monitor and verify users. The ease of use and campus-focused design make the system operationally 
+feasible. 
+3.4.3 Scheduling Feasibility 
+The project timeline was carefully planned to ensure that all modules of the system could be completed 
+within the given academic schedule. Development activities such as authentication implementation, ride 
+27 
+
+
+=== PAGE 28 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+booking features, and map integration were divided into phases. 
+By following the Agile methodology, the development team can continuously test and improve the system 
+while ensuring timely completion of the project. 
+3.4.4 Financial Feasibility 
+The RideBuddy system is financially feasible because it primarily uses cloud-based services and 
+open-source technologies. Development costs are minimized since tools like Supabase and modern 
+JavaScript frameworks are freely available for educational use. 
+Operational costs are also low because the system does not require expensive hardware infrastructure. 
+Future enhancements may include additional server resources depending on system usage and scalability 
+requirements. 
+3.5 Requirement Analysis 
+Requirement analysis identifies the necessary system features and technical specifications required for the 
+successful implementation of RideBuddy. 
+3.5.1 Non-Functional Requirements 
+• The web platform should be accessible through browsers such as Google Chrome, Mozilla Firefox, and  
+Microsoft Edge.​
+ • The system should be responsive and compatible with mobile devices, tablets, and laptops.​
+ • The user interface should be simple, responsive, and easy to navigate.​
+ • Secure authentication must be implemented to protect user data.​
+ • The platform should provide reliable performance with minimal delays in ride booking and updates. 
+3.5.2 Functional Requirements 
+ • User registration and login using university email authentication.​
+ • Rider application and verification system.​
+ • Ride booking functionality for passengers.​
+ • Real-time ride tracking using map integration.​
+ • Rider dashboard for managing ride requests and ride history.​
+ • Admin panel for managing users, riders, and ride activities. 
+3.5.3 Hardware Requirements 
+Minimum Server Requirements 
+ • Processor: Minimum 1.3 GHz processor recommended​
+ • Memory: At least 1 GB RAM​
+ • Storage: Minimum 20 MB hard disk space​
+ • Network: Reliable internet connection​
+28 
+
+
+=== PAGE 29 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ • Bandwidth: Minimum 256 Kbps network speed​
+ • Display Resolution: 1024 × 768 recommended 
+Minimum Client Requirements 
+ • Processor: Intel Pentium IV or higher​
+ • Device: Laptop, smartphone, tablet, or desktop computer​
+ • Internet connectivity for accessing the platform 
+3.5.4 Software Requirements 
+ • Development Environment: Visual Studio Code​
+ • Frontend Technologies: React, TypeScript, Tailwind CSS​
+ • Backend Services: Supabase (authentication, database, storage)​
+ • Database: PostgreSQL (Supabase database)​
+ • Map Integration: Leaflet​
+ • Routing Engine: OSRM 
+3.6 Information of Tools 
+The development of the RideBuddy platform involves the use of various modern development tools and 
+technologies that support efficient application development, testing, and deployment. These tools help 
+ensure that the system is scalable, secure, and capable of delivering real-time ride-sharing services to users. 
+1 React 
+React is a popular JavaScript library used for building user interfaces, especially for web applications that 
+require dynamic and responsive components. It allows developers to create reusable UI components that 
+improve development efficiency and maintainability. 
+In the RideBuddy system, React is used to develop the frontend interface, including pages such as login, 
+registration, ride booking, rider dashboard, and admin panel. React's component-based architecture makes it 
+easier to manage and update different parts of the user interface. 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 3.2 React 
+29 
+
+
+=== PAGE 30 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+           2 TypeScript 
+TypeScript is a strongly typed programming language built on top of JavaScript. It adds static typing and 
+modern programming features that help developers write more reliable and maintainable code. 
+In the RideBuddy platform, TypeScript helps reduce coding errors, improves code readability, and ensures 
+better structure for the application. It also enhances the development process by providing better debugging 
+and code suggestions during development. 
+ 
+ 
+ 
+ 
+Figure. 3.3 TypeScript 
+3 Tailwind CSS 
+Tailwind CSS is a utility-first CSS framework used to design modern and responsive user interfaces. It 
+allows developers to create visually appealing layouts quickly by using predefined utility classes. 
+In the RideBuddy system, Tailwind CSS is used to design the user interface of the application, ensuring 
+responsiveness across devices such as desktops, tablets, and mobile phones. It also helps maintain consistent 
+styling throughout the platform. 
+ 
+ 
+ 
+Figure. 3.4 Tailwindcss 
+3.6.4 Supabase 
+Supabase is a cloud-based backend platform that provides services such as authentication, database 
+management, file storage, and real-time data synchronization. 
+In the RideBuddy system, Supabase is used to manage: 
+●​
+User authentication and login​
+ 
+●​
+Database storage using PostgreSQL​
+ 
+●​
+Real-time updates for ride requests​
+ 
+30 
+
+
+=== PAGE 31 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+●​
+File storage for rider documents and verification​
+ 
+Supabase simplifies backend development and provides secure and scalable cloud infrastructure. 
+ 
+ 
+ 
+Figure. 3.5 Supabase 
+3.6.5 Leaflet 
+Leaflet is an open-source JavaScript library used for interactive maps. It allows developers to display map 
+data and location information within web applications. 
+In RideBuddy, Leaflet is used to integrate map functionality, enabling users to view pickup locations, 
+routes, and ride tracking on the map interface. 
+3.6.6 OSRM (Open Source Routing Machine) 
+OSRM is a routing engine that calculates optimal travel routes based on road network data. It provides fast 
+and accurate route planning for navigation systems. 
+In the RideBuddy platform, OSRM is used to calculate routes between pickup and destination points. It 
+helps riders and passengers view the most efficient travel path within the city. 
+3.6.7 Visual Studio Code 
+Visual Studio Code is a widely used source-code editor developed by Microsoft. It supports multiple 
+programming languages and provides useful features such as debugging tools, extensions, and version 
+control integration. 
+For the RideBuddy project, Visual Studio Code is used as the main development environment for writing 
+and managing the application code. 
+3.7 Mechanism of Action 
+The RideBuddy platform operates through the integration of several modern web technologies that work 
+together to provide a seamless ride-sharing experience for university students. The system architecture 
+consists of a frontend interface, backend services, database management, authentication mechanisms, and 
+map-based route processing. These components interact with each other to ensure efficient ride booking, 
+rider verification, and real-time ride updates. 
+31 
+
+
+=== PAGE 32 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+1. Frontend (React.js & Tailwind CSS) 
+The frontend of the RideBuddy platform is developed using React.js and Tailwind CSS. React.js provides a 
+component-based architecture that allows developers to create dynamic and interactive user interfaces. 
+Tailwind CSS is used to design responsive and visually appealing layouts. 
+The frontend handles user interactions such as: 
+●​
+User registration and login​
+ 
+●​
+Ride search and booking​
+ 
+●​
+Viewing ride details and routes​
+ 
+●​
+Rider dashboard for managing ride requests​
+ 
+●​
+Admin panel for system management​
+ 
+The responsive design ensures that the platform works smoothly on desktops, tablets, and mobile devices 
+2. Backend (Supabase Cloud Services) 
+The backend of the RideBuddy system is powered by Supabase, which provides several important services 
+such as authentication, database management, and serverless functions. 
+The backend performs tasks including: 
+●​
+User authentication and account management​
+ 
+●​
+Processing ride booking requests​
+ 
+●​
+Managing rider verification​
+ 
+●​
+Handling ride data and status updates​
+ 
+●​
+Real-time synchronization between riders and passengers​
+ 
+Supabase allows secure communication between the frontend and database while maintaining system 
+scalability. 
+3. Database (PostgreSQL – Supabase) 
+The RideBuddy platform uses PostgreSQL database provided by Supabase to store and manage 
+application data. 
+The database stores information related to: 
+32 
+
+
+=== PAGE 33 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+●​
+User accounts​
+ 
+●​
+Rider profiles​
+ 
+●​
+Vehicle details​
+ 
+●​
+Ride listings​
+ 
+●​
+Booking records​
+ 
+●​
+Ride history​
+ 
+     This structured data storage ensures efficient data retrieval and reliable system performance. 
+ 
+ 4. Map and Routing Services (Leaflet & OSRM) 
+RideBuddy integrates Leaflet, an open-source mapping library, to display interactive maps within the 
+application. 
+The routing system is powered by OSRM (Open Source Routing Machine) which calculates the best route 
+between pickup and destination locations. 
+These tools enable: 
+●​
+Map-based ride visualization​
+ 
+●​
+Route calculation​
+ 
+●​
+Ride tracking during travel​
+ 
+●​
+Improved navigation for riders and passengers​
+ 
+ 5. Authentication and Security 
+The platform uses secure authentication mechanisms through Supabase to verify user identities. Access 
+to the system is restricted to students with valid university email domains. 
+Security measures include: 
+●​
+Secure login authentication​
+ 
+●​
+Role-based access control (Admin, Rider, User)​
+ 
+●​
+Data encryption and protection​
+ 
+●​
+Rider verification through vehicle and license detail. 
+These measures ensure a safe ride-sharing environment within the campus ecosystem. 
+ 
+ 
+33 
+
+
+=== PAGE 34 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+6. Overall Workflow 
+ 
+The overall workflow of the RideBuddy system follows these steps: 
+ 
+1.​
+A student registers on the platform using their university email address.​
+ 
+2.​
+After registration, users can log in and access the RideBuddy dashboard.​
+ 
+3.​
+Students who wish to offer rides apply as riders by submitting vehicle and license details.​
+ 
+4.​
+The admin verifies rider applications before granting rider privileges.​
+ 
+5.​
+Riders create ride listings by selecting routes and travel times.​
+ 
+6.​
+Passengers browse available rides and submit ride booking requests.​
+ 
+7.​
+Riders review and accept or reject ride requests.​
+ 
+8.​
+Once accepted, the ride is confirmed and both users can track the ride through the map interface.​
+ 
+9.​
+After the ride is completed, the system updates the ride status and records the ride history.​
+ 
+This workflow ensures efficient coordination between riders and passengers while maintaining safety and 
+reliability. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+34 
+
+
+=== PAGE 35 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 4  
+DESIGN AND IMPLEMENTATION 
+4.1 Overview of Existing System 
+Currently, students rely on traditional transportation methods such as public buses, auto-rickshaws, and 
+private ride-hailing services to travel from campus to nearby city locations. These systems are not 
+specifically designed for students and often lead to several issues such as high transportation costs, limited 
+availability, and safety concerns when traveling with unknown drivers. 
+Public transport may not always be available at convenient times, while ride-hailing services can be 
+expensive for daily commuting. Additionally, many students who own vehicles travel alone, leaving empty 
+seats unused. Due to the absence of a dedicated student-based ride-sharing system, transportation resources 
+are not utilized efficiently. 
+4.2 Overview of Proposed System 
+The proposed system, RideBuddy, is a campus-based ride-sharing platform designed to connect student 
+passengers with verified student riders. The system allows students to easily find and book rides within the 
+campus community. 
+RideBuddy provides features such as secure login using university email, rider verification, ride 
+booking, and real-time route tracking through map integration. The platform ensures that only 
+authorized users can access the system, creating a safe and trusted environment for ride sharing. 
+The proposed system helps reduce transportation costs, improves travel convenience, and promotes 
+carpooling among students. 
+4.3 Proposed System Architecture and Design 
+The RideBuddy platform is designed using a modern web-based architecture that integrates frontend 
+technologies, backend services, and database management systems. This architecture ensures efficient 
+communication between system components and provides a scalable solution for ride-sharing services. 
+4.3.1 System Architecture 
+The RideBuddy system follows a three-layer architecture consisting of: 
+1. Presentation Layer (Frontend)​
+ This layer is responsible for user interaction. It is developed using React and Tailwind CSS, providing a 
+responsive and user-friendly interface for students to register, book rides, and track ride progress. 
+2. Application Layer (Backend)​
+ The backend handles business logic, authentication, and ride management. Services such as user 
+verification, ride requests, and ride confirmations are processed in this layer. 
+3. Data Layer (Database)​
+ The database stores user information, rider details, ride listings, and booking records.  
+35 
+
+
+=== PAGE 36 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2 Proposed System Design 
+The proposed system design focuses on creating a secure, scalable, and efficient ride-sharing platform. The 
+system includes several modules such as: 
+●​
+User Module: Allows students to register, log in, and book rides.​
+ 
+●​
+Rider Module: Enables verified riders to offer rides and manage ride requests.​
+ 
+●​
+Admin Module: Allows administrators to verify riders and monitor system activities.​
+ 
+●​
+Ride Management Module: Handles ride booking, confirmation, and ride tracking.​
+ 
+The system also integrates interactive maps and route services to provide real-time ride tracking and route 
+visualization. This design ensures a smooth and reliable experience for both riders and passengers. 
+4.3.2.1 System Architecture Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.1 System Architecture Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+36 
+
+
+=== PAGE 37 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+4.3.2.2 Use Case Daigram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4.3.2.2 Use Case Daigram 
+ 
+ 
+ 
+37 
+
+
+=== PAGE 38 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2.3 Activity Daigram 
+ 
+●​
+4.3.2.3.1 Admin 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.3.1 Admin 
+ 
+ 
+38 
+
+
+=== PAGE 39 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+●​
+4.3.2.3.2 Student 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.3.2 Student 
+ 
+ 
+ 
+ 
+39 
+
+
+=== PAGE 40 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2.4 Class Daigram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.4 Class Daigram 
+ 
+ 
+40 
+
+
+=== PAGE 41 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2.5  Sequence Daigram 
+ 
+ 
+ 
+Figure. 4.3.2.5  Sequence Daigram 
+ 
+ 
+ 
+ 
+ 
+41 
+
+
+=== PAGE 42 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2.6  DFD Daigram 
+ 
+●​
+4.3.2.6.1 Level 0 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.6.1 Level 0 
+ 
+●​
+4.3.2.6.2 Level 1 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.6.2 Level 1 
+42 
+
+
+=== PAGE 43 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+●​
+4.3.2.6.3 Level 2 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.6.3 Level 1 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+43 
+
+
+=== PAGE 44 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.3.2.7 ER Daigram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.3.2.7 ER Daigram 
+ 
+ 
+ 
+ 
+ 
+44 
+
+
+=== PAGE 45 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.4 Data Dictionary 
+ 
+4.4.1 Table: profiles 
+ 
+ 
+ 
+ 
+ 
+45 
+Column 
+Data Type 
+Nullable 
+Default 
+Description 
+id 
+UUID 
+No 
+gen_random_uuid() 
+Primary key 
+user_id 
+UUID 
+No 
+— 
+Reference to 
+auth user 
+full_name 
+VARCHAR 
+Yes 
+NULL 
+User's full name 
+college_email 
+VARCHAR 
+No 
+— 
+University email 
+address 
+college_name 
+VARCHAR 
+Yes 
+NULL 
+Name of the 
+college 
+phone 
+VARCHAR 
+Yes 
+NULL 
+Contact number 
+student_id 
+VARCHAR 
+Yes 
+NULL 
+Student ID 
+number 
+avatar_url 
+VARCHAR 
+Yes 
+NULL 
+Profile picture 
+URL 
+is_rider 
+BOOLEAN 
+Yes 
+false 
+Whether user is 
+a rider 
+is_verified 
+BOOLEAN 
+Yes 
+false 
+Admin 
+verification 
+status 
+is_available 
+BOOLEAN 
+Yes 
+false 
+Rider 
+availability 
+status 
+created_at 
+TIMESTAMP 
+Yes 
+now() 
+Record creation 
+time 
+updated_at 
+TIMESTAMP 
+Yes 
+now() 
+Last update time 
+
+
+=== PAGE 46 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+4.4.2 Table: user_roles 
+ 
+ 
+ 
+4.4.3 Table: rides 
+ 
+46 
+ 
+Column 
+Data Type 
+Nullable 
+Default 
+Description 
+id 
+UUID 
+No 
+gen_random_uuid() 
+Primary key 
+user_id 
+UUID 
+No 
+— 
+Reference to auth 
+user 
+role 
+app_role (ENUM) 
+No 
+— 
+Role: admin, rider, 
+or user 
+created_at 
+TIMESTAMP 
+Yes 
+now() 
+Assignment time 
+Column 
+Data Type 
+Nullable Default 
+Description 
+id 
+UUID 
+No 
+gen_rando
+m_uuid() 
+Primary key 
+user_id 
+UUID 
+No 
+— 
+Passenger's user ID 
+rider_id 
+UUID 
+Yes 
+NULL 
+Assigned rider's user ID 
+pickup_locati
+on 
+VARCHAR 
+No 
+'Parul 
+University' 
+Pickup address 
+pickup_lat 
+FLOAT 
+Yes 
+NULL 
+Pickup latitude 
+pickup_lng 
+FLOAT 
+Yes 
+NULL 
+Pickup longitude 
+drop_location 
+VARCHAR 
+No 
+— 
+Destination address 
+drop_lat 
+FLOAT 
+Yes 
+NULL 
+Drop latitude 
+drop_lng 
+FLOAT 
+Yes 
+NULL 
+Drop longitude 
+rider_current_
+lat 
+FLOAT 
+Yes 
+NULL 
+Rider's live latitude 
+rider_current_
+lng 
+FLOAT 
+Yes 
+NULL 
+Rider's live longitude 
+
+
+=== PAGE 47 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+ 
+4.4.4 Table: rider_applications 
+ 
+ 
+ 
+47 
+fare 
+DECIMAL 
+Yes 
+NULL 
+Ride fare amount 
+rider_earnings DECIMAL 
+Yes 
+NULL 
+Rider's earning from ride 
+status 
+VARCHAR 
+No 
+'pending' 
+pending/accepted/in_progress/completed/ca
+ncelled 
+created_at 
+TIMESTAMP 
+No 
+now() 
+Booking time 
+updated_at 
+TIMESTAMP 
+No 
+now() 
+Last status change 
+completed_at 
+TIMESTAMP 
+Yes 
+NULL 
+Completion timestamp 
+Column 
+Data Type 
+Nullable 
+Default 
+Description 
+id 
+UUID 
+No 
+gen_random_uuid() 
+Primary key 
+user_id 
+UUID 
+No 
+— 
+Applicant's user ID 
+license_number 
+VARCHAR 
+No 
+— 
+Driving license number 
+license_image_url 
+VARCHAR 
+No 
+— 
+Uploaded license image path 
+vehicle_type 
+VARCHAR 
+No 
+— 
+Type of vehicle 
+vehicle_number 
+VARCHAR 
+No 
+— 
+Vehicle registration number 
+vehicle_image_url 
+VARCHAR 
+No 
+— 
+Uploaded vehicle image 
+path 
+status 
+VARCHAR 
+No 
+'pending' 
+pending/approved/rejected 
+rejection_reason 
+VARCHAR 
+Yes 
+NULL 
+Reason if rejected 
+created_at 
+TIMESTAMP 
+No 
+now() 
+Application submission time 
+updated_at 
+TIMESTAMP 
+No 
+now() 
+Last review time 
+
+
+=== PAGE 48 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+4.4.5 Table: rider_earnings 
+ 
+ 
+4.5 Snapshots 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.4.1 RideBuddy Dashboard 
+ 
+ 
+ 
+ 
+48 
+Column 
+Data Type 
+Nullable 
+Default 
+Description 
+id 
+UUID 
+No 
+gen_random_uuid() 
+Primary key 
+rider_id 
+UUID 
+No 
+— 
+Rider's user ID 
+ride_id 
+UUID 
+Yes 
+NULL 
+Associated ride ID (FK) 
+amount 
+DECIMAL 
+No 
+0 
+Earning amount 
+created_at 
+TIMESTAMP 
+Yes 
+now() 
+Earning record time 
+
+
+=== PAGE 49 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.4.2 Workflow Of RideBuddy 
+ 
+ 
+ 
+Figure. 4.4.3 Become a Rider 
+49 
+
+
+=== PAGE 50 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.4.4 Login Page 
+ 
+ 
+ 
+Figure. 4.4.5 Sing Up Page 
+ 
+50 
+
+
+=== PAGE 51 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+Figure. 4.4.6 Rider Applications Dashboard 
+ 
+ 
+ 
+Figure. 4.4.7 User management dashboard 
+ 
+ 
+ 
+51 
+
+
+=== PAGE 52 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+ 
+ 
+Figure. 4.4.8 Ride History 
+ 
+ 
+ 
+Figure. 4.4.9 Profile Details 
+ 
+52 
+
+
+=== PAGE 53 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+ 
+Figure. 4.4.10 Become a Rider Application 
+ 
+ 
+ 
+Figure. 4.4.11 Rider’s Dashboard 
+ 
+ 
+ 
+ 
+53 
+
+
+=== PAGE 54 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 5: TESTING AND DEPLOYMENT 
+5.1 Testing 
+A structured and comprehensive testing procedure was conducted on the RideBuddy application to ensure that all 
+architectural components client interface, role-based access control, relational database schema, geospatial routing, 
+and real-time state synchronization operate reliably under real-world university commuting conditions. Testing was 
+conducted across the following major stages: 
+5.1.1. Unit Testing 
+Unit testing verified individual modules, utility functions, and isolated components to guarantee baseline reliability 
+prior to full system integration: 
+1​ University Domain Validation: Evaluated the user registration input parser to ensure strict validation of the 
+institutional email domain (@paruluniversity.ac.in). Registration attempts utilizing public or non-affiliated 
+domains (such as @gmail.com, @outlook.com, or @yahoo.com) were successfully blocked. 
+2​ Document Upload & Validation: Tested the document upload pipeline in the rider onboarding module. 
+Validated file size limitations (maximum 5 MB per file), accepted image extensions (.jpg, .png, .pdf), and proper 
+storage in dedicated private buckets in Supabase Storage. 
+3​ OSRM Routing & Distance Calculation: Tested coordinate pairs between Parul University campus and major 
+student transit destinations (Waghodia Road, Vadodara Railway Station, Alkapuri, Manjalpur, Sayajigunj). 
+Distance calculations and estimated travel times were verified for accuracy. 
+4​ UI Component Responsiveness: Conducted component-level tests on React UI elements (booking buttons, 
+destination selection cards, ride status badges, and Leaflet interactive map containers) across multiple viewport 
+resolutions. 
+5.1.2. Integration Testing 
+Integration testing focused on verifying the seamless flow of data across frontend components, database services, and 
+external routing APIs: 
+2.​ Ride Lifecycle State Machine: Tested end-to-end status transitions across the complete ride lifecycle: pending 
+→ accepted → in_progress → completed (or cancelled). Confirmed that database triggers automatically set the 
+completed_at timestamp upon trip finish. 
+3.​ Supabase Realtime WebSockets: Verified database change subscriptions. When a rider accepts a ride request on 
+their dashboard, the passenger interface immediately receives the status change event and transitions to the live 
+tracking view without requiring a manual page refresh. 
+4.​ Admin Approval & Role Elevation Pipeline: Verified that when an administrator approves a record in the 
+rider_applications table, the system updates the is_rider boolean in the profiles table and inserts a corresponding 
+entry into the user_roles table. 
+5.​ Rider Earnings Tracking: Tested the automatic calculation and recording of driver payouts. Upon transition of a 
+ride to completed, the platform correctly credits the calculated fare to the rider_earnings. 
+54 
+
+
+=== PAGE 55 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+5.1.3. Simulated Testing and User Acceptance 
+Controlled simulation scenarios were executed to evaluate platform behavior under realistic campus mobility 
+environments: 
+1​ Concurrent Ride Requests: Simulated simultaneous ride bookings originating from campus hostel clusters to 
+test PostgreSQL transaction handling and Row Level Security (RLS) policies under load. 
+2​ Network Fluctuation Resilience: Tested real-time ride tracking during network switches between campus Wi-Fi 
+and mobile data (4G/5G). The Leaflet map component and WebSocket listener successfully resumed location 
+synchronization upon reconnect. 
+3​ Role-Based Security Boundaries: Tested authorization boundaries to ensure passengers cannot access rider 
+earnings routes or admin review panels, enforcing strict route-guard redirection. 
+5.2 Deployment 
+The RideBuddy system was deployed using scalable, modern cloud infrastructure to support continuous availability 
+for students during peak morning and evening travel hours: 
+5.2.1. Hosting and Cloud Server Setup 
+1​
+Frontend Web Application: The React and Tailwind CSS application was deployed on a modern continuous 
+deployment platform connected directly to the version control repository. Build optimizations were enabled to 
+deliver minified JavaScript bundles and asset compression. 
+2​
+Backend and Database Management: Managed through Supabase Cloud, running PostgreSQL on scalable 
+cloud infrastructure with automated daily snapshots, connection pooling, and low-latency API access. 
+3​
+Asset & Document Storage: Secured file storage buckets were configured on Supabase Storage for driving 
+licenses and vehicle images, protected by role-restricted access policies. 
+5.5.2. Progressive Web Compatibility 
+1​
+The platform was built and deployed as a responsive, mobile-first web application. Students can access the 
+platform on smartphones (iOS and Android), tablets, and laptops via modern browsers without requiring 
+third-party app store downloads. 
+2​
+Client-side data caching was implemented using TanStack React Query to cache route catalogs and ride histories, 
+minimizing repetitive server requests. 
+5.2.3. User Onboarding and Verification Workflow 
+●​ Registered students complete email verification before gaining platform access. 
+●​ Prospective riders submit their vehicle registration number, vehicle type, and driving license. The submitted 
+documents appear on the administrator panel for review before rider capabilities are unlocked. 
+5.2.4. Continuous Maintenance and Monitoring 
+●​ Performance Monitoring: Continuous tracking of API response times, database query execution durations, and 
+routing endpoint latency. 
+●​ Error Logging: Application-level logging captures unhandled client exceptions and WebSocket disconnections 
+55 
+
+
+=== PAGE 56 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+to inform continuous updates. 
+5.2.5. Challenges in Deployment 
+●​ Campus Ground Geospatial Mapping: Internal, unnamed campus roads occasionally caused coordinate 
+snapping deviations in the routing machine. This was resolved by configuring custom pickup anchor coordinates 
+at major campus gates and hostel blocks. 
+●​ Network Density Delays: High cellular traffic density during class changeover hours led to minor WebSocket 
+packet latency. Reconnection retry logic was implemented to maintain persistent live tracking. 
+●​ Verification Backlog: Manual review of rider documents during peak semester start required the introduction of 
+dedicated admin filter queues to streamline approvals. 
+ 
+ 
+56 
+
+
+=== PAGE 57 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 6: ANALYSIS AND RESULTS 
+6.1 System Performance Evaluation 
+The RideBuddy platform underwent structured performance testing to evaluate routing latency, authentication 
+security, database query throughput, and overall student user experience: 
+6.1.1. Geospatial Routing and Tracking Performance 
+●​ Route calculation between the campus and predefined destinations (Waghodia Road, Vadodara Station, Alkapuri, 
+Manjalpur, Sayajigunj) executed in an average of 1.2 to 1.8 seconds using the OSRM routing engine. 
+●​ Live coordinate updates between rider and passenger screens over Supabase Realtime channels maintained an 
+average propagation latency of under 450 milliseconds under standard 4G and campus Wi-Fi networks. 
+6.1.2. Authentication & Access Control Stability 
+●​ During stress testing, the domain restriction mechanism achieved a 100% rejection rate for unauthorized email 
+domains, successfully preventing unauthorized access outside Parul University. 
+●​ Role-based access controls prevented unauthorized access to administrative endpoints, redirecting 
+unauthenticated users to the login screen. 
+6.1.3. Database Throughput and Response Times 
+●​ Database queries for ride history retrieval, active ride polling, and earnings aggregation executed in an average 
+time of 35 to 55 milliseconds, supported by B-tree indexing on foreign key columns (user_id, rider_id, and 
+status). 
+●​ Row Level Security (RLS) policies executed with negligible computational overhead, ensuring data privacy 
+across user accounts. 
+6.2 Results 
+The evaluation demonstrated that RideBuddy offers an efficient, affordable, and trusted transit ecosystem tailored for 
+university students. The key experimental findings include: 
+Table 6.1: System Latency and Execution Benchmarks 
+Performance Parameter 
+Measured Value 
+Evaluation Status 
+Institutional 
+Domain 
+Filter 
+Accuracy 
+100% (Zero false admissions) 
+Optimal 
+OSRM 
+Route 
+Calculation 
+Latency 
+1.2 - 1.8 seconds 
+Optimal 
+57 
+
+
+=== PAGE 58 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+Performance Parameter 
+Measured Value 
+Evaluation Status 
+Supabase WebSocket Sync 
+Latency 
+< 450 ms 
+Optimal 
+Database Query Response 
+(Indexed) 
+35 - 55 ms 
+Optimal 
+Rider Application Submission 
+Time 
+< 3.0 seconds (with 2 file 
+uploads) 
+Optimal 
+Cross-Platform UI 
+Compatibility 
+Mobile, Tablet, Desktop 
+Verified 
+Economic Impact and Student Cost Savings: 
+A comparative cost assessment was conducted between existing commercial transportation options and RideBuddy's 
+carpooling fare model across major campus transit routes: 
+Table 6.2: Student Commuting Cost Comparison 
+Route 
+Destination 
+Commercial 
+Auto-Rickshaw 
+Private 
+Ride-Hailing 
+(Ola/Uber) 
+RideBuddy 
+Student Fare 
+Student Cost 
+Savings (%) 
+Waghodia Road 
+₹30 - ₹40 
+₹60 - ₹80 
+₹15 
+50% - 75% 
+Vadodara 
+Railway Station 
+₹70 - ₹90 
+₹110 - ₹150 
+₹40 
+43% - 64% 
+Alkapuri 
+₹90 - ₹120 
+₹140 - ₹180 
+₹50 
+44% - 64% 
+Manjalpur 
+₹70 - ₹90 
+₹100 - ₹140 
+₹35 
+50% - 65% 
+Sayajigunj 
+₹80 - ₹100 
+₹120 - ₹160 
+₹45 
+44% - 62% 
+The empirical results show that RideBuddy reduces regular daily commuting costs for students by 43% to 75% 
+compared to traditional auto-rickshaws and commercial taxi services.  
+58 
+
+
+=== PAGE 59 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 7: CONCLUSION AND FUTURE ENHANCEMENT 
+7.1 Conclusion 
+The RideBuddy project successfully addresses the recurring intra-city transportation challenges encountered by 
+students at Parul University. By providing a dedicated, campus-centric ride-sharing platform, RideBuddy effectively 
+resolves the shortcomings of overcrowded university shuttles, high commercial auto-rickshaw fares, and the security 
+concerns associated with public ride-hailing services. 
+By leveraging a modern technology stack—combining React and Tailwind CSS for an intuitive frontend, Supabase 
+and PostgreSQL for scalable database management and real-time synchronization, and Leaflet with OSRM for 
+interactive map routing—the platform delivers a dependable peer-to-peer mobility service. Key features such as 
+institutional email authentication, structured rider verification, predefined route selection, and role-specific 
+dashboards create a closed-loop, trusted campus community. 
+Through comprehensive testing and evaluation, RideBuddy demonstrated high system responsiveness, strong data 
+integrity, and substantial economic savings for students. In addition to reducing commuting costs and travel delays, 
+the platform promotes sustainable campus transportation by optimizing empty vehicle seats, reducing vehicular 
+congestion, and lowering the university's collective carbon footprint. 
+7.2 Future Enhancement 
+While the current implementation of RideBuddy meets all core functional requirements for campus ride-sharing, 
+several technical and operational enhancements are planned for future iterations: 
+●​ Digital Payment Gateway Integration: Integrating direct UPI payments (Razorpay, Cashfree, or Google Pay) 
+and an in-app digital wallet to automate fare settlement immediately upon ride completion, eliminating cash 
+dependency. 
+●​ In-App Encrypted Communication: Adding a real-time messaging and masked-calling module allowing riders 
+and passengers to coordinate pickup details without disclosing personal phone numbers. 
+●​ Automated AI/OCR Verification: Implementing Optical Character Recognition (OCR) and document 
+verification APIs to automatically scan driving licenses and student ID cards during onboarding, reducing manual 
+admin verification turnaround times. 
+●​ Emergency SOS and Campus Security Integration: Introducing an in-app SOS safety trigger that instantly 
+transmits the student's live location and ride details to the Parul University Campus Security control room and 
+registered emergency contacts. 
+●​ Two-Way Rating and Review System: Establishing a bilateral feedback system where both riders and 
+passengers rate each other after every trip, encouraging courteous conduct and maintaining platform quality. 
+●​ Carbon Footprint and Sustainability Analytics: Developing an environmental dashboard displaying 
+cumulative fuel savings and CO2 emissions prevented through shared student commutes, supporting green 
+campus sustainability initiatives.
+ 
+59 
+
+
+=== PAGE 60 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+CHAPTER 8: References 
+ 
+1.​ S. Shaheen, A. Cohen, and J. Zohdy, Shared Mobility: Current Practices and Guiding Principles, 
+Washington, DC: U.S. Department of Transportation, 2016. 
+ 
+2.​ J. Chan and S. Shaheen, “Ridesharing in North America: Past, Present, and Future,” Transport Reviews, vol. 
+32, no. 1, pp. 93–112, 2012. 
+ 
+3.​ M. Furuhata et al., “Ridesharing: The State-of-the-Art and Future Directions,” Transportation Research Part 
+B: Methodological, vol. 57, pp. 28–46, 2013. 
+ 
+4.​ A. Agatz, A. Erera, M. Savelsbergh, and X. Wang, “Optimization for Dynamic Ride-sharing: A ​ Review,” 
+European Journal of Operational Research, vol. 223, no. 2, pp. 295–303, 2012. 
+ 
+5.​ R. Cervero and Y. Tsai, “City CarShare in San Francisco, California: Second-Year Travel Demand and Car 
+Ownership Impacts,” Transportation Research Record, vol. 1887, pp. 117–127, 2004. 
+ 
+6.​ N. J. Goodall, “Can You Trust a Self-Driving Car? Ethical Considerations in Autonomous Vehicles,” 
+Transportation Research Record, vol. 2424, no. 1, pp. 58–64, 2014. 
+ 
+7.​ D. C. Hensher, “Future Bus Transport Contracts under a Mobility as a Service (MaaS) Regime in the Digital 
+Age: Are They Likely to Change?” Transportation Research Part A, vol. 98, pp. 86–96, 2017. 
+ 
+8.​ J. Alonso-Mora, S. Samaranayake, A. Wallar, E. Frazzoli, and D. Rus, “On-demand High-capacity 
+Ride-sharing via Dynamic Trip-vehicle Assignment,” Proceedings of the National Academy of Sciences, 
+vol. 114, no. 3, pp. 462–467, 2017. 
+ 
+9.​ G. Li, D. L. Greene, and M. Wegener, “Transportation and Energy Use,” Handbook of Transport Modelling, 
+Elsevier, pp. 347–365, 2011. 
+ 
+10.​S. Ma, Y. Zheng, and O. Wolfson, “Real-Time City-Scale Taxi Ridesharing,” IEEE Transactions on 
+Knowledge and Data Engineering, vol. 27, no. 7, pp. 1782–1795, 2015. 
+ 
+11.​T. Chen and K. Kockelman, “Management of a Shared Autonomous Electric Vehicle Fleet: Implications of 
+Pricing Schemes,” Transportation Research Record, vol. 2572, pp. 37–46, 2016. 
+ 
+12.​P. Santi et al., “Quantifying the Benefits of Vehicle Pooling with Shareability Networks,” Proceedings of the 
+National Academy of Sciences, vol. 111, no. 37, pp. 13290–13294, 2014. 
+ 
+13.​M. E. Ben-Akiva, D. McFadden, and K. Train, “Foundations of Stated Preference Elicitation: Consumer 
+Behavior and Choice-based Conjoint Analysis,” Foundations and Trends in Econometrics, vol. 10, no. 1–2, 
+pp. 1–144, 2016. 
+ 
+14.​A. Rayle, S. Shaheen, N. Chan, D. Dai, and R. Cervero, “Just a Better Taxi? A Survey-Based Comparison of 
+Taxis, Transit, and Ridesourcing Services in San Francisco,” Transport Policy, vol. 45, pp. 168–178, 2016. 
+ 
+15.​J. Wang, C. Chen, Q. Yang, and S. Yang, “A Survey on Ride-Sharing: From Static to Dynamic Matching,” 
+ACM Computing Surveys, vol. 53, no. 4, pp. 1–34, 2021. 
+ 
+ 
+16.​D. Daganzo and C. Ouyang, “Public Transportation Systems: Principles of System Design, Operations 
+Planning and Real-Time Control,” Elsevier, 2019. 
+60 
+
+
+=== PAGE 61 ===
+           Team Id: PIET_069 ​
+​
+​
+​
+​
+​
+​
+​
+​
+RIDEBUDDY 
+ 
+ 
+ 
+17.​R. Katzev, “Car Sharing: A New Approach to Urban Transportation Problems,” Analyses of Social Issues 
+and Public Policy, vol. 3, no. 1, pp. 65–86, 2003. 
+ 
+18.​M. Dias et al., “Using Sharing Economy Concepts in Transportation,” Transportation Research Procedia, 
+vol. 3, pp. 296–305, 2014. 
+ 
+19.​A. Agatz, M. Savelsbergh, and X. Wang, “Dynamic Ride-Sharing: A Simulation Study in Metro Atlanta,” 
+Procedia Social and Behavioral Sciences, vol. 17, pp. 532–550, 2011. 
+ 
+20.​S. Shaheen and A. Cohen, “Innovative Mobility: Carsharing Outlook,” Transportation Sustainability 
+Research Center, University of California, Berkeley, 2019. 
+ 
+61 
+
+

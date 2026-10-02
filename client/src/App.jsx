@@ -1,18 +1,24 @@
 import { useState, useEffect } from 'react';
 import { FinanceHubNavbar } from './components/layout/FinanceHubNavbar.jsx';
+import { HomeDashboardView } from './components/dashboard/HomeDashboardView.jsx';
 import { TradingTerminalView } from './components/dashboard/TradingTerminalView.jsx';
 import { TradeFlowView } from './components/dashboard/TradeFlowView.jsx';
-import { OrdersView } from './components/orders/OrdersView.jsx';
-import { AuthModal } from './components/auth/AuthModal.jsx';
-import { LoginView } from './components/auth/LoginView.jsx';
+import { MarketView } from './components/dashboard/MarketView.jsx';
+import { IpoView } from './components/ipo/IpoView.jsx';
+import { MutualFundsView } from './components/mutualfunds/MutualFundsView.jsx';
+import { SipView } from './components/sip/SipView.jsx';
 import { PortfolioView } from './components/dashboard/PortfolioView.jsx';
+import { OrdersView } from './components/orders/OrdersView.jsx';
+import { CalculatorsView } from './components/calculators/CalculatorsView.jsx';
 import { WatchlistView } from './components/dashboard/WatchlistView.jsx';
 import { NewsView } from './components/dashboard/NewsView.jsx';
 import { AiInsightsView } from './components/dashboard/AiInsightsView.jsx';
-import { fetchPortfolio } from './services/api.js';
-import { formatINR } from './utils/formatters.js';
+import { AdminView } from './components/admin/AdminView.jsx';
+import { AuthModal } from './components/auth/AuthModal.jsx';
+import { LoginView } from './components/auth/LoginView.jsx';
 import { BackgroundLayer } from './components/common/BackgroundLayer.jsx';
-import { MarketView } from './components/dashboard/MarketView.jsx';
+import { fetchUnifiedPortfolio } from './services/api.js';
+import { formatINR } from './utils/formatters.js';
 
 export function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -24,18 +30,23 @@ export function App() {
 
   const [portfolio, setPortfolio] = useState({
     profile: {
-      name: "Guest Account",
-      email: "guest@investor.in",
-      availableBalance: 100000.00,
-      totalInvestment: 0.00,
-      currentPortfolioValue: 0.00,
-      todaysProfit: 0.00,
-      todaysProfitPercent: 0.00,
-      totalProfit: 0.00,
-      totalProfitPercent: 0.00
+      name: "Rahul Sharma",
+      email: "rahul.sharma@investor.in",
+      availableBalance: 125000.00,
+      totalInvested: 132000.00,
+      currentAssetsValue: 154205.13,
+      totalNetWorth: 279205.13,
+      todaysProfit: 1250.40,
+      todaysProfitPercent: 0.81,
+      overallProfit: 22205.13,
+      overallProfitPercent: 16.82,
+      xirr: 18.42
     },
-    holdings: [],
-    orders: []
+    stockMetrics: { invested: 87000, current: 95800, pnl: 8800, holdings: [] },
+    mfMetrics: { invested: 45000, current: 52405, pnl: 7405, holdings: [] },
+    sipMetrics: { invested: 42000, current: 44543, plans: [] },
+    ipoMetrics: { invested: 14820, current: 17042, applications: [] },
+    allocation: []
   });
 
   // Load user from storage on mount
@@ -43,8 +54,10 @@ export function App() {
     const token = localStorage.getItem('authToken');
     const storedUser = localStorage.getItem('currentUser');
     if (token && storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setCurrentUser(parsed);
+      try {
+        const parsed = JSON.parse(storedUser);
+        setCurrentUser(parsed);
+      } catch (e) {}
     }
   }, []);
 
@@ -52,48 +65,30 @@ export function App() {
     const token = localStorage.getItem('authToken');
     if (!token) return;
     try {
-      const data = await fetchPortfolio();
-      setPortfolio(data);
-      if (data.profile) {
-        // Update user state available balance
-        setCurrentUser(prev => prev ? { ...prev, availableBalance: data.profile.availableBalance } : null);
+      const data = await fetchUnifiedPortfolio();
+      if (data) {
+        setPortfolio(data);
+        if (data.profile) {
+          setCurrentUser(prev => prev ? { ...prev, availableBalance: data.profile.availableBalance } : null);
+        }
       }
     } catch (err) {
-      console.warn("Failed to fetch live portfolio details:", err.message);
+      console.warn("Portfolio sync fallback:", err.message);
     }
   };
 
-  // Reload portfolio when user changes
   useEffect(() => {
     if (currentUser) {
       loadPortfolio();
-    } else {
-      // reset portfolio mock default
-      setPortfolio({
-        profile: {
-          name: "Guest Account",
-          email: "guest@investor.in",
-          availableBalance: 100000.00,
-          totalInvestment: 0.00,
-          currentPortfolioValue: 0.00,
-          todaysProfit: 0.00,
-          todaysProfitPercent: 0.00,
-          totalProfit: 0.00,
-          totalProfitPercent: 0.00
-        },
-        holdings: [],
-        orders: []
-      });
     }
   }, [currentUser]);
 
   const handleSelectStock = (symbol) => {
     setSelectedStockTicker(symbol);
-    setActiveTab('dashboard');
+    setActiveTab('stocks');
   };
 
-  const handleOrderExecuted = (orderData) => {
-    // Reload portfolio balances and assets from MySQL database
+  const handleOrderExecuted = () => {
     loadPortfolio();
   };
 
@@ -105,7 +100,6 @@ export function App() {
   const handleLogOut = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('guestPortfolio');
     setCurrentUser(null);
     setIsGuestMode(false);
     setActiveTab('dashboard');
@@ -126,6 +120,8 @@ export function App() {
     );
   }
 
+  const currentAvailableBalance = currentUser ? currentUser.availableBalance : portfolio.profile.availableBalance;
+
   return (
     <div className="min-h-screen bg-[#05070D] text-slate-100 flex flex-col font-sans relative">
       <BackgroundLayer activeTab={activeTab} />
@@ -134,14 +130,29 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onSelectStock={handleSelectStock}
-        availableBalance={currentUser ? currentUser.availableBalance : portfolio.profile.availableBalance}
+        availableBalance={currentAvailableBalance}
+        currentUser={currentUser}
       />
 
-      <main className="flex-1 p-6 overflow-y-auto space-y-6">
+      <main className="flex-1 p-4 md:p-6 overflow-y-auto space-y-6">
         
+        {/* TAB 1: GROWW/UPSTOX STYLE DASHBOARD */}
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            
+          <HomeDashboardView
+            onSelectStock={handleSelectStock}
+            setActiveTab={setActiveTab}
+            currentUser={currentUser}
+          />
+        )}
+
+        {/* TAB 2: MARKETS OVERVIEW */}
+        {activeTab === 'markets' && (
+          <MarketView onSelectStock={handleSelectStock} />
+        )}
+
+        {/* TAB 3: STOCKS TRADING TERMINAL */}
+        {activeTab === 'stocks' && (
+          <div className="space-y-6 max-w-7xl mx-auto">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-white/10">
                 <button
@@ -171,7 +182,7 @@ export function App() {
                 </button>
               ) : (
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400 font-semibold font-mono">KYC: Verified</span>
+                  <span className="text-xs text-emerald-400 font-semibold font-mono">KYC: Verified</span>
                   <button 
                     onClick={handleLogOut}
                     className="py-1.5 px-3.5 text-xs font-bold rounded-xl border border-rose-500/30 text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 transition-colors"
@@ -183,79 +194,119 @@ export function App() {
             </div>
 
             {viewMode === 'FINNEXA_TERMINAL' ? (
-              <TradingTerminalView onOrderExecuted={handleOrderExecuted} />
+              <TradingTerminalView 
+                selectedSymbol={selectedStockTicker} 
+                onOrderExecuted={handleOrderExecuted} 
+              />
             ) : (
               <TradeFlowView onOrderExecuted={handleOrderExecuted} />
             )}
-
           </div>
         )}
 
-        {activeTab === 'markets' && (
-          <MarketView onSelectStock={handleSelectStock} />
+        {/* TAB 4: INDIAN IPO HUB */}
+        {activeTab === 'ipo' && (
+          <IpoView />
         )}
 
-        {activeTab === 'watchlist' && (
-          <WatchlistView onSelectStock={handleSelectStock} />
+        {/* TAB 5: MUTUAL FUNDS HUB */}
+        {activeTab === 'mutual-funds' && (
+          <MutualFundsView onStartSipWithFund={(fund) => setActiveTab('sip')} />
         )}
 
-        {activeTab === 'news' && (
-          <NewsView />
+        {/* TAB 6: SIP WEALTH DASHBOARD */}
+        {activeTab === 'sip' && (
+          <SipView />
         )}
 
+        {/* TAB 7: UNIFIED PORTFOLIO */}
         {activeTab === 'portfolio' && (
-          <PortfolioView onSelectStock={handleSelectStock} />
+          <PortfolioView 
+            onSelectStock={handleSelectStock} 
+            setActiveTab={setActiveTab} 
+          />
         )}
 
+        {/* TAB 8: ORDERS & TRANSACTIONS */}
         {activeTab === 'orders' && (
           <OrdersView />
         )}
 
+        {/* TAB 9: FINANCIAL CALCULATORS */}
+        {activeTab === 'calculators' && (
+          <CalculatorsView />
+        )}
+
+        {/* TAB 10: WATCHLIST */}
+        {activeTab === 'watchlist' && (
+          <WatchlistView onSelectStock={handleSelectStock} />
+        )}
+
+        {/* TAB 11: MARKET NEWS */}
+        {activeTab === 'news' && (
+          <NewsView />
+        )}
+
+        {/* TAB 12: AI INSIGHTS */}
         {activeTab === 'ai' && (
           <AiInsightsView />
         )}
 
+        {/* TAB 13: ADMIN PANEL */}
+        {activeTab === 'admin' && (
+          <AdminView />
+        )}
+
+        {/* TAB 14: USER PROFILE & KYC */}
         {activeTab === 'profile' && (
-          <div className="max-w-2xl mx-auto glass-card p-8 space-y-6">
+          <div className="max-w-2xl mx-auto glass-card p-8 space-y-6 rounded-3xl border border-white/10">
             <div className="flex items-center gap-4 border-b border-white/10 pb-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-black text-lg shadow-lg">
-                {currentUser ? currentUser.name.substring(0, 2).toUpperCase() : 'GS'}
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-black text-lg shadow-lg">
+                {currentUser ? (currentUser.firstname?.[0] || 'U') : 'IN'}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">{currentUser ? currentUser.name : 'Guest Account'}</h2>
-                <p className="text-xs text-slate-400 font-mono">KYC Status: VERIFIED</p>
+                <h2 className="text-lg font-bold text-white">
+                  {currentUser ? `${currentUser.firstname || currentUser.name} ${currentUser.lastname || ''}` : 'Guest Account'}
+                </h2>
+                <p className="text-xs text-emerald-400 font-mono">SEBI KYC Status: VERIFIED</p>
               </div>
             </div>
 
             {currentUser ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1">
-                  <span className="text-[10px] text-slate-400 block">Email Address</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">Email Address</span>
                   <span className="text-white font-extrabold">{currentUser.email}</span>
                 </div>
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1">
-                  <span className="text-[10px] text-slate-400 block">Mobile Number</span>
-                  <span className="text-white font-extrabold">{currentUser.mobile}</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">Mobile Number</span>
+                  <span className="text-white font-extrabold">{currentUser.mobile_number || currentUser.mobile || '9876543210'}</span>
                 </div>
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1">
-                  <span className="text-[10px] text-slate-400 block">PAN Card Number</span>
-                  <span className="text-white font-extrabold uppercase">{currentUser.pan}</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">PAN Card Number</span>
+                  <span className="text-cyan-400 font-extrabold uppercase">{currentUser.PANCARD_number || currentUser.pan || 'ABCDE1234F'}</span>
                 </div>
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1">
-                  <span className="text-[10px] text-slate-400 block">Virtual Wallet Balance</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">Available Wallet Balance</span>
                   <span className="text-emerald-400 font-extrabold">{formatINR(currentUser.availableBalance)}</span>
                 </div>
                 <div className="bg-slate-950/60 p-4 rounded-xl border border-white/5 space-y-1 col-span-1 md:col-span-2">
-                  <span className="text-[10px] text-slate-400 block">Residential Address</span>
-                  <span className="text-slate-200 font-sans block pt-0.5 leading-relaxed">{currentUser.address}</span>
+                  <span className="text-[10px] text-slate-400 block font-sans">Permanent Residential Address</span>
+                  <span className="text-slate-200 font-sans block pt-0.5 leading-relaxed">{currentUser.address || 'Mumbai, Maharashtra, India'}</span>
                 </div>
 
-                <div className="col-span-1 md:col-span-2 pt-4">
+                <div className="col-span-1 md:col-span-2 pt-4 flex gap-3">
+                  <button
+                    onClick={() => setActiveTab('admin')}
+                    className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl"
+                  >
+                    Open Admin Control Center
+                  </button>
                   <button 
                     onClick={handleLogOut}
-                    className="w-full py-3.5 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-md shadow-rose-600/10 rounded-xl uppercase tracking-wider transition-all"
+                    className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs shadow-md shadow-rose-600/10 rounded-xl uppercase tracking-wider transition-all"
                   >
-                    Terminate Session & Log Out
+                    Log Out Session
                   </button>
                 </div>
               </div>

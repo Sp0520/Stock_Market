@@ -27,27 +27,127 @@ app.use(express.json());
 const JWT_SECRET = process.env.JWT_SECRET || 'indian_stock_market_jwt_secret_key_2026';
 
 // Global In-Memory Fallback Store (for Sandbox deployments where MySQL is not connected)
+// Global In-Memory Fallback Store (for Sandbox deployments where MySQL is not connected)
 const IN_MEMORY_USERS = [];
+let IN_MEMORY_IPOS = JSON.parse(JSON.stringify(INDIAN_IPOS));
+let IN_MEMORY_MUTUAL_FUNDS = JSON.parse(JSON.stringify(MUTUAL_FUNDS));
+let IN_MEMORY_ANNOUNCEMENTS = [
+  { id: 1, title: 'NSE & BSE Special Trading Session', category: 'MARKET_ALERT', message: 'Special live trading session scheduled this Saturday for Disaster Recovery site switch.', severity: 'INFO', date: 'Today' },
+  { id: 2, title: 'SEBI Investor Protection Advisory', category: 'REGULATORY', message: 'Never share your trading passwords or OTPs with unauthorized entities.', severity: 'WARNING', date: 'Yesterday' }
+];
 
 const getUserSessionData = (userId) => {
   let user = IN_MEMORY_USERS.find(u => u.id === parseInt(userId, 10));
   if (!user) {
     user = {
       id: parseInt(userId, 10) || 1,
-      firstname: "Investor",
-      lastname: "Pro",
-      email: "sandbox@investor.in",
+      firstname: "Rahul",
+      lastname: "Sharma",
+      email: "rahul.sharma@investor.in",
+      role: "admin", // Admin privilege enabled for platform testing
       password: "",
       mobile: "9876543210",
       pan: "ABCDE1234F",
-      address: "Mumbai, India",
-      availableBalance: 100000.00,
-      holdings: [],
-      transactions: [
-        { id: "DEP_INIT", payment_date: new Date().toISOString(), payment_id: "DEP_10001", description: "Welcome Wallet Fund Bonus", status: "COMPLETED", debit: 0, credit: 100000.00 }
+      address: "A-404, Tech Park Heights, BKC, Mumbai - 400051",
+      availableBalance: 125000.00,
+      holdings: [
+        { stock_name: "TCS.NS", purchase_price: 3550.00, qty: 120, status: 1 },
+        { stock_name: "RELIANCE.NS", purchase_price: 2820.00, qty: 85, status: 1 },
+        { stock_name: "HDFCBANK.NS", purchase_price: 1510.00, qty: 120, status: 1 }
       ],
-      watchlist: ["RELIANCE", "TCS", "INFY"],
-      orders: []
+      mfHoldings: [
+        {
+          id: 1,
+          fundId: "mf-1",
+          fundName: "Parag Parikh Flexi Cap Fund Direct-Growth",
+          category: "Flexi Cap",
+          folioNumber: "FOLIO-PPF-88219",
+          units: 339.9433,
+          investedAmount: 25000.00,
+          averageNav: 73.54,
+          currentNav: 88.25,
+          currentValue: 30000.00,
+          purchaseDate: "2024-03-15"
+        },
+        {
+          id: 2,
+          fundId: "mf-5",
+          fundName: "SBI Nifty 50 Index Fund Direct-Growth",
+          category: "Index Funds",
+          folioNumber: "FOLIO-SBI-44129",
+          units: 102.5641,
+          investedAmount: 20000.00,
+          averageNav: 195.00,
+          currentNav: 218.45,
+          currentValue: 22405.13,
+          purchaseDate: "2024-05-10"
+        }
+      ],
+      sipPlans: [
+        {
+          id: 1,
+          sipCode: "SIP-PPF-001",
+          fundId: "mf-1",
+          fundName: "Parag Parikh Flexi Cap Fund Direct-Growth",
+          frequency: "MONTHLY",
+          installmentAmount: 5000.00,
+          sipDay: 10,
+          durationMonths: 36,
+          expectedReturn: 15.00,
+          status: "ACTIVE",
+          installmentsPaid: 6,
+          totalInvested: 30000.00,
+          unitsAllocated: 365.1250,
+          currentNav: 88.25,
+          currentValue: 32222.28,
+          nextInstallmentDate: "2026-11-10",
+          startDate: "2024-05-10"
+        },
+        {
+          id: 2,
+          sipCode: "SIP-SBI-002",
+          fundId: "mf-5",
+          fundName: "SBI Nifty 50 Index Fund Direct-Growth",
+          frequency: "MONTHLY",
+          installmentAmount: 3000.00,
+          sipDay: 15,
+          durationMonths: 60,
+          expectedReturn: 13.00,
+          status: "ACTIVE",
+          installmentsPaid: 4,
+          totalInvested: 12000.00,
+          unitsAllocated: 56.4020,
+          currentNav: 218.45,
+          currentValue: 12321.02,
+          nextInstallmentDate: "2026-11-15",
+          startDate: "2024-07-15"
+        }
+      ],
+      ipoApplications: [
+        {
+          id: 1,
+          applicationNo: "IPO-APP-2026-1001",
+          ipoId: "ipo-1",
+          company: "Swiggy Limited",
+          investorCategory: "RETAIL",
+          lots: 1,
+          bidPrice: 390.00,
+          totalAmount: 14820.00,
+          upiId: "rahul@okaxis",
+          status: "ALLOTTED",
+          allottedShares: 38,
+          refundAmount: 0.00,
+          appliedAt: "2024-11-06T10:30:00Z"
+        }
+      ],
+      transactions: [
+        { id: "DEP_INIT", payment_date: new Date().toISOString(), payment_id: "DEP_10001", description: "Welcome Wallet Fund Bonus", status: "COMPLETED", debit: 0, credit: 125000.00 }
+      ],
+      watchlist: ["RELIANCE", "TCS", "INFY", "HDFCBANK", "ICICIBANK"],
+      orders: [
+        { id: 1, symbol: "RELIANCE.NS", exchange: "NSE", type: "BUY", order_category: "LIMIT", qty: 85, price: 2820.00, status: "EXECUTED", time: new Date().toISOString(), executed_price: 2820.00, charges: 25.50 },
+        { id: 2, symbol: "TCS.NS", exchange: "NSE", type: "BUY", order_category: "MARKET", qty: 120, price: 3550.00, status: "EXECUTED", time: new Date().toISOString(), executed_price: 3550.00, charges: 18.20 }
+      ]
     };
     IN_MEMORY_USERS.push(user);
   }
@@ -1282,14 +1382,210 @@ app.post('/api/funds/withdraw', authenticateToken, async (req, res) => {
   }
 });
 
-// === IPOS, MUTUAL FUNDS, NEWS, AI ===
+// ============================================================
+// REAL-WORLD DATA HELPERS: AMFI MUTUAL FUNDS & INDIAN NEWS
+// ============================================================
+const mfNavCache = {};
+async function getLiveFundNav(fund) {
+  if (!fund.schemeCode) return fund;
+  const now = Date.now();
+  if (mfNavCache[fund.schemeCode] && (now - mfNavCache[fund.schemeCode].timestamp < 1800000)) { // 30 min cache
+    return { ...fund, ...mfNavCache[fund.schemeCode].data };
+  }
+  try {
+    const res = await fetch(`https://api.mfapi.in/mf/${fund.schemeCode}`, { signal: AbortSignal.timeout(3500) });
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.data && json.data.length > 0) {
+        const latest = json.data[0];
+        const latestNav = parseFloat(latest.nav);
+        const navDate = latest.date;
+        const prev = json.data[1] ? parseFloat(json.data[1].nav) : latestNav;
+        const return1D = prev > 0 ? parseFloat((((latestNav - prev) / prev) * 100).toFixed(2)) : fund.return1D;
+        const update = {
+          nav: latestNav,
+          navDate,
+          return1D,
+          isLiveNav: true,
+          historicalNav: json.data.slice(0, 30)
+        };
+        mfNavCache[fund.schemeCode] = { timestamp: now, data: update };
+        return { ...fund, ...update };
+      }
+    }
+  } catch (err) {
+    // Fail gracefully to pre-seeded static AMFI NAV
+  }
+  return { ...fund, isLiveNav: false };
+}
+
+let liveNewsCache = { timestamp: 0, items: [] };
+async function fetchLiveIndianNews() {
+  const now = Date.now();
+  if (liveNewsCache.items.length > 0 && (now - liveNewsCache.timestamp < 600000)) { // 10 min cache
+    return liveNewsCache.items;
+  }
+  try {
+    const res = await fetch('https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-IN&gl=IN&ceid=IN:en', { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      const xml = await res.text();
+      const items = [];
+      const regex = /<item>[\s\S]*?<title>(.*?)<\/title>[\s\S]*?<link>(.*?)<\/link>[\s\S]*?<pubDate>(.*?)<\/pubDate>[\s\S]*?<source[^>]*>(.*?)<\/source>[\s\S]*?<\/item>/g;
+      let m;
+      let count = 0;
+      while ((m = regex.exec(xml)) !== null && count < 12) {
+        const rawTitle = m[1].replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+        const link = m[2];
+        const pubDate = m[3];
+        const source = m[4];
+        
+        let category = 'Indian Stock Market';
+        if (rawTitle.toLowerCase().includes('ipo')) category = 'IPO News';
+        else if (rawTitle.toLowerCase().includes('mutual fund') || rawTitle.toLowerCase().includes('sip')) category = 'Mutual Funds';
+        else if (rawTitle.toLowerCase().includes('tcs') || rawTitle.toLowerCase().includes('reliance') || rawTitle.toLowerCase().includes('infosys') || rawTitle.toLowerCase().includes('hdfc')) category = 'Company News';
+        
+        items.push({
+          id: `live-news-${count + 1}`,
+          title: rawTitle,
+          link,
+          pubDate,
+          time: new Date(pubDate).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+          source: source || 'Market Wire',
+          category,
+          sentiment: rawTitle.toLowerCase().includes('surge') || rawTitle.toLowerCase().includes('rally') || rawTitle.toLowerCase().includes('gain') ? 'BULLISH' : (rawTitle.toLowerCase().includes('fall') || rawTitle.toLowerCase().includes('drop') || rawTitle.toLowerCase().includes('loss') ? 'BEARISH' : 'NEUTRAL'),
+          summary: rawTitle,
+          isLiveApi: true
+        });
+        count++;
+      }
+      if (items.length > 0) {
+        liveNewsCache = { timestamp: now, items };
+        return items;
+      }
+    }
+  } catch (err) {
+    console.warn("Live RSS news fetch fallback:", err.message);
+  }
+  return INDIAN_MARKET_NEWS;
+}
+
+// ============================================================
+// 1. IPO MODULE ENDPOINTS
+// ============================================================
 app.get('/api/ipos', (req, res) => {
-  res.json({ success: true, data: INDIAN_IPOS });
+  const { status, search } = req.query;
+  let ipos = [...IN_MEMORY_IPOS];
+  
+  if (status && status !== 'ALL') {
+    ipos = ipos.filter(i => i.status.toUpperCase() === status.toUpperCase());
+  }
+  if (search) {
+    const q = search.toLowerCase();
+    ipos = ipos.filter(i => i.company.toLowerCase().includes(q) || i.symbol.toLowerCase().includes(q));
+  }
+  
+  res.json({ success: true, count: ipos.length, data: ipos });
+});
+
+app.get('/api/ipos/:id', (req, res) => {
+  const ipo = IN_MEMORY_IPOS.find(i => i.id === req.params.id);
+  if (!ipo) return res.status(404).json({ success: false, message: "IPO record not found" });
+  res.json({ success: true, data: ipo });
+});
+
+app.post('/api/ipos/apply', authenticateToken, async (req, res) => {
+  const { ipoId, investorCategory = 'RETAIL', lots = 1, upiId } = req.body;
+  if (!ipoId) return res.status(400).json({ success: false, message: "IPO ID is required" });
+  if (!upiId || !upiId.includes('@')) return res.status(400).json({ success: false, message: "A valid UPI ID (e.g. yourname@okaxis) is required for ASBA mandate simulation" });
+  
+  const lotsCount = parseInt(lots, 10);
+  if (isNaN(lotsCount) || lotsCount < 1) return res.status(400).json({ success: false, message: "Lots must be at least 1" });
+
+  const ipo = IN_MEMORY_IPOS.find(i => i.id === ipoId);
+  if (!ipo) return res.status(404).json({ success: false, message: "IPO not found" });
+
+  if (ipo.status !== 'OPEN' && ipo.status !== 'CURRENT') {
+    return res.status(400).json({ success: false, message: `Cannot apply: IPO bidding is currently ${ipo.status}` });
+  }
+
+  const bidPrice = ipo.maxPrice;
+  const totalAmount = lotsCount * ipo.lotSize * bidPrice;
+  const applicationNo = `IPO-APP-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
+
+  const userId = req.user.id;
+  const user = getUserSessionData(userId);
+
+  if (user.availableBalance < totalAmount) {
+    return res.status(400).json({
+      success: false,
+      message: `Insufficient wallet balance. Required: ₹${totalAmount.toLocaleString('en-IN')}, Available: ₹${user.availableBalance.toLocaleString('en-IN')}`
+    });
+  }
+
+  // Deduct balance as simulated ASBA hold
+  user.availableBalance -= totalAmount;
+  const appRecord = {
+    id: (user.ipoApplications.length + 1),
+    applicationNo,
+    ipoId,
+    company: ipo.company,
+    symbol: ipo.symbol,
+    investorCategory,
+    lots: lotsCount,
+    shares: lotsCount * ipo.lotSize,
+    bidPrice,
+    totalAmount,
+    upiId,
+    status: 'APPLIED',
+    allottedShares: 0,
+    refundAmount: 0.00,
+    appliedAt: new Date().toISOString()
+  };
+  user.ipoApplications.unshift(appRecord);
+
+  // Add transaction
+  user.transactions.unshift({
+    id: `TXN_IPO_${Date.now()}`,
+    payment_id: `pay_IPO_${applicationNo}`,
+    payment_date: new Date().toISOString(),
+    description: `ASBA Mandate Block for ${lotsCount} lot(s) of ${ipo.company}`,
+    debit: totalAmount,
+    credit: 0,
+    status: 'COMPLETED'
+  });
+
+  // Try saving to MySQL if active
+  try {
+    await db.query(
+      "INSERT INTO ipo_applications (application_no, user_id, ipo_id, company, investor_category, lots, bid_price, total_amount, upi_id, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'APPLIED')",
+      [applicationNo, userId, ipoId, ipo.company, investorCategory, lotsCount, bidPrice, totalAmount, upiId]
+    );
+    await db.query("UPDATE users SET available_balance = available_balance - ? WHERE id=?", [totalAmount, userId]);
+  } catch (dbErr) {
+    // In-memory handled
+  }
+
+  res.json({
+    success: true,
+    message: `Simulated ASBA application submitted successfully for ${ipo.company}! Mandate blocked on UPI: ${upiId}`,
+    application: appRecord,
+    availableBalance: user.availableBalance
+  });
+});
+
+app.get('/api/ipos/my-applications', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const user = getUserSessionData(userId);
+  try {
+    const [rows] = await db.query("SELECT * FROM ipo_applications WHERE user_id=? ORDER BY applied_at DESC", [userId]);
+    if (rows.length > 0) return res.json({ success: true, data: rows });
+  } catch (e) {}
+  res.json({ success: true, data: user.ipoApplications || [] });
 });
 
 app.post('/api/ipos/allotment-check', (req, res) => {
   const { pan, ipoId } = req.body;
-  const ipo = INDIAN_IPOS.find(i => i.id === ipoId) || INDIAN_IPOS[0];
+  const ipo = IN_MEMORY_IPOS.find(i => i.id === ipoId) || IN_MEMORY_IPOS[0];
   const allocated = Math.random() > 0.45;
   res.json({
     success: true,
@@ -1297,54 +1593,515 @@ app.post('/api/ipos/allotment-check', (req, res) => {
     company: ipo.company,
     status: allocated ? "ALLOTTED" : "NOT ALLOTTED",
     sharesAllotted: allocated ? ipo.lotSize : 0,
-    refundAmount: allocated ? "₹0.00" : ipo.minInvestment,
+    refundAmount: allocated ? "₹0.00" : `₹${ipo.minInvestment.toLocaleString('en-IN')}`,
     message: allocated 
       ? `Congratulations! 1 Lot (${ipo.lotSize} shares) of ${ipo.company} allotted to PAN ${pan || 'ABCDE1234F'}.`
-      : `No allotment received for PAN ${pan || 'ABCDE1234F'}. Refund initiated to bank account.`
+      : `No allotment received for PAN ${pan || 'ABCDE1234F'}. Unblocked funds returned to bank account.`
   });
 });
 
-app.get('/api/mutual-funds', (req, res) => {
-  res.json({ success: true, data: MUTUAL_FUNDS });
+// ============================================================
+// 2. MUTUAL FUND MODULE ENDPOINTS (REAL AMFI DATA VIA MFAPI.IN)
+// ============================================================
+app.get('/api/mutual-funds', async (req, res) => {
+  const { category, search, sortBy } = req.query;
+  let funds = await Promise.all(IN_MEMORY_MUTUAL_FUNDS.map(f => getLiveFundNav(f)));
+
+  if (category && category !== 'ALL') {
+    funds = funds.filter(f => 
+      f.category.toLowerCase().includes(category.toLowerCase()) || 
+      f.mainCategory.toLowerCase().includes(category.toLowerCase())
+    );
+  }
+
+  if (search) {
+    const q = search.toLowerCase();
+    funds = funds.filter(f => f.name.toLowerCase().includes(q) || f.fundHouse.toLowerCase().includes(q));
+  }
+
+  if (sortBy === 'returns1y') funds.sort((a, b) => b.return1Y - a.return1Y);
+  else if (sortBy === 'returns3y') funds.sort((a, b) => b.return3Y - a.return3Y);
+  else if (sortBy === 'returns5y') funds.sort((a, b) => b.return5Y - a.return5Y);
+  else if (sortBy === 'rating') funds.sort((a, b) => b.rating - a.rating);
+
+  res.json({ success: true, count: funds.length, data: funds });
 });
 
-app.get('/api/news', (req, res) => {
-  res.json({ success: true, news: INDIAN_MARKET_NEWS, corporateActions: CORPORATE_ACTIONS });
+app.get('/api/mutual-funds/:id', async (req, res) => {
+  const rawFund = IN_MEMORY_MUTUAL_FUNDS.find(f => f.id === req.params.id || f.schemeCode === parseInt(req.params.id, 10));
+  if (!rawFund) return res.status(404).json({ success: false, message: "Mutual fund not found" });
+
+  const fund = await getLiveFundNav(rawFund);
+  res.json({ success: true, data: fund });
 });
 
+app.post('/api/mutual-funds/invest', authenticateToken, async (req, res) => {
+  const { fundId, amount, folioNumber } = req.body;
+  const investAmt = parseFloat(amount);
+  if (isNaN(investAmt) || investAmt <= 0) {
+    return res.status(400).json({ success: false, message: "Valid investment amount is required" });
+  }
+
+  const rawFund = IN_MEMORY_MUTUAL_FUNDS.find(f => f.id === fundId);
+  if (!rawFund) return res.status(404).json({ success: false, message: "Mutual fund not found" });
+  const fund = await getLiveFundNav(rawFund);
+
+  if (investAmt < fund.minLumpsum) {
+    return res.status(400).json({ success: false, message: `Minimum investment for ${fund.name} is ₹${fund.minLumpsum.toLocaleString('en-IN')}` });
+  }
+
+  const userId = req.user.id;
+  const user = getUserSessionData(userId);
+
+  if (user.availableBalance < investAmt) {
+    return res.status(400).json({ success: false, message: "Insufficient wallet balance to complete investment" });
+  }
+
+  const unitsAllotted = parseFloat((investAmt / fund.nav).toFixed(4));
+  user.availableBalance -= investAmt;
+
+  const existingHolding = user.mfHoldings.find(h => h.fundId === fund.id);
+  if (existingHolding) {
+    const totalUnits = existingHolding.units + unitsAllotted;
+    const totalInvested = existingHolding.investedAmount + investAmt;
+    existingHolding.units = parseFloat(totalUnits.toFixed(4));
+    existingHolding.investedAmount = parseFloat(totalInvested.toFixed(2));
+    existingHolding.averageNav = parseFloat((totalInvested / totalUnits).toFixed(4));
+    existingHolding.currentNav = fund.nav;
+    existingHolding.currentValue = parseFloat((totalUnits * fund.nav).toFixed(2));
+  } else {
+    user.mfHoldings.unshift({
+      id: user.mfHoldings.length + 1,
+      fundId: fund.id,
+      fundName: fund.name,
+      category: fund.category,
+      folioNumber: folioNumber || `FOLIO-${fund.id.toUpperCase()}-${Math.floor(10000 + Math.random() * 90000)}`,
+      units: unitsAllotted,
+      investedAmount: investAmt,
+      averageNav: fund.nav,
+      currentNav: fund.nav,
+      currentValue: investAmt,
+      purchaseDate: new Date().toISOString()
+    });
+  }
+
+  user.transactions.unshift({
+    id: `TXN_MF_${Date.now()}`,
+    payment_id: `pay_MF_${Math.floor(100000 + Math.random() * 900000)}`,
+    payment_date: new Date().toISOString(),
+    description: `Lumpsum investment of ₹${investAmt.toLocaleString('en-IN')} in ${fund.name}`,
+    debit: investAmt,
+    credit: 0,
+    status: 'COMPLETED'
+  });
+
+  res.json({
+    success: true,
+    message: `Successfully invested ₹${investAmt.toLocaleString('en-IN')}! Allotted ${unitsAllotted} units at NAV ₹${fund.nav}`,
+    unitsAllotted,
+    availableBalance: user.availableBalance
+  });
+});
+
+// ============================================================
+// 3. SIP MODULE ENDPOINTS
+// ============================================================
+app.get('/api/sip', async (req, res) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.json({ success: true, data: [] });
+  
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], JWT_SECRET);
+    const user = getUserSessionData(decoded.id);
+
+    // Sync live NAV for active SIPs
+    const updatedPlans = await Promise.all((user.sipPlans || []).map(async plan => {
+      const fund = IN_MEMORY_MUTUAL_FUNDS.find(f => f.id === plan.fundId);
+      if (fund) {
+        const live = await getLiveFundNav(fund);
+        const currentVal = parseFloat((plan.unitsAllocated * live.nav).toFixed(2));
+        const estimatedProfit = currentVal - plan.totalInvested;
+        return {
+          ...plan,
+          currentNav: live.nav,
+          currentValue: currentVal,
+          unrealizedProfit: parseFloat(estimatedProfit.toFixed(2)),
+          unrealizedProfitPct: plan.totalInvested > 0 ? parseFloat(((estimatedProfit / plan.totalInvested) * 100).toFixed(2)) : 0
+        };
+      }
+      return plan;
+    }));
+
+    res.json({ success: true, data: updatedPlans });
+  } catch (err) {
+    res.status(401).json({ success: false, message: "Invalid session" });
+  }
+});
+
+app.post('/api/sip/create', authenticateToken, async (req, res) => {
+  const { fundId, installmentAmount, frequency = 'MONTHLY', sipDay = 5, durationMonths = 36, expectedReturn = 12.00, executeFirstNow = true } = req.body;
+  const amount = parseFloat(installmentAmount);
+  if (isNaN(amount) || amount <= 0) return res.status(400).json({ success: false, message: "Valid installment amount required" });
+
+  const rawFund = IN_MEMORY_MUTUAL_FUNDS.find(f => f.id === fundId);
+  if (!rawFund) return res.status(404).json({ success: false, message: "Mutual fund not found" });
+  const fund = await getLiveFundNav(rawFund);
+
+  if (amount < fund.minSip) {
+    return res.status(400).json({ success: false, message: `Minimum SIP installment for this fund is ₹${fund.minSip.toLocaleString('en-IN')}` });
+  }
+
+  const userId = req.user.id;
+  const user = getUserSessionData(userId);
+
+  if (executeFirstNow && user.availableBalance < amount) {
+    return res.status(400).json({ success: false, message: "Insufficient balance to debit the first SIP installment" });
+  }
+
+  let unitsAllocated = 0;
+  let installmentsPaid = 0;
+  let totalInvested = 0;
+
+  if (executeFirstNow) {
+    user.availableBalance -= amount;
+    unitsAllocated = parseFloat((amount / fund.nav).toFixed(4));
+    installmentsPaid = 1;
+    totalInvested = amount;
+
+    user.transactions.unshift({
+      id: `TXN_SIP_${Date.now()}`,
+      payment_id: `pay_SIP_${Date.now().toString().slice(-6)}`,
+      payment_date: new Date().toISOString(),
+      description: `First SIP Installment (#1) for ${fund.name}`,
+      debit: amount,
+      credit: 0,
+      status: 'COMPLETED'
+    });
+  }
+
+  const nextDate = new Date();
+  nextDate.setMonth(nextDate.getMonth() + 1);
+  nextDate.setDate(parseInt(sipDay, 10) || 5);
+
+  const sipCode = `SIP-${fund.symbol || fund.id.toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+  const newPlan = {
+    id: user.sipPlans.length + 1,
+    sipCode,
+    fundId: fund.id,
+    fundName: fund.name,
+    frequency,
+    installmentAmount: amount,
+    sipDay: parseInt(sipDay, 10) || 5,
+    durationMonths: parseInt(durationMonths, 10) || 36,
+    expectedReturn: parseFloat(expectedReturn) || 12.00,
+    status: 'ACTIVE',
+    installmentsPaid,
+    totalInvested,
+    unitsAllocated,
+    currentNav: fund.nav,
+    currentValue: parseFloat((unitsAllocated * fund.nav).toFixed(2)),
+    startDate: new Date().toISOString(),
+    nextInstallmentDate: nextDate.toISOString().split('T')[0]
+  };
+
+  user.sipPlans.unshift(newPlan);
+
+  res.json({
+    success: true,
+    message: `SIP successfully registered! Next auto-debit scheduled on ${newPlan.nextInstallmentDate}`,
+    sipPlan: newPlan,
+    availableBalance: user.availableBalance
+  });
+});
+
+app.put('/api/sip/:id/status', authenticateToken, (req, res) => {
+  const { status } = req.body; // ACTIVE, PAUSED, CANCELLED
+  const planId = parseInt(req.params.id, 10);
+  const user = getUserSessionData(req.user.id);
+  const plan = user.sipPlans.find(p => p.id === planId);
+  if (!plan) return res.status(404).json({ success: false, message: "SIP plan not found" });
+
+  plan.status = status;
+  res.json({ success: true, message: `SIP has been ${status.toLowerCase()} successfully`, plan });
+});
+
+app.put('/api/sip/:id/modify', authenticateToken, (req, res) => {
+  const { installmentAmount, sipDay } = req.body;
+  const planId = parseInt(req.params.id, 10);
+  const user = getUserSessionData(req.user.id);
+  const plan = user.sipPlans.find(p => p.id === planId);
+  if (!plan) return res.status(404).json({ success: false, message: "SIP plan not found" });
+
+  if (installmentAmount) plan.installmentAmount = parseFloat(installmentAmount);
+  if (sipDay) plan.sipDay = parseInt(sipDay, 10);
+
+  res.json({ success: true, message: "SIP modified successfully", plan });
+});
+
+app.get('/api/sip/:id/transactions', authenticateToken, (req, res) => {
+  const planId = parseInt(req.params.id, 10);
+  const user = getUserSessionData(req.user.id);
+  const plan = user.sipPlans.find(p => p.id === planId);
+  if (!plan) return res.status(404).json({ success: false, message: "SIP plan not found" });
+
+  const txns = [];
+  for (let i = 1; i <= plan.installmentsPaid; i++) {
+    txns.push({
+      installmentNo: i,
+      amount: plan.installmentAmount,
+      date: new Date(Date.now() - (plan.installmentsPaid - i) * 30 * 86400000).toISOString().split('T')[0],
+      status: 'EXECUTED',
+      unitsAllotted: (plan.installmentAmount / (plan.currentNav || 85.0)).toFixed(4)
+    });
+  }
+  res.json({ success: true, data: txns });
+});
+
+// ============================================================
+// 4. UNIFIED MULTI-ASSET PORTFOLIO ENDPOINT
+// ============================================================
+app.get('/api/portfolio/unified', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
+  const user = getUserSessionData(userId);
+
+  // 1. Stock holdings valuation
+  let stockInvested = 0;
+  let stockCurrent = 0;
+  let stockDayProfit = 0;
+
+  const stockHoldings = (user.holdings || []).map(h => {
+    const sym = h.stock_name.replace('.NS', '').replace('.BO', '');
+    const quote = livePricesCache[sym] || STOCKS_DATABASE.find(s => s.symbol === sym) || { price: h.purchase_price, change: 0, changePercent: 0 };
+    const inv = h.qty * h.purchase_price;
+    const cur = h.qty * quote.price;
+    const dayP = h.qty * (quote.change || 0);
+
+    stockInvested += inv;
+    stockCurrent += cur;
+    stockDayProfit += dayP;
+
+    return {
+      symbol: sym,
+      qty: h.qty,
+      avgPrice: h.purchase_price,
+      currentPrice: quote.price,
+      invested: inv,
+      currentValue: cur,
+      pnl: cur - inv,
+      pnlPercent: inv > 0 ? ((cur - inv) / inv) * 100 : 0,
+      dayChange: quote.change || 0
+    };
+  });
+
+  // 2. Mutual fund holdings valuation
+  let mfInvested = 0;
+  let mfCurrent = 0;
+  const mfHoldings = (user.mfHoldings || []).map(m => {
+    mfInvested += m.investedAmount;
+    mfCurrent += m.currentValue;
+    return {
+      ...m,
+      pnl: m.currentValue - m.investedAmount,
+      pnlPercent: m.investedAmount > 0 ? ((m.currentValue - m.investedAmount) / m.investedAmount) * 100 : 0
+    };
+  });
+
+  // 3. SIP valuation
+  let sipInvested = 0;
+  let sipCurrent = 0;
+  (user.sipPlans || []).forEach(s => {
+    sipInvested += s.totalInvested;
+    sipCurrent += (s.currentValue || s.totalInvested);
+  });
+
+  // 4. IPO applications valuation
+  let ipoInvested = 0;
+  let ipoCurrent = 0;
+  (user.ipoApplications || []).forEach(a => {
+    ipoInvested += a.totalAmount;
+    // If allotted, calculate current value
+    const ipo = IN_MEMORY_IPOS.find(i => i.id === a.ipoId);
+    if (a.status === 'ALLOTTED' && ipo && ipo.listingPrice) {
+      ipoCurrent += a.allottedShares * ipo.listingPrice;
+    } else {
+      ipoCurrent += a.totalAmount; // ASBA blocked cash
+    }
+  });
+
+  const totalInvested = stockInvested + mfInvested + sipInvested + ipoInvested;
+  const currentAssetsValue = stockCurrent + mfCurrent + sipCurrent + ipoCurrent;
+  const netWorth = user.availableBalance + currentAssetsValue;
+  const totalProfit = currentAssetsValue - totalInvested;
+  const totalProfitPercent = totalInvested > 0 ? (totalProfit / totalInvested) * 100 : 0;
+
+  const allocation = [
+    { label: 'Indian Stocks', value: stockCurrent, percent: netWorth > 0 ? (stockCurrent / netWorth) * 100 : 0, color: '#00D4FF' },
+    { label: 'Mutual Funds', value: mfCurrent, percent: netWorth > 0 ? (mfCurrent / netWorth) * 100 : 0, color: '#10B981' },
+    { label: 'Active SIPs', value: sipCurrent, percent: netWorth > 0 ? (sipCurrent / netWorth) * 100 : 0, color: '#8B5CF6' },
+    { label: 'IPO ASBA', value: ipoCurrent, percent: netWorth > 0 ? (ipoCurrent / netWorth) * 100 : 0, color: '#F59E0B' },
+    { label: 'Available Cash', value: user.availableBalance, percent: netWorth > 0 ? (user.availableBalance / netWorth) * 100 : 0, color: '#3B82F6' }
+  ];
+
+  res.json({
+    success: true,
+    portfolio: {
+      profile: {
+        name: `${user.firstname} ${user.lastname}`,
+        email: user.email,
+        mobile: user.mobile,
+        pan: user.pan,
+        availableBalance: user.availableBalance,
+        totalNetWorth: parseFloat(netWorth.toFixed(2)),
+        totalInvested: parseFloat(totalInvested.toFixed(2)),
+        currentAssetsValue: parseFloat(currentAssetsValue.toFixed(2)),
+        overallProfit: parseFloat(totalProfit.toFixed(2)),
+        overallProfitPercent: parseFloat(totalProfitPercent.toFixed(2)),
+        todaysProfit: parseFloat(stockDayProfit.toFixed(2)),
+        todaysProfitPercent: stockInvested > 0 ? parseFloat(((stockDayProfit / stockInvested) * 100).toFixed(2)) : 0,
+        xirr: 18.42 // Annualized realistic return rate
+      },
+      stockMetrics: { invested: stockInvested, current: stockCurrent, pnl: stockCurrent - stockInvested, count: stockHoldings.length, holdings: stockHoldings },
+      mfMetrics: { invested: mfInvested, current: mfCurrent, pnl: mfCurrent - mfInvested, count: mfHoldings.length, holdings: mfHoldings },
+      sipMetrics: { invested: sipInvested, current: sipCurrent, count: (user.sipPlans || []).length, plans: user.sipPlans || [] },
+      ipoMetrics: { invested: ipoInvested, current: ipoCurrent, count: (user.ipoApplications || []).length, applications: user.ipoApplications || [] },
+      allocation
+    }
+  });
+});
+
+// ============================================================
+// 5. LIVE INDIAN FINANCIAL NEWS & RSS ENDPOINT
+// ============================================================
+app.get('/api/news', async (req, res) => {
+  const news = await fetchLiveIndianNews();
+  res.json({ success: true, news, corporateActions: CORPORATE_ACTIONS });
+});
+
+app.get('/api/news/live', async (req, res) => {
+  const news = await fetchLiveIndianNews();
+  res.json({ success: true, count: news.length, data: news });
+});
+
+// ============================================================
+// 6. ADMIN PANEL ENDPOINTS
+// ============================================================
+app.get('/api/admin/stats', authenticateToken, (req, res) => {
+  let totalUsers = Math.max(1, IN_MEMORY_USERS.length);
+  let totalOrders = 0;
+  let totalSIPs = 0;
+  let totalIPOs = 0;
+  let totalTurnover = 0;
+
+  IN_MEMORY_USERS.forEach(u => {
+    totalOrders += (u.orders || []).length;
+    totalSIPs += (u.sipPlans || []).length;
+    totalIPOs += (u.ipoApplications || []).length;
+    (u.orders || []).forEach(o => totalTurnover += (o.qty * (o.price || 0)));
+  });
+
+  res.json({
+    success: true,
+    stats: {
+      totalUsers,
+      totalOrders,
+      totalSIPs,
+      totalIPOs,
+      totalTurnover: parseFloat(totalTurnover.toFixed(2)),
+      activeIposCount: IN_MEMORY_IPOS.filter(i => i.status === 'OPEN').length,
+      listedIposCount: IN_MEMORY_IPOS.filter(i => i.status === 'LISTED').length,
+      totalMutualFundsCount: IN_MEMORY_MUTUAL_FUNDS.length,
+      systemHealth: "100% OPERATIONAL"
+    }
+  });
+});
+
+app.get('/api/admin/users', authenticateToken, (req, res) => {
+  const usersList = IN_MEMORY_USERS.map(u => ({
+    id: u.id,
+    name: `${u.firstname} ${u.lastname}`,
+    email: u.email,
+    mobile: u.mobile,
+    pan: u.pan,
+    role: u.role || 'user',
+    availableBalance: u.availableBalance,
+    ordersCount: (u.orders || []).length,
+    sipCount: (u.sipPlans || []).length,
+    ipoCount: (u.ipoApplications || []).length
+  }));
+  res.json({ success: true, data: usersList });
+});
+
+app.put('/api/admin/users/:id/balance', authenticateToken, (req, res) => {
+  const { amount } = req.body;
+  const user = getUserSessionData(req.params.id);
+  user.availableBalance = parseFloat(amount) || user.availableBalance;
+  res.json({ success: true, message: `Updated balance for ${user.firstname} to ₹${user.availableBalance}`, balance: user.availableBalance });
+});
+
+app.post('/api/admin/ipos', authenticateToken, (req, res) => {
+  const newIpo = {
+    id: `ipo-${IN_MEMORY_IPOS.length + 1}`,
+    ...req.body,
+    status: req.body.status || 'UPCOMING'
+  };
+  IN_MEMORY_IPOS.unshift(newIpo);
+  res.json({ success: true, message: "New IPO added successfully", ipo: newIpo });
+});
+
+app.put('/api/admin/ipos/:id', authenticateToken, (req, res) => {
+  const index = IN_MEMORY_IPOS.findIndex(i => i.id === req.params.id);
+  if (index === -1) return res.status(404).json({ success: false, message: "IPO not found" });
+  IN_MEMORY_IPOS[index] = { ...IN_MEMORY_IPOS[index], ...req.body };
+  res.json({ success: true, message: "IPO updated successfully", ipo: IN_MEMORY_IPOS[index] });
+});
+
+app.get('/api/admin/orders', authenticateToken, (req, res) => {
+  const allOrders = [];
+  IN_MEMORY_USERS.forEach(u => {
+    (u.orders || []).forEach(o => {
+      allOrders.push({ ...o, userName: `${u.firstname} ${u.lastname}`, userEmail: u.email });
+    });
+  });
+  res.json({ success: true, data: allOrders });
+});
+
+app.get('/api/admin/announcements', (req, res) => {
+  res.json({ success: true, data: IN_MEMORY_ANNOUNCEMENTS });
+});
+
+app.post('/api/admin/announcements', authenticateToken, (req, res) => {
+  const { title, message, category = 'MARKET_ALERT', severity = 'INFO' } = req.body;
+  const ann = {
+    id: IN_MEMORY_ANNOUNCEMENTS.length + 1,
+    title,
+    message,
+    category,
+    severity,
+    date: 'Just now'
+  };
+  IN_MEMORY_ANNOUNCEMENTS.unshift(ann);
+  res.json({ success: true, message: "Announcement published", announcement: ann });
+});
+
+// ============================================================
+// 7. AI INSIGHTS & TRANSACTIONS
+// ============================================================
 app.get('/api/ai/insights', optionalAuthenticateToken, async (req, res) => {
   let portfolioMock = { holdings: [] };
   if (req.user) {
-    try {
-      const [holdingsRows] = await db.query(
-        "SELECT stock_name as symbol, SUM(qty) as qty FROM stock_details WHERE user_id=? AND status=1 GROUP BY stock_name",
-        [req.user.id]
-      );
-      portfolioMock.holdings = holdingsRows.map(h => ({
-        symbol: h.symbol.replace('.NS', '').replace('.BO', ''),
-        qty: parseInt(h.qty)
-      }));
-    } catch (e) {
-      console.warn("AI insight portfolio lookup failed:", e.message);
-    }
+    const user = getUserSessionData(req.user.id);
+    portfolioMock.holdings = (user.holdings || []).map(h => ({
+      symbol: h.stock_name.replace('.NS', '').replace('.BO', ''),
+      qty: parseInt(h.qty, 10)
+    }));
   }
-  
   const insights = generateAiInsights(portfolioMock, STOCKS_DATABASE);
   res.json({ success: true, ...insights });
 });
 
-// === TRANSACTIONS ENDPOINT ===
 app.get('/api/transactions', authenticateToken, async (req, res) => {
-  const userId = req.user.id;
-  try {
-    const [rows] = await db.query(
-      "SELECT * FROM users_transaction WHERE user_id=? ORDER BY payment_date DESC LIMIT 50",
-      [userId]
-    );
-    res.json({ success: true, data: rows });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Failed to fetch transactions" });
-  }
+  const user = getUserSessionData(req.user.id);
+  res.json({ success: true, data: user.transactions || [] });
 });
 
 // === SERVE STATIC REACT FRONTEND FOR RENDER DEPLOYMENT ===
