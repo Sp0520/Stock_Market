@@ -153,35 +153,35 @@ export function App() {
         {/* TAB 3: STOCKS TRADING TERMINAL */}
         {activeTab === 'stocks' && (
           <div className="space-y-6 max-w-7xl mx-auto">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-white/10">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-900/80 p-1 rounded-xl border border-white/10 w-full sm:w-auto">
                 <button
                   onClick={() => setViewMode('FINNEXA_TERMINAL')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all text-center ${
                     viewMode === 'FINNEXA_TERMINAL' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400'
                   }`}
                 >
-                  ⚡ FinNexa Terminal (Groww & Upstox UI)
+                  ⚡ FinNexa Terminal
                 </button>
                 <button
                   onClick={() => setViewMode('TRADE_FLOW')}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                  className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all text-center ${
                     viewMode === 'TRADE_FLOW' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400'
                   }`}
                 >
-                  📈 TRADEFLOW Dashboard
+                  📈 TRADEFLOW
                 </button>
               </div>
 
               {!currentUser ? (
                 <button 
                   onClick={() => setShowAuthModal(true)}
-                  className="gradient-btn py-2 px-5 text-xs font-extrabold shadow-lg shadow-blue-500/10"
+                  className="gradient-btn py-2 px-5 text-xs font-extrabold shadow-lg shadow-blue-500/10 w-full sm:w-auto text-center"
                 >
                   🔒 Secure Trade Login
                 </button>
               ) : (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto">
                   <span className="text-xs text-emerald-400 font-semibold font-mono">KYC: Verified</span>
                   <button 
                     onClick={handleLogOut}

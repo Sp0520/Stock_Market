@@ -308,7 +308,7 @@ export const TradeFlowView = ({ onOrderExecuted }) => {
     <div className="flex flex-col lg:flex-row gap-6">
       
       {/* Sidebar Navigation */}
-      <div className="w-full lg:w-56 glass-card p-4 space-y-2 shrink-0 flex flex-row lg:flex-col justify-between lg:justify-start gap-2 overflow-x-auto lg:overflow-x-visible">
+      <div className="w-full lg:w-56 glass-card p-2.5 sm:p-4 space-y-0 lg:space-y-2 shrink-0 flex flex-row lg:flex-col justify-start gap-1.5 sm:gap-2 overflow-x-auto lg:overflow-x-visible scrollbar-none">
         {[
           { id: 'Portfolio Overview', label: 'Portfolio Overview', icon: LayoutDashboard },
           { id: 'Watchlist', label: 'Watchlist', icon: Eye },
@@ -321,7 +321,7 @@ export const TradeFlowView = ({ onOrderExecuted }) => {
             <button
               key={item.id}
               onClick={() => setActiveSideTab(item.id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-xs transition-all w-full text-left whitespace-nowrap ${
+              className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-bold text-xs transition-all w-auto lg:w-full text-left whitespace-nowrap shrink-0 ${
                 activeSideTab === item.id
                   ? 'bg-blue-600/20 border border-blue-500/40 text-cyan-300 shadow-md shadow-blue-500/10'
                   : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'

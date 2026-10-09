@@ -480,3 +480,162 @@ textarea:focus {
   position: relative;
   width: 100%;
 }
+
+/* ========================================================
+   MOBILE RESPONSIVENESS FOR TRADITIONAL PHP VIEWS (<= 768px)
+   Leaves desktop & laptop designs (> 768px) 100% untouched.
+   Supports 320px, 360px, 375px, 390px, 414px, 430px screens.
+   ======================================================== */
+@media screen and (max-width: 768px) {
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden !important;
+  }
+
+  /* Navbar on Mobile */
+  .navbar {
+    padding: 12px 16px !important;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .navbar .title_logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .title_logo a {
+    font-size: 1.05rem !important;
+  }
+
+  .navbar ul {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 8px 0 0 0;
+    justify-content: flex-start;
+  }
+
+  .navbar ul li a {
+    font-size: 0.8rem !important;
+    padding: 6px 10px !important;
+  }
+
+  .dropbtn {
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+  }
+
+  /* Content Containers Padding */
+  .content_dashboard,
+  .content_market,
+  .content_portfolios,
+  .content_selectedStock,
+  .content_transactionHistory,
+  .content {
+    margin: 16px auto !important;
+    padding: 16px 12px !important;
+    border-radius: 16px !important;
+    max-width: 100% !important;
+  }
+
+  /* Card padding on mobile */
+  .card-premium,
+  .signinContent,
+  .signup_card {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  /* Horizontal Scrolling for Data Tables without Page Overflow */
+  table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+  }
+
+  table th, table td {
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Forms and Search inputs on mobile */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  textarea {
+    font-size: 14px !important;
+    padding: 10px 12px !important;
+    width: 100% !important;
+  }
+
+  /* Filter form stacking */
+  .filter form,
+  .content_market form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+
+  .filter input[type="search"],
+  .filter input[type="text"] {
+    min-width: 100% !important;
+  }
+
+  .btnBuy, .btnBuy_, .btnSignup_singup, .btnGetStockDetails, .btnSearchStock, .btnWithdrawModal, .btnAddMoney {
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+    touch-action: manipulation;
+  }
+
+  /* Selected Stock Info Grid */
+  .selectedStock-header,
+  .stock-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Chart container inside selectedStock.php */
+  canvas#myChart {
+    max-height: 260px !important;
+    width: 100% !important;
+  }
+
+  /* Modal on mobile */
+  .modal-dialog {
+    margin: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navbar .title_logo a {
+    font-size: 0.95rem !important;
+  }
+
+  .navbar ul li a {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+
+  h1 {
+    font-size: 1.4rem !important;
+  }
+
+  h2 {
+    font-size: 1.2rem !important;
+  }
+
+  h3 {
+    font-size: 1.05rem !important;
+  }
+}
+

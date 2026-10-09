@@ -106,7 +106,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
         </div>
 
         {/* Auth Glass Card */}
-        <div className="glass-card p-6 md:p-8 space-y-6 bg-slate-950/40 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl">
+        <div className="glass-card p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6 bg-slate-950/40 backdrop-blur-3xl border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl">
           
           <div className="text-center">
             <h2 className="text-lg font-bold text-white">
@@ -193,7 +193,7 @@ export const LoginView = ({ onLoginSuccess, onContinueAsGuest }) => {
             /* SIGNUP FORM */
             <form onSubmit={handleSignupSubmit} className="space-y-3.5 text-xs">
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-slate-300 font-semibold">First Name</label>
                   <div className="relative">

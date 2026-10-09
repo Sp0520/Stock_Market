@@ -640,7 +640,7 @@ export const TradingTerminalView = ({ onOrderExecuted }) => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
         {/* Left column: Search and Stock Selector */}
-        <div className="glass-card p-5 space-y-4 flex flex-col h-[650px] bg-slate-950/25">
+        <div className="glass-card p-4 sm:p-5 space-y-4 flex flex-col max-h-[380px] lg:max-h-none lg:h-[650px] bg-slate-950/25">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">FINANCE.hub Terminal</h3>
             <div className="flex items-center gap-1 text-[9px] text-slate-500 font-mono">

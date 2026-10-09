@@ -138,17 +138,17 @@ export const FinanceHubNavbar = ({
         </nav>
 
         {/* Right Section: Balance, Notification, User & Mobile Toggle */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           
           {/* Available Balance Pill */}
           <div 
             onClick={() => handleNavClick('portfolio')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-white/10 hover:border-emerald-500/30 cursor-pointer transition-colors"
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-slate-900/80 border border-white/10 hover:border-emerald-500/30 cursor-pointer transition-colors"
           >
-            <Wallet className="w-3.5 h-3.5 text-emerald-400" />
+            <Wallet className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <div className="flex flex-col text-right">
-              <span className="text-[9px] text-slate-400 uppercase font-mono leading-none">Wallet</span>
-              <span className="text-xs font-bold font-mono text-emerald-400 leading-tight">
+              <span className="hidden xs:inline text-[9px] text-slate-400 uppercase font-mono leading-none">Wallet</span>
+              <span className="text-[11px] sm:text-xs font-bold font-mono text-emerald-400 leading-tight whitespace-nowrap">
                 {formatINR(availableBalance)}
               </span>
             </div>
@@ -156,7 +156,7 @@ export const FinanceHubNavbar = ({
 
           <button 
             onClick={() => handleNavClick('news')}
-            className="p-2 rounded-xl border border-white/10 hover:bg-white/5 text-slate-300 relative"
+            className="p-1.5 sm:p-2 rounded-xl border border-white/10 hover:bg-white/5 text-slate-300 relative"
             title="Market News"
           >
             <Bell className="w-4 h-4" />
@@ -169,7 +169,7 @@ export const FinanceHubNavbar = ({
             className="flex items-center gap-2 cursor-pointer"
             title="Profile & KYC"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 border border-white/20 flex items-center justify-center text-black font-extrabold text-xs shadow-md">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 border border-white/20 flex items-center justify-center text-black font-extrabold text-xs shadow-md">
               {currentUser ? (currentUser.firstname?.[0] || 'U') : 'IN'}
             </div>
           </div>
@@ -177,7 +177,8 @@ export const FinanceHubNavbar = ({
           {/* Mobile Hamburger Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2 rounded-xl border border-white/10 hover:bg-white/5 text-slate-300"
+            className="xl:hidden p-1.5 sm:p-2 rounded-xl border border-white/10 hover:bg-white/5 text-slate-300"
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -188,7 +189,7 @@ export const FinanceHubNavbar = ({
 
       {/* MOBILE / TABLET SLIDE-OUT DRAWER */}
       {mobileMenuOpen && (
-        <div className="xl:hidden fixed inset-x-0 top-[57px] bottom-0 bg-[#05070D]/95 backdrop-blur-2xl border-t border-white/10 z-50 p-6 overflow-y-auto space-y-6 animate-in slide-in-from-top-4 duration-200">
+        <div className="xl:hidden fixed inset-x-0 top-[53px] sm:top-[57px] bottom-0 bg-[#05070D]/95 backdrop-blur-2xl border-t border-white/10 z-50 p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6 animate-in slide-in-from-top-4 duration-200">
           
           {/* Mobile Search */}
           <div className="sm:hidden">
@@ -199,9 +200,49 @@ export const FinanceHubNavbar = ({
                 placeholder="Search Stocks, IPOs, Mutual Funds..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full bg-slate-900 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500"
+                className="w-full bg-slate-900 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
               />
             </div>
+
+            {showDropdown && (
+              <div className="mt-2 glass-panel border border-cyan-500/30 rounded-2xl p-2 shadow-2xl max-h-60 overflow-y-auto">
+                {sampleSearchItems
+                  .filter(s => s.symbol.toLowerCase().includes(searchQuery.toLowerCase()) || s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                  .map((item) => (
+                    <div
+                      key={item.symbol}
+                      onClick={() => {
+                        if (item.type === 'STOCK') {
+                          onSelectStock(item.symbol);
+                          setActiveTab('stocks');
+                        } else if (item.type === 'IPO') {
+                          setActiveTab('ipo');
+                        } else {
+                          setActiveTab('mutual-funds');
+                        }
+                        setShowDropdown(false);
+                        setSearchQuery('');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="flex items-center justify-between p-2.5 hover:bg-white/5 rounded-xl cursor-pointer transition-colors"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-white text-xs">{item.symbol}</span>
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-white/5 text-slate-300 border border-white/10">
+                            {item.exchange}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-400 truncate max-w-[180px]">{item.name}</p>
+                      </div>
+                      <div className="text-right font-mono">
+                        <div className="text-xs font-semibold text-white">{formatINR(item.price)}</div>
+                        <div className="text-[10px] text-emerald-400 font-semibold">+{item.change}%</div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Navigation Links Grid */}
@@ -210,7 +251,7 @@ export const FinanceHubNavbar = ({
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className={`p-3.5 rounded-xl text-left transition-all flex items-center justify-between ${
+                className={`p-3 sm:p-3.5 rounded-xl text-left transition-all flex items-center justify-between ${
                   activeTab === item.id
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                     : 'bg-slate-900/60 text-slate-300 hover:text-white border border-white/5'
@@ -223,7 +264,7 @@ export const FinanceHubNavbar = ({
           </div>
 
           {/* Quick Account Info */}
-          <div className="p-4 rounded-2xl bg-slate-900 border border-white/10 space-y-2 font-mono text-xs">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-900 border border-white/10 space-y-2 font-mono text-xs">
             <div className="flex justify-between">
               <span className="text-slate-400">Available Wallet:</span>
               <span className="text-emerald-400 font-bold">{formatINR(availableBalance)}</span>

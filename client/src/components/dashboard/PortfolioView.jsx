@@ -171,17 +171,17 @@ export const PortfolioView = ({ onSelectStock, setActiveTab }) => {
             <p className="text-xs text-slate-400 mt-0.5">Distributed multi-asset wealth distribution in Indian Rupees</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-            <span className="px-3 py-1 rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-[11px] sm:text-xs font-mono">
+            <span className="px-2.5 py-1 rounded-xl bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
               Stocks: <strong>{formatINR(stockMetrics.current)}</strong>
             </span>
-            <span className="px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            <span className="px-2.5 py-1 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
               Mutual Funds: <strong>{formatINR(mfMetrics.current)}</strong>
             </span>
-            <span className="px-3 py-1 rounded-xl bg-purple-500/10 text-purple-300 border border-purple-500/20">
+            <span className="px-2.5 py-1 rounded-xl bg-purple-500/10 text-purple-300 border border-purple-500/20">
               SIPs: <strong>{formatINR(sipMetrics.current)}</strong>
             </span>
-            <span className="px-3 py-1 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20">
+            <span className="px-2.5 py-1 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20">
               IPO ASBA: <strong>{formatINR(ipoMetrics.current)}</strong>
             </span>
           </div>

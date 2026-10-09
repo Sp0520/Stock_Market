@@ -275,3 +275,79 @@ h1, h2, h3, h4, h5, .brand-font {
     transform: none !important;
   }
 }
+
+/* ========================================================
+   MOBILE RESPONSIVENESS ENHANCEMENTS (Phones <= 768px)
+   Keeps desktop/laptop view 100% unchanged above 768px.
+   Optimized for 320px, 360px, 375px, 390px, 414px, 430px.
+   ======================================================== */
+@media screen and (max-width: 768px) {
+  /* Prevent horizontal screen scrolling and clipping */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Compact glass card padding for mobile screens */
+  .glass-card, .glass-panel {
+    border-radius: 16px !important;
+  }
+
+  /* Soften intense 3D perspective tilts on touch mobile screens */
+  .perspective-container {
+    perspective: none !important;
+  }
+
+  .glass-card-3d {
+    transform: none !important;
+  }
+
+  /* Mobile touch comfortable taps & readable inputs */
+  .glass-input {
+    font-size: 14px !important; /* Prevents auto-zoom on iOS Safari */
+    min-height: 42px;
+  }
+
+  /* Table containers become horizontally scrollable with smooth touch scrolling */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: thin;
+  }
+
+  /* Ensure modal dialogs don't exceed screen boundaries */
+  .glass-card.max-w-md,
+  .glass-card.max-w-lg,
+  .glass-card.max-w-2xl,
+  .glass-card.max-w-3xl {
+    width: 100% !important;
+    max-width: calc(100vw - 24px) !important;
+    margin: 12px auto !important;
+    max-height: calc(100vh - 32px) !important;
+  }
+
+  /* Ensure button text does not wrap awkwardly on narrow phones */
+  button, a {
+    touch-action: manipulation;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Ultra-compact spacing for smaller phone screens (320px - 430px) */
+  .glass-card {
+    padding: 1rem !important;
+  }
+
+  /* Font size calibrations for small viewport */
+  h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+  }
+
+  h2 {
+    font-size: 1.15rem !important;
+    line-height: 1.25 !important;
+  }
+}
+
